@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Core.Repositories;
 using TaskManager.Data;
 using TaskManager.Models;
 
@@ -14,10 +15,12 @@ namespace TaskManager.Controllers
     public class ProjectsController : Controller
     {
         private readonly TaskManagerContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ProjectsController(TaskManagerContext context)
+        public ProjectsController(TaskManagerContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Projects
@@ -34,8 +37,13 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
+            //var project = await _context.Projects.FirstOrDefaultAsync(m => m.Id == id);
             var project = await _context.Projects
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(c => c.Contributers)
+                .ThenInclude(u => u.ApplicationUser)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
             if (project == null)
             {
                 return NotFound();
