@@ -1,6 +1,7 @@
 ﻿using TaskManager.Areas.Identity.Data;
 using TaskManager.Core.Repositories;
 using TaskManager.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskManager.Repositories;
 
@@ -20,6 +21,17 @@ public class UserRepository : IUserRepository
     public ApplicationUser GetUser(string id)
     {
         return _context.Users.FirstOrDefault(u => u.Id == id);
+    }
+
+    public async Task<ApplicationUser> GetUserWithProjects(string id)
+    {
+        var user = await _context.Users
+            .Include(u => u.Projects)
+            .ThenInclude(p => p.Project)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        return user;
     }
 
     public ApplicationUser UpdateUser(ApplicationUser user)

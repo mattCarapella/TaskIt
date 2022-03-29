@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TaskManager.Areas.Identity.Data;
+using TaskManager.Models;
 
 namespace TaskManager.Data;
 
@@ -12,6 +13,9 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<ProjectAssignment> ProjectAssignments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

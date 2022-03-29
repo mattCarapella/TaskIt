@@ -32,14 +32,7 @@ public class UserController : Controller
             return NotFound();
         }
 
-        //var user = await _context.Users
-        //    .Include(u => u.Projects)
-        //    .ThenInclude(p => p.Project)
-        //    .AsNoTracking()
-        //    .FirstOrDefaultAsync(x => x.Id == id);
-
-        var user = _unitOfWork.User.GetUser(id);
-
+        var user = await _unitOfWork.User.GetUserWithProjects(id);
         if (user == null)
         {
             return NotFound();

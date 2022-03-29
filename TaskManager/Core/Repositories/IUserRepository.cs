@@ -8,6 +8,8 @@ public interface IUserRepository
 
     ApplicationUser GetUser(string id);
 
+    Task<ApplicationUser> GetUserWithProjects(string id);
+
     ApplicationUser UpdateUser(ApplicationUser user);
 
 }

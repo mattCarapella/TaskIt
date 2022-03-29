@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using TaskManager.Models;
 
 namespace TaskManager.Areas.Identity.Data;
 
@@ -22,6 +23,10 @@ public class ApplicationUser : IdentityUser
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? LastLoggedInAt  { get; set; }
+
+
+
+    public ICollection<ProjectAssignment>? Projects { get; set; }
 
 }
 
