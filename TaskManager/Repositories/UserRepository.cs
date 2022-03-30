@@ -2,6 +2,7 @@
 using TaskManager.Core.Repositories;
 using TaskManager.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace TaskManager.Repositories;
 
@@ -33,6 +34,7 @@ public class UserRepository : IUserRepository
 
         return user;
     }
+
 
     public ApplicationUser UpdateUser(ApplicationUser user)
     {

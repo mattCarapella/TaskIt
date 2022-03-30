@@ -28,9 +28,12 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());
+
+            // If user is admin or project manager => get all projects
+            // If user role is developer => get assigned projects
         }
 
-        // GET: Projects/Details/5
+        // GET: Projects/Details/{id}
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -38,8 +41,8 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            //var project = await _context.Projects.FirstOrDefaultAsync(m => m.Id == id);
             var project = await _context.Projects
+                .Include(t => t.Tickets)
                 .Include(c => c.Contributers)
                 .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
@@ -54,8 +57,6 @@ namespace TaskManager.Controllers
         }
 
 
-
-
         // GET: Projects/Create
         public IActionResult Create()
         {
@@ -63,8 +64,6 @@ namespace TaskManager.Controllers
         }
 
         // POST: Projects/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Tag,GoalDate")] Project project)
@@ -84,7 +83,6 @@ namespace TaskManager.Controllers
                     };
 
                     project.Id = Guid.NewGuid();
-                    //_context.Add(project);
                     project.Contributers.Add(contributer);
                     _context.Projects.Add(project);
                     await _context.SaveChangesAsync();
@@ -100,8 +98,7 @@ namespace TaskManager.Controllers
         }
 
 
-
-        // GET: Projects/Edit/5
+        // GET: Projects/Edit/{id}
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -117,6 +114,8 @@ namespace TaskManager.Controllers
             return View(project);
         }
 
+
+        // POST: Projects/Edit/{id}
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(Guid? id)
@@ -144,44 +143,7 @@ namespace TaskManager.Controllers
         }
 
 
-        // POST: Projects/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,Tag,GoalDate,CreatedAt,UpdatedAt")] Project project)
-        //{
-        //    if (id != project.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(project);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ProjectExists(project.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(project);
-        //}
-
-
-
-        // GET: Projects/Delete/5
+        // GET: Projects/Delete/{id}
         public async Task<IActionResult> Delete(Guid? id, bool? saveChangeErrors = false)
         {
             if (id == null)
@@ -207,6 +169,8 @@ namespace TaskManager.Controllers
 
         }
 
+
+        // POST: Projects/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -230,7 +194,7 @@ namespace TaskManager.Controllers
         }
 
 
-
+        // GET: AddUser/{id}
         public async Task<IActionResult> AddUser(Guid? id)
         {
             if (id == null)
@@ -253,6 +217,8 @@ namespace TaskManager.Controllers
             return View(vm);
         }
 
+
+        // POST: AddUser/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddUser(Guid? id, AddUserProjectViewModel projectViewModel)
@@ -280,7 +246,6 @@ namespace TaskManager.Controllers
                 _context.ProjectAssignments.Add(contributer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Projects", project);
-
             }
             catch (DbUpdateException)
             {
@@ -290,6 +255,7 @@ namespace TaskManager.Controllers
             var vm = GetViewModel(project);
             return View(vm);
         }
+
 
         private AddUserProjectViewModel GetViewModel(Project project)
         {
@@ -315,6 +281,8 @@ namespace TaskManager.Controllers
             return vm;
         }
 
+
+        // POST: RemoveUser
         [HttpPost]
         public async Task<IActionResult> RemoveUser(Guid paID)
         {
@@ -324,38 +292,6 @@ namespace TaskManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-       
-
-
-
-
-        //public async Task<IActionResult> Delete(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var project = await _context.Projects
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (project == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(project);
-        //}
-
-        // POST: Projects/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(Guid id)
-        //{
-        //    var project = await _context.Projects.FindAsync(id);
-        //    _context.Projects.Remove(project);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         private bool ProjectExists(Guid id)
         {
@@ -364,3 +300,86 @@ namespace TaskManager.Controllers
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+//var project = await _context.Projects.FirstOrDefaultAsync(m => m.Id == id);
+
+
+// To protect from overposting attacks, enable the specific properties you want to bind to.
+// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
+
+//public async Task<IActionResult> Delete(Guid? id)
+//{
+//    if (id == null)
+//    {
+//        return NotFound();
+//    }
+
+//    var project = await _context.Projects
+//        .FirstOrDefaultAsync(m => m.Id == id);
+//    if (project == null)
+//    {
+//        return NotFound();
+//    }
+
+//    return View(project);
+//}
+
+// POST: Projects/Delete/5
+//[HttpPost, ActionName("Delete")]
+//[ValidateAntiForgeryToken]
+//public async Task<IActionResult> DeleteConfirmed(Guid id)
+//{
+//    var project = await _context.Projects.FindAsync(id);
+//    _context.Projects.Remove(project);
+//    await _context.SaveChangesAsync();
+//    return RedirectToAction(nameof(Index));
+//}
+
+
+
+// POST: Projects/Edit/5
+// To protect from overposting attacks, enable the specific properties you want to bind to.
+// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+//[HttpPost]
+//[ValidateAntiForgeryToken]
+//public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,Tag,GoalDate,CreatedAt,UpdatedAt")] Project project)
+//{
+//    if (id != project.Id)
+//    {
+//        return NotFound();
+//    }
+
+//    if (ModelState.IsValid)
+//    {
+//        try
+//        {
+//            _context.Update(project);
+//            await _context.SaveChangesAsync();
+//        }
+//        catch (DbUpdateConcurrencyException)
+//        {
+//            if (!ProjectExists(project.Id))
+//            {
+//                return NotFound();
+//            }
+//            else
+//            {
+//                throw;
+//            }
+//        }
+//        return RedirectToAction(nameof(Index));
+//    }
+//    return View(project);
+//}

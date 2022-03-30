@@ -28,6 +28,8 @@ public class ApplicationUser : IdentityUser
 
     public ICollection<ProjectAssignment>? Projects { get; set; }
 
+    public ICollection<TicketAssignment>? Tickets { get; set; }
+
 }
 
 public class ApplicationRole : IdentityRole

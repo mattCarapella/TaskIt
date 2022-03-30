@@ -25,4 +25,5 @@ public class Project
 
 
     public ICollection<ProjectAssignment>? Contributers { get; set; } = new List<ProjectAssignment>();
+    public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }
