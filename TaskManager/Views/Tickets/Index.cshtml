@@ -1,49 +1,103 @@
-﻿@model IEnumerable<TaskManager.Models.Ticket>
+﻿@using TaskManager.Core
+@*@model IEnumerable<TaskManager.Models.Ticket>*@
+@model PaginatedList<TaskManager.Models.Ticket>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Tickets</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Submit a new ticket</a>
 </p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search by name or description:
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> 
+            <a asp-action="Index">Clear</a>    
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Project)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Project
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Ticket
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["StatusSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Status
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TicketType)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Ticket Type
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Priority)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["PrioritySortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Priority
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GoalDate)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Goal Date
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Created On
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Upvotes)
+                <a class="index--sort-link" 
+                    asp-action="Index" 
+                    asp-route-sortOrder="@ViewData["UpvotesSortParam"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                     Upvotes
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
+                Last Updated
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tag)
+                Tag
             </th>
             <th></th>
         </tr>
@@ -93,3 +147,25 @@
 }
     </tbody>
 </table>
+
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex-1)";
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex+1)";
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

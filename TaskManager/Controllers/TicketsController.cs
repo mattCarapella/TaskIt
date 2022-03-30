@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Core;
 using TaskManager.Core.Repositories;
+using TaskManager.Core.ViewModels;
 using TaskManager.Data;
 using TaskManager.Models;
 
@@ -24,10 +26,95 @@ namespace TaskManager.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-            var taskManagerContext = _context.Tickets.Include(t => t.Project);
-            return View(await taskManagerContext.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["ProjectNameSortParam"] = sortOrder == "projectName" ? "projectName_desc" : "projectName";
+            ViewData["TicketTitleSortParam"] = sortOrder == "ticketTitle" ? "ticketTitle_desc" : "ticketTitle";
+            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
+            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
+            ViewData["PrioritySortParam"] = sortOrder == "priority" ? "priority_desc" : "priority";
+            ViewData["CreatedOnSortParam"] = sortOrder == "createdOn" ? "createdOn_desc" : "createdOn";
+            ViewData["UpvotesSortParam"] = sortOrder == "upvotes" ? "upvotes_desc" : "upvotes";
+            ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
+            ViewData["CurrentFilter"] = searchString;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            var ticketContext = _context.Tickets.Include(t => t.Project);
+            var tickets = from t in ticketContext select t;
+            
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tickets = tickets.Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "projectName":
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+                case "projectName_desc":
+                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    break;
+                case "ticketTitle":
+                    tickets = tickets.OrderBy(t => t.Title);
+                    break;
+                case "ticketTitle_desc":
+                    tickets = tickets.OrderByDescending(t => t.Title);
+                    break;
+                case "goalDate":
+                    tickets = tickets.OrderBy(t => t.GoalDate);
+                    break;
+                case "goalDate_desc":
+                    tickets = tickets.OrderByDescending(t => t.GoalDate);
+                    break;
+                case "status":
+                    tickets = tickets.OrderBy(t => t.Status);
+                    break;
+                case "status_desc":
+                    tickets = tickets.OrderByDescending(t => t.Status);
+                    break;
+                case "priority":
+                    tickets = tickets.OrderBy(t => t.Priority);
+                    break;
+                case "priority_desc":
+                    tickets = tickets.OrderByDescending(t => t.Priority);
+                    break;
+                case "createdOn":
+                    tickets = tickets.OrderBy(t => t.CreatedAt);
+                    break;
+                case "createdOn_desc":
+                    tickets = tickets.OrderByDescending(t => t.CreatedAt);
+                    break;
+                case "upvotes":
+                    tickets = tickets.OrderBy(t => t.Upvotes);
+                    break;
+                case "upvotes_desc":
+                    tickets = tickets.OrderByDescending(t => t.Upvotes);
+                    break;
+                case "ticketType":
+                    tickets = tickets.OrderBy(t => t.TicketType);
+                    break;
+                case "ticketType_desc":
+                    tickets = tickets.OrderByDescending(t => t.TicketType);
+                    break;
+                default:
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+            }
+
+            int pageSize = 9;
+            return View(await PaginatedList<Ticket>.CreateAsync(tickets.AsNoTracking(), pageNumber ?? 1, pageSize));
+            //return View(await tickets.AsNoTracking().ToListAsync());
         }
 
 
@@ -42,7 +129,11 @@ namespace TaskManager.Controllers
             var ticket = await _context.Tickets
                 .Include(t => t.Project)
                 .Include(t => t.SubmittedBy)
+                .Include(c => c.AssignedTo)
+                    .ThenInclude(u => u.ApplicationUser)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.TicketId == id);
+
             if (ticket == null)
             {
                 return NotFound();
@@ -114,7 +205,7 @@ namespace TaskManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(Guid? id)
         {
-            if (id != null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -125,19 +216,20 @@ namespace TaskManager.Controllers
                     ticketToUpdate,
                     "",
                     t => t.Title, t => t.Description, t => t.TicketType, t => t.Status,
-                    t => t.Priority, t => t.Tag, t => t.GoalDate, t => t.ProjectId, t => t.UpdatedAt))
+                    t => t.Priority, t => t.Tag, t => t.GoalDate, t => t.ProjectId))
             {
                 try
                 {
                     ticketToUpdate.UpdatedAt = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", new { id = ticketToUpdate.TicketId });
                 }
                 catch (DbUpdateException)
                 {
                     ModelState.AddModelError("", "There was a problem updating this ticket. Please try again.");
                 }
             }
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticketToUpdate.ProjectId);
             return View(ticketToUpdate);
         }
 
@@ -191,6 +283,93 @@ namespace TaskManager.Controllers
             {
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
             }
+        }
+
+
+        // GET: AssignUser/{id}
+        public async Task<IActionResult> AssignUser(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets
+                .Include(c => c.AssignedTo)
+                .ThenInclude(u => u.ApplicationUser)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.TicketId == id);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            var vm = GetViewModel(ticket);
+            return View(vm);
+        }
+
+
+        // POST: AssignUser/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignUser(Guid? id, AssignUserTicketViewModel ticketViewModel)
+        {
+            var selectedUserId = ticketViewModel.UserId;
+            if (selectedUserId == null || id == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(p => p.TicketId == id);
+            var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
+            var assignee = new TicketAssignment
+            {
+                TicketAssignmentId = Guid.NewGuid(),
+                ApplicationUser = selectedUser,
+                ApplicationUserId = selectedUserId,
+                Ticket = ticket,
+                TicketId = ticket.TicketId,
+            };
+
+            try
+            {
+                _context.TicketAssignments.Add(assignee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", new { id = ticket.TicketId });
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to add user.");
+            }
+
+            var vm = GetViewModel(ticket);
+            return View(vm);
+        }
+
+
+        private AssignUserTicketViewModel GetViewModel(Ticket ticket)
+        {
+            var userList = (from user in _context.Users
+                            select new SelectListItem()
+                            {
+                                Text = user.UserName,
+                                Value = user.Id.ToString()
+                            }).ToList();
+
+            userList.Insert(0, new SelectListItem()
+            {
+                Text = "----Select----",
+                Value = String.Empty
+            });
+
+            ViewBag.ListOfUsers = userList;
+            var vm = new AssignUserTicketViewModel
+            {
+                Ticket = ticket,
+                ListOfUsers = userList
+            };
+            return vm;
         }
 
 
@@ -279,4 +458,44 @@ namespace TaskManager.Controllers
 //    _context.Tickets.Remove(ticket);
 //    await _context.SaveChangesAsync();
 //    return RedirectToAction(nameof(Index));
+//}
+
+
+
+
+
+
+//// POST: Tickets/Edit/{id}
+//[HttpPost]
+//[ValidateAntiForgeryToken]
+//public async Task<IActionResult> Edit(Guid id, [Bind("Title,Description,Tag,TicketType,Status,Upvotes," +
+//    "Priority,GoalDate")] Ticket ticket)
+//{
+//    if (id != ticket.TicketId)
+//    {
+//        return NotFound();
+//    }
+
+//    if (ModelState.IsValid)
+//    {
+//        try
+//        {
+//            _context.Update(ticket);
+//            await _context.SaveChangesAsync();
+//        }
+//        catch (DbUpdateConcurrencyException)
+//        {
+//            if (!TicketExists(ticket.TicketId))
+//            {
+//                return NotFound();
+//            }
+//            else
+//            {
+//                throw;
+//            }
+//        }
+//        return RedirectToAction(nameof(Index));
+//    }
+//    //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+//    return View(ticket);
 //}
