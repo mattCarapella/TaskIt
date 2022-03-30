@@ -29,6 +29,7 @@ public class UserRepository : IUserRepository
         var user = await _context.Users
             .Include(u => u.Projects)
             .ThenInclude(p => p.Project)
+            .Include(t => t.Tickets)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
 

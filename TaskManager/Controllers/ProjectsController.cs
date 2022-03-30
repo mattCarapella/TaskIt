@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Core;
+using TaskManager.Core.Enums;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
 using TaskManager.Data;
@@ -25,10 +27,69 @@ namespace TaskManager.Controllers
         }
 
         // GET: Projects
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-            return View(await _context.Projects.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CreatedOnSortParam"] = sortOrder == "createdOn" ? "createdOn_desc" : "createdOn";
+            ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
+            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
+            ViewData["OpenTicketSortParam"] = sortOrder == "openTickets" ? "openTickets_desc" : "openTickets";
 
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var projectsInContext = _context.Projects.Include(p => p.Tickets);
+
+            var projects = from p in projectsInContext select p;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                projects = projects.Where(s => s.Name.Contains(searchString) || s.Description.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name":
+                    projects = projects.OrderBy(p => p.Name);
+                    break;
+                case "name_desc":
+                    projects = projects.OrderByDescending(p => p.Name);
+                    break;
+                case "createdOn_desc":
+                    projects = projects.OrderByDescending(p => p.CreatedAt);
+                    break;
+                case "goalDate":
+                    projects = projects.OrderBy(p => p.GoalDate);
+                    break;
+                case "goalDate_desc":
+                    projects = projects.OrderByDescending(p => p.GoalDate);
+                    break;
+                case "openTickets":
+                    projects = projects.OrderBy(p => p.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count());
+                    break;
+                case "openTickets_desc":
+                    projects = projects.OrderByDescending(p => p.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count());
+                    break;
+                default:
+                    projects = projects.OrderBy(p => p.CreatedAt);
+                    break;
+            }
+
+            int pageSize = 10;
+            return View(await PaginatedList<Project>.CreateAsync(projects.AsNoTracking(), pageNumber ?? 1, pageSize));
+            //return View(await projects.AsNoTracking().ToListAsync());
+
+
+            // ::: TO DO:::
+            //
             // If user is admin or project manager => get all projects
             // If user role is developer => get assigned projects
         }

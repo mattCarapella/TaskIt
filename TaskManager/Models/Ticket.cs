@@ -1,22 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TaskManager.Areas.Identity.Data;
+using static TaskManager.Core.Enums.Enums;
 
 namespace TaskManager.Models;
 
 
-public enum TicketType
-{
-    BUG = 0,
-    FEATURE = 1,
-}
+//public enum TicketType
+//{
+//    BUG = 0,
+//    FEATURE = 1,
+//}
 
-public enum Status
-{
-    TODO,
-    INPROGRESS = 1,
-    SUBMITTED = 2,
-    COMPLETED = 3
-}
+//public enum Status
+//{
+//    TODO,
+//    INPROGRESS = 1,
+//    SUBMITTED = 2,
+//    COMPLETED = 3
+//}
 
 public class Ticket
 {
