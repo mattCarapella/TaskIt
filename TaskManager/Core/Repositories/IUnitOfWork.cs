@@ -6,4 +6,6 @@ public interface IUnitOfWork
 
     IRoleRepository Role { get; }
 
+    //ITicketRepository Ticket { get; }
+
 }

@@ -30,6 +30,7 @@ namespace TaskManager.Controllers
             return View(await taskManagerContext.ToListAsync());
         }
 
+
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -50,6 +51,7 @@ namespace TaskManager.Controllers
             return View(ticket);
         }
 
+
         // GET: Tickets/Create
         public IActionResult Create()
         {
@@ -57,12 +59,12 @@ namespace TaskManager.Controllers
             return View();
         }
 
+
         // POST: Tickets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,Tag,TicketType,Status,Priority,GoalDate,ProjectId, SubmittedBy")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Title,Description,Tag,TicketType,Status,Priority," +
+            "GoalDate,ProjectId,SubmittedBy")] Ticket ticket)
         {
             try
             {
@@ -88,6 +90,7 @@ namespace TaskManager.Controllers
             return View(ticket);
         }
 
+
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -105,44 +108,42 @@ namespace TaskManager.Controllers
             return View(ticket);
         }
 
+
         // POST: Tickets/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("TicketId,Title,Description,Tag,TicketType,Status,Upvotes,Priority,GoalDate,CreatedAt,UpdatedAt,ProjectId")] Ticket ticket)
+        public async Task<IActionResult> EditPost(Guid? id)
         {
-            if (id != ticket.TicketId)
+            if (id != null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var ticketToUpdate = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketId == id);
+
+            if (await TryUpdateModelAsync<Ticket>(
+                    ticketToUpdate,
+                    "",
+                    t => t.Title, t => t.Description, t => t.TicketType, t => t.Status,
+                    t => t.Priority, t => t.Tag, t => t.GoalDate, t => t.ProjectId, t => t.UpdatedAt))
             {
                 try
                 {
-                    _context.Update(ticket);
+                    ticketToUpdate.UpdatedAt = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException)
                 {
-                    if (!TicketExists(ticket.TicketId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "There was a problem updating this ticket. Please try again.");
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
-            return View(ticket);
+            return View(ticketToUpdate);
         }
 
-        // GET: Tickets/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+
+        // GET: Tickets/Delete/{id}
+        public async Task<IActionResult> Delete(Guid? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -150,26 +151,48 @@ namespace TaskManager.Controllers
             }
 
             var ticket = await _context.Tickets
-                .Include(t => t.Project)
-                .FirstOrDefaultAsync(m => m.TicketId == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.TicketId == id);
+
             if (ticket == null)
             {
                 return NotFound();
             }
 
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] = "There was a problem deleting this ticket. Please try again.";
+            }
+
             return View(ticket);
         }
 
-        // POST: Tickets/Delete/5
+
+        // POST: Tickets/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid? id)
         {
+            //var ticket = await _unitOfWork.Ticket.GetTicket(id);
             var ticket = await _context.Tickets.FindAsync(id);
-            _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (ticket == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                _context.Tickets.Remove(ticket);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+
+            }
+            catch (DbUpdateException)
+            {
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
+
 
         private bool TicketExists(Guid id)
         {
@@ -177,3 +200,83 @@ namespace TaskManager.Controllers
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//// POST: Tickets/Edit/{id}
+//[HttpPost]
+//[ValidateAntiForgeryToken]
+//public async Task<IActionResult> Edit(Guid id, [Bind("TicketId,Title,Description,Tag,TicketType,Status,Upvotes," +
+//    "Priority,GoalDate,CreatedAt,UpdatedAt,ProjectId")] Ticket ticket)
+//{
+//    if (id != ticket.TicketId)
+//    {
+//        return NotFound();
+//    }
+
+//    if (ModelState.IsValid)
+//    {
+//        try
+//        {
+//            _context.Update(ticket);
+//            await _context.SaveChangesAsync();
+//        }
+//        catch (DbUpdateConcurrencyException)
+//        {
+//            if (!TicketExists(ticket.TicketId))
+//            {
+//                return NotFound();
+//            }
+//            else
+//            {
+//                throw;
+//            }
+//        }
+//        return RedirectToAction(nameof(Index));
+//    }
+//    ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+//    return View(ticket);
+//}
+
+
+
+
+//// GET: Tickets/Delete/{id}
+//public async Task<IActionResult> Delete(Guid? id)
+//{
+//    if (id == null)
+//    {
+//        return NotFound();
+//    }
+
+//    var ticket = await _context.Tickets
+//        .Include(t => t.Project)
+//        .FirstOrDefaultAsync(m => m.TicketId == id);
+//    if (ticket == null)
+//    {
+//        return NotFound();
+//    }
+
+//    return View(ticket);
+//}
+
+//// POST: Tickets/Delete/5
+//[HttpPost, ActionName("Delete")]
+//[ValidateAntiForgeryToken]
+//public async Task<IActionResult> DeleteConfirmed(Guid id)
+//{
+//    var ticket = await _context.Tickets.FindAsync(id);
+//    _context.Tickets.Remove(ticket);
+//    await _context.SaveChangesAsync();
+//    return RedirectToAction(nameof(Index));
+//}
