@@ -7,64 +7,73 @@
 <h1>@Model.Name</h1>
 
 <div>
-    
+
     <hr />
     <dl class="row">
-        
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Tag)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Tag)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.GoalDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.GoalDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UpdatedAt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
     </dl>
 </div>
 
 <h4>Contributers</h4>
-    <hr />
-    <dd class="col-sm-10">
-        <table class="table">
+<hr />
+<dd class="col-sm-10">
+    <table class="table">
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Job Title</th>
+        </tr>
+        @foreach (var item in Model.Contributers)
+        {
             <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Job Title</th>
-                
+                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
+                <td><a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">Details</a></td>
+                <td>
+                    @using(Html.BeginForm("RemoveUser", "Projects"))
+                    {
+                        <input type="hidden" name="paID" value="@item.ProjectAssignmentId" />
+                        <input type="submit" value="Remove" />
+                    }
+                </td>
             </tr>
-            @foreach (var item in Model.Contributers)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
-                    <td><a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">Details</a></td>
-                </tr>
-            }
-        </table>
-    </dd>
+        }
+    </table>
+</dd>
+
+<a asp-controller="Projects" asp-action="AddUser" asp-route-id="@Model.Id">Add a User</a>
+<hr />
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Core.Repositories;
+using TaskManager.Core.ViewModels;
 using TaskManager.Data;
 using TaskManager.Models;
 
@@ -52,6 +53,9 @@ namespace TaskManager.Controllers
             return View(project);
         }
 
+
+
+
         // GET: Projects/Create
         public IActionResult Create()
         {
@@ -94,6 +98,8 @@ namespace TaskManager.Controllers
             
             return View(project);
         }
+
+
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
@@ -222,6 +228,103 @@ namespace TaskManager.Controllers
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
             }
         }
+
+
+
+        public async Task<IActionResult> AddUser(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects
+                .Include(c => c.Contributers)
+                .ThenInclude(u => u.ApplicationUser)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var vm = GetViewModel(project);
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddUser(Guid? id, AddUserProjectViewModel projectViewModel)
+        {
+            var selectedUserId = projectViewModel.UserId;
+            if (selectedUserId == null || id == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
+            var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
+            var contributer = new ProjectAssignment
+            {
+                ProjectAssignmentId = Guid.NewGuid(),
+                ApplicationUser = selectedUser,
+                ApplicationUserId = selectedUserId,
+                Project = project,
+                ProjectId = project.Id,
+                IsManager = false
+            };
+
+            try
+            {
+                _context.ProjectAssignments.Add(contributer);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Projects", project);
+
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to add user.");
+            }
+
+            var vm = GetViewModel(project);
+            return View(vm);
+        }
+
+        private AddUserProjectViewModel GetViewModel(Project project)
+        {
+            var userList = (from user in _context.Users
+                            select new SelectListItem()
+                            {
+                                Text = user.UserName,
+                                Value = user.Id.ToString()
+                            }).ToList();
+
+            userList.Insert(0, new SelectListItem()
+            {
+                Text = "----Select----",
+                Value = String.Empty
+            });
+
+            ViewBag.ListOfUsers = userList;
+            var vm = new AddUserProjectViewModel
+            {
+                Project = project,
+                ListOfUsers = userList
+            };
+            return vm;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveUser(Guid paID)
+        {
+            var entryToRemove = await _context.ProjectAssignments.FirstOrDefaultAsync(p => p.ProjectAssignmentId == paID);
+            _context.ProjectAssignments.Remove(entryToRemove);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+       
 
 
 
