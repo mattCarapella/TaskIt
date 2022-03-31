@@ -65,3 +65,9 @@ body {
     padding-top: 3%;
     padding-bottom: 5%;
 }
+
+.navbar-brand {
+    font-size:1.4em;
+    padding-left: 30px;
+    padding-top:10px;
+}

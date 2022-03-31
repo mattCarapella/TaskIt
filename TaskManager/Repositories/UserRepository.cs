@@ -3,6 +3,7 @@ using TaskManager.Core.Repositories;
 using TaskManager.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TaskManager.Repositories;
 
@@ -43,5 +44,6 @@ public class UserRepository : IUserRepository
         _context.SaveChanges();
         return user;
     }
+
 
 }
