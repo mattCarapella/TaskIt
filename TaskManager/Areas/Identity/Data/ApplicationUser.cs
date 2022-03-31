@@ -11,21 +11,21 @@ namespace TaskManager.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the ApplicationUser class
 public class ApplicationUser : IdentityUser
 {
-    [StringLength(50, MinimumLength = 1)]
-    [Required]
+    [Required, StringLength(50), Display(Name = "First Name")]
     public string FirstName { get; set; }
 
-    [StringLength(50, MinimumLength = 1)]
-    [Required]
+    [Required, StringLength(50), Display(Name = "Last Name")]
     public string LastName { get; set; }
 
-    public string Photo { get; set; } = "";
+    public string ProfilePicture { get; set; } = "";
 
+    [Display(Name = "Employee ID")]
     public string? EmployeeID { get; set; }
 
+    [Display(Name = "Job Title")]
     public string? JobTitle { get; set; }
 
-    [Display(Name = "Full Name")]
+    [Display(Name = "Name")]
     public string FullName
     {
         get
@@ -34,8 +34,10 @@ public class ApplicationUser : IdentityUser
         }
     }
 
+    [Display(Name = "Created On"), DataType(DataType.Date)]
     public DateTime? CreatedAt { get; set; }
 
+    [Display(Name = "Last Login"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime? LastLoggedInAt  { get; set; }
 
 

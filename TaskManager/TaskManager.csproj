@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Core\ViewModels\Ticket\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

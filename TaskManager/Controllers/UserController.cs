@@ -11,11 +11,14 @@ public class UserController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public UserController(IUnitOfWork unitOfWork, SignInManager<ApplicationUser> signInManager)
+    public UserController(IUnitOfWork unitOfWork, SignInManager<ApplicationUser> signInManager,
+        IWebHostEnvironment webHostEnvironment)
     {
         _unitOfWork = unitOfWork;
         _signInManager = signInManager;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public IActionResult Index()
@@ -125,6 +128,8 @@ public class UserController : Controller
             await _signInManager.UserManager.RemoveFromRolesAsync(user, rolesToDelete);
         }
 
+        string uploadedFileName = UploadFile(data);
+
         user.FirstName = data.User.FirstName;
         user.LastName = data.User.LastName;
         user.UserName = data.User.UserName;
@@ -132,6 +137,7 @@ public class UserController : Controller
         user.JobTitle = data.User.JobTitle;
         user.EmployeeID = data.User.EmployeeID;
         user.Email = data.User.Email;
+        user.ProfilePicture = uploadedFileName;
 
         _unitOfWork.User.UpdateUser(user);
 
@@ -139,4 +145,20 @@ public class UserController : Controller
 
     }
 
+
+    private string UploadFile(EditUserViewModel data)
+    {
+        string fileName = null;
+        if (data.ProfilePicture != null)
+        {
+            string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            fileName = Guid.NewGuid().ToString() + "_" + data.ProfilePicture.FileName;
+            string filePath = Path.Combine(uploadDir, fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                data.ProfilePicture.CopyTo(fileStream);
+            }
+        }
+        return fileName;
+    }
 }

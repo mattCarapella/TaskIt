@@ -47,9 +47,9 @@
         </dd>
     </dl>
 </div>
-
+<hr />
 <h4>Contributers</h4>
-    <hr />
+    
     <dd class="col-sm-10">
         <table class="table">
             <tr>
@@ -80,7 +80,7 @@
             <select asp-for="UserId" class="form-control" asp-items="@(new SelectList(ViewBag.ListOfUsers, "Value", "Text"))"></select>
         </div>
         <div class="form-group">
-            <input id="Submit" class="btn btn-secondary" type="submit" value="Submit" />
+            <input id="Submit" class="btn btn-primary" type="submit" value="Submit" />
         </div>
     </form>
 </div>
