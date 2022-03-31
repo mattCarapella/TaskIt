@@ -3,101 +3,104 @@
 }
 @model TaskManager.Core.ViewModels.UserViewModel
 
-<h1>@Model.User.UserName</h1>
+<div class="main-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-11">
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.JobTitle)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.JobTitle)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.EmployeeID)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.EmployeeID)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.CreatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.CreatedAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.LastLoggedInAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.LastLoggedInAt)
-        </dd>
-        <dt class="col-sm-2">
-            Roles
-        </dt>
-        <dd class="col-sm-10">
-            <ul>
-                @foreach (var role in @Model.Roles)
-                {
-                    <li>@role</li>
-                }
-            </ul>
-        </dd>
+                <div class="page-header mb-4">
+                    <div class="media">
+                        <img alt="Image" src="~/images/@Model.User.ProfilePicture" class="avatar avatar-lg mt-1" overflow="hidden" />
+                        <div class="media-body ml-3">
+                            <h1 class="mb-0">@Model.User.FullName</h1>
+                            <p class="lead">@Model.User.JobTitle</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.User.UserName)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.User.UserName)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.User.Email)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.User.Email)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.User.JobTitle)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.User.JobTitle)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.User.EmployeeID)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.User.EmployeeID)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.User.CreatedAt)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.User.CreatedAt)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.User.LastLoggedInAt)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.User.LastLoggedInAt)
+                        </dd>
+                        <dt class="col-sm-2">
+                            Roles
+                        </dt>
+                        <dd class="col-sm-10">
+                            <ul>
+                                @foreach (var role in @Model.Roles)
+                                {
+                                    <li>@role</li>
+                                }
+                            </ul>
+                        </dd>
 
-    </dl>
-    <h4>Projects</h4>
-    <hr />
-    <dd class="col-sm-10">
-        <table class="table">
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>Goal Date</th>
-            </tr>
-            @foreach (var item in Model.User.Projects)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Project.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Project.Description)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Project.CreatedAt)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Project.GoalDate)</td>
-                    <td><a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">Details</a></td>
-                </tr>
-            }
-        </table>
-    </dd>
+                    </dl>
+                    <h4>Projects</h4>
+                    <hr />
+                    <dd class="col-sm-10">
+                        <table class="table">
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Start Date</th>
+                                <th>Goal Date</th>
+                            </tr>
+                            @foreach (var item in Model.User.Projects)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Project.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Project.Description)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Project.CreatedAt)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Project.GoalDate)</td>
+                                    <td><a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">Details</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </dd>
+                </div>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model?.User.Id">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.User.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
 
 
 
@@ -106,7 +109,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-11">
-                <div class="page-header mb-4">
+                @*<div class="page-header mb-4">
                     <div class="media">
                         <img alt="Image" src="~/assets/img/avatar-male-4.jpg" class="avatar avatar-lg mt-1" />
                         <div class="media-body ml-3">
@@ -114,7 +117,7 @@
                             <p class="lead">@Model.User.JobTitle</p>
                         </div>
                     </div>
-                </div>
+                </div>*@
                 <ul class="nav nav-tabs nav-fill" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" data-toggle="tab" href="#teams" role="tab" aria-controls="teams" aria-selected="true">Teams</a>

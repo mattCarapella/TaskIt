@@ -14,7 +14,12 @@ html {
 }
 
 body {
+    
     margin-bottom: 60px;
+}
+
+.container-body {
+    margin-top: 45px;
 }
 
 .btn-text {
@@ -66,8 +71,30 @@ body {
     padding-bottom: 5%;
 }
 
+.project-create--container {
+    width: 70%;
+}
+
+
+
+.project-create--form {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
 .navbar-brand {
-    font-size:1.4em;
+    font-size: 1.4em;
     padding-left: 30px;
-    padding-top:10px;
+    padding-top: 10px;
+}
+
+.user-details--header {
+    padding-top:30px;
+}
+
+.navbar-avatar {
+    width: 44px;
+    height: 44px;
+    margin-left: 30px;
+    margin-right: 10px;
 }
