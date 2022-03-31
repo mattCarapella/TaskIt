@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -344,6 +345,8 @@ namespace TaskManager.Controllers
 
             try
             {
+                var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+                ticket.AssignedBy = currentUser;
                 _context.TicketAssignments.Add(assignee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", new { id = ticket.TicketId });
@@ -372,6 +375,8 @@ namespace TaskManager.Controllers
                 Text = "----Select----",
                 Value = String.Empty
             });
+
+            
 
             ViewBag.ListOfUsers = userList;
             var vm = new AssignUserTicketViewModel

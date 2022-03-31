@@ -1,0 +1,125 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TaskManager.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="layout layout-nav-top">
+    <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+        
+        <div class="row">
+            <div class="col-md-3">
+                <a class="navbar-brand" href="index.html">
+                    <img alt="Pipeline" src="~/assets/img/logo.svg" />
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TaskIt</a>
+            </div>
+        </div>
+        
+        
+
+     
+
+        <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="" asp-action="">Team</a>
+                </li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Pages</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="Index">Roles</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Admin">Admin</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Manager">Manager</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                </li>
+            </ul>
+
+            <div class="d-lg-flex align-items-center">
+               
+                <div class="dropdown mx-lg-2">
+                    <button class="btn btn-light btn-block dropdown-toggle" type="button" id="newContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Add New
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Team</a>
+                        <a class="dropdown-item" href="#">Project</a>
+                        <a class="dropdown-item" href="#">Task</a>
+                    </div>
+                </div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="d-none d-lg-block">
+                        <div class="dropdown">
+                            <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img alt="Image" src="~/assets/img/avatar-male-4.jpg" class="avatar" />
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="nav-side-user.html" class="dropdown-item">Profile</a>
+                                <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
+                                @*<a class="dropdown-item" id="register" asp-area="Identity" asp-page="/Account/Logout">Log Out</a>*@
+                                 <form id="logoutForm" class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" 
+                                    asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button id="logout" type="submit" class="btn btn-link dropdown-item">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                        </li>
+                    </ul>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*@if (SignInManager.IsSignedIn(User))
+    {
+        var currentUser = @UserManager.Users.FirstOrDefault(u => u.UserName == @UserManager.GetUserName(User));
+        <li class="nav-item">
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            Hello, @UserManager.GetUserName(User)
+        </a>
+    </li>
+    <li class="nav-item">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" 
+                asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
+</ul>*@
