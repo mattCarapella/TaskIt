@@ -4,85 +4,93 @@
     ViewData["Title"] = "Ticket Details";
 }
 
-
-
 <div>
     <h1>@Model.Title</h1>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Project)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Project.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TicketType)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TicketType)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Status)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Priority)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Priority)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.GoalDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.GoalDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Upvotes)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Upvotes)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Tag)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Tag)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UpdatedAt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.SubmittedBy)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SubmittedBy.UserName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SubmittedBy.FullName)
         </dd>
     </dl>
 </div>
 <hr />
-<h4>Assigned To</h4>
+<div class="row">    
+    <div class="col-md-2">
+        <h4>Contributers</h4>
+    </div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-outline-secondary">
+            <a asp-controller="Tickets" asp-action="AssignUser" asp-route-id="@Model.TicketId" class="btn-text-dark">Assign to User</a>
+        </button>
+    </div>
+</div>
 <dd class="col-sm-10">
     <table class="table">
         <tr>
+            <th>Name</th>
             <th>Username</th>
             <th>Email</th>
             <th>Job Title</th>
@@ -91,17 +99,22 @@
         @foreach (var item in Model.AssignedTo)
         {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</td>
                 <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
                 <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
                 <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
                 <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
-                <td><a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">Details</a></td>
-                
+                <td>
+                    <button type="button" class="btn btn-outline-secondary">
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Details</a>
+                    </button>        
+                </td>
+
             </tr>
         }
     </table>
 </dd>
-<a asp-controller="Tickets" asp-action="AssignUser" asp-route-id="@Model.TicketId">Assign to ticket</a>
+
 <hr />
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.TicketId">Edit</a> |
@@ -111,9 +124,9 @@
 
 
 @*<td>
-                    @using(Html.BeginForm("RemoveUser", "Projects"))
-                    {
-                        <input type="hidden" name="paID" value="@item.TicketAssignmentId" />
-                        <input type="submit" value="Remove" />
-                    }
-                </td>*@
+    @using(Html.BeginForm("RemoveUser", "Projects"))
+    {
+        <input type="hidden" name="paID" value="@item.TicketAssignmentId" />
+        <input type="submit" value="Remove" />
+    }
+</td>*@

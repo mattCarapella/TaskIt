@@ -9,116 +9,122 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Projects</h1>
-<p>
-    <a asp-action="Create">Add a Project</a>
-</p>
+<div class="projects--index">
+    <h1>Projects</h1>
+    <button type="submit" class="btn btn-outline-primary">
+        <a asp-action="Create" class="btn-outline-primary-text">Add a Project</a>
+    </button>
 
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Search by name or description:
-            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> 
-            <a asp-action="Index">Clear</a>    
-        </p>
-    </div>
-</form>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Search by name or description:
+                <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <button type="submit" class="btn btn-outline-dark">Search</button>
+                <button type="submit" class="btn btn-outline-dark">
+                    <a asp-action="Index" class="btn-outline-dark-text">Clear</a>
+                </button>
+            </p>
+        </div>
+    </form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a class="index--sort-link" 
-                    asp-action="Index" 
-                    asp-route-sortOrder="@ViewData["NameSortParam"]"
-                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                    Name
-                </a>
-            </th>
-            <th>Description</th>
-            <th>
-                 <a class="index--sort-link" 
-                    asp-action="Index"
-                    asp-route-sortOrder="@ViewData["OpenTicketSortParam"]"
-                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                    Open Tickets
-                </a>
-            </th>
-            <th>
-                <a class="index--sort-link" 
-                    asp-action="Index"
-                    asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
-                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                    Created On
-                </a>
-            </th>
-            <th>
-                <a class="index--sort-link" 
-                    asp-action="Index" 
-                    asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
-                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                    Goal Date
-                </a>
-            </th>
-            <th>Last Updated</th>
-            <th>Tag</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model) {
-            var ticketCount = item.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count();
+    <table class="table">
+        <thead>
             <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-               @Html.DisplayFor(modelItem => ticketCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GoalDate)
-            </td>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tag)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+                <th>
+                    <a class="index--sort-link"
+                       asp-action="Index"
+                       asp-route-sortOrder="@ViewData["NameSortParam"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        Name
+                    </a>
+                </th>
+                <th>Description</th>
+                <th>
+                    <a class="index--sort-link"
+                       asp-action="Index"
+                       asp-route-sortOrder="@ViewData["OpenTicketSortParam"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        Open Tickets
+                    </a>
+                </th>
+                <th>
+                    <a class="index--sort-link"
+                       asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        Created On
+                    </a>
+                </th>
+                <th>
+                    <a class="index--sort-link"
+                       asp-action="Index"
+                       asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        Goal Date
+                    </a>
+                </th>
+                <th>Last Updated</th>
+                <th>Tag</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var ticketCount = item.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count();
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => ticketCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GoalDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdatedAt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tag)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
     }
-    </tbody>
-</table>
 
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex-1)" ;
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
 
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex-1)";
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex+1)" ;
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
 
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex+1)";
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>
+</div>
