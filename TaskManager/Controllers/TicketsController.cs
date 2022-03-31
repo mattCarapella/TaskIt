@@ -146,7 +146,7 @@ namespace TaskManager.Controllers
         // GET: Tickets/Create
         public IActionResult Create()
         {
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description");
+            ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description");
             return View();
         }
 
@@ -170,7 +170,7 @@ namespace TaskManager.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+                ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
                 return View(ticket);
             }
             catch (DbUpdateException)
@@ -195,7 +195,7 @@ namespace TaskManager.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+            ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
             return View(ticket);
         }
 
@@ -229,7 +229,7 @@ namespace TaskManager.Controllers
                     ModelState.AddModelError("", "There was a problem updating this ticket. Please try again.");
                 }
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticketToUpdate.ProjectId);
+            ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticketToUpdate.ProjectId);
             return View(ticketToUpdate);
         }
 

@@ -24,4 +24,18 @@ public class Enums
         COMPLETED = 3
     }
 
+    public enum Priority
+    {
+        [Display(Name = "1 (Lowest Priority)")]
+        ONE,
+        [Display(Name = "2")]
+        TWO,
+        [Display(Name = "3")]
+        THREE,
+        [Display(Name = "4")]
+        FOUR,
+        [Display(Name = "5 (Highest Priority)")]
+        FIVE
+    }
+
 }

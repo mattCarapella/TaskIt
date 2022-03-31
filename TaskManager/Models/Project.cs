@@ -6,21 +6,21 @@ public class Project
 {
     public Guid Id { get; set; }
 
-    [Required]
+    [Required, StringLength(50)]
     public string? Name { get; set; }
 
-    [Required]
+    [Required, StringLength(1000)]
     public string? Description { get; set; }
 
     public string? Tag { get; set; }
 
-    [DataType(DataType.Date)]
+    [Display(Name= "Goal Date"), DataType(DataType.Date)]
     public DateTime? GoalDate { get; set; }
 
-    [DataType(DataType.Date)]
+    [Display(Name = "Created On"), DataType(DataType.Date)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    [DataType(DataType.Date)]
+    [Display(Name = "Updated At"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime? UpdatedAt { get; set; }
 
 
