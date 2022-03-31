@@ -10,5 +10,7 @@ namespace TaskManager.Models
 
         public Ticket? Ticket { get; set; }
         public ApplicationUser? ApplicationUser { get; set; }
+
+        public ApplicationUser? AssignedBy { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManager.Data;
 
@@ -11,9 +12,10 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    partial class TaskManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220331170948_AddAssignedByToTicketAssignmentAndProjectAssignment")]
+    partial class AddAssignedByToTicketAssignmentAndProjectAssignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,7 +295,7 @@ namespace TaskManager.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AssignedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsManager")
                         .HasColumnType("bit");
@@ -304,8 +306,6 @@ namespace TaskManager.Migrations
                     b.HasKey("ProjectAssignmentId");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("AssignedById");
 
                     b.HasIndex("ProjectId");
 
@@ -450,17 +450,11 @@ namespace TaskManager.Migrations
                         .WithMany("Projects")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "AssignedBy")
-                        .WithMany()
-                        .HasForeignKey("AssignedById");
-
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Contributers")
                         .HasForeignKey("ProjectId");
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("AssignedBy");
 
                     b.Navigation("Project");
                 });

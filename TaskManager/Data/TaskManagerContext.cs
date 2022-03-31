@@ -27,6 +27,30 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
         // Add your customizations after calling base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+
+        builder.Entity<ProjectAssignment>()
+            .HasOne(u => u.ApplicationUser)
+            .WithMany(p => p.Projects)
+            .HasForeignKey(pa => pa.ApplicationUserId);
+
+        builder.Entity<ProjectAssignment>()
+            .HasOne(p => p.Project)
+            .WithMany(u => u.Contributers)
+            .HasForeignKey(pa => pa.ProjectId);
+
+        builder.Entity<Ticket>()
+            .HasOne(p => p.Project)
+            .WithMany(t => t.Tickets);
+
+        builder.Entity<TicketAssignment>()
+            .HasOne(u => u.ApplicationUser)
+            .WithMany(t => t.Tickets)
+            .HasForeignKey(ta => ta.ApplicationUserId);
+
+        builder.Entity<TicketAssignment>()
+            .HasOne(t => t.Ticket)
+            .WithMany(u => u.AssignedTo)
+            .HasForeignKey(pa => pa.TicketId);
     }
 
 }

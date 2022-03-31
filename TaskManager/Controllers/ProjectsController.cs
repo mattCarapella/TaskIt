@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -114,6 +115,8 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
+
+
             return View(project);
         }
 
@@ -133,14 +136,15 @@ namespace TaskManager.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == HttpContext.User.Identity.Name);
-
+                    //var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == HttpContext.User.Identity.Name);
+                    var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
                     var contributer = new ProjectAssignment
                     {
                         ProjectAssignmentId = Guid.NewGuid(),
-                        ApplicationUser = user,
+                        ApplicationUser = currentUser,
                         Project = project,
-                        IsManager = true
+                        IsManager = true,
+                        AssignedBy = currentUser
                     };
 
                     project.Id = Guid.NewGuid();
@@ -292,6 +296,7 @@ namespace TaskManager.Controllers
 
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
             var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
+            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
             var contributer = new ProjectAssignment
             {
                 ProjectAssignmentId = Guid.NewGuid(),
@@ -299,7 +304,8 @@ namespace TaskManager.Controllers
                 ApplicationUserId = selectedUserId,
                 Project = project,
                 ProjectId = project.Id,
-                IsManager = false
+                IsManager = false,
+                AssignedBy = currentUser
             };
 
             try

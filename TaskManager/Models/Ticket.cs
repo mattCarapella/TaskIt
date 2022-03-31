@@ -57,8 +57,8 @@ public class Ticket
     [Display(Name = "Submitted by")]
     public ApplicationUser? SubmittedBy { get; set; }
 
-    [Display(Name = "Assigned by")]
-    public ApplicationUser? AssignedBy { get; set; }
+    //[Display(Name = "Assigned by")]
+    //public ApplicationUser? AssignedBy { get; set; }
 
     public ICollection<TicketAssignment>? AssignedTo { get; set; }
 

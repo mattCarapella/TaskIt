@@ -172,9 +172,9 @@ namespace TaskManager.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == HttpContext.User.Identity.Name);
+                    var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
                     ticket.TicketId = Guid.NewGuid();
-                    ticket.SubmittedBy = user;
+                    ticket.SubmittedBy = currentUser;
                     var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
                     project.Tickets.Add(ticket);
                     _context.Add(ticket);
@@ -276,7 +276,6 @@ namespace TaskManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid? id)
         {
-            //var ticket = await _unitOfWork.Ticket.GetTicket(id);
             var ticket = await _context.Tickets.FindAsync(id);
             if (ticket == null)
             {
@@ -334,6 +333,7 @@ namespace TaskManager.Controllers
 
             var ticket = await _context.Tickets.FirstOrDefaultAsync(p => p.TicketId == id);
             var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
+            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
             var assignee = new TicketAssignment
             {
                 TicketAssignmentId = Guid.NewGuid(),
@@ -341,12 +341,12 @@ namespace TaskManager.Controllers
                 ApplicationUserId = selectedUserId,
                 Ticket = ticket,
                 TicketId = ticket.TicketId,
+                AssignedBy = currentUser
             };
 
             try
             {
-                var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
-                ticket.AssignedBy = currentUser;
+
                 _context.TicketAssignments.Add(assignee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", new { id = ticket.TicketId });
