@@ -1,15 +1,12 @@
 ﻿@using TaskManager.Core.ViewModels
-
 @model AssignUserTicketViewModel
 
 @{
     ViewData["Title"] = "Assign Ticket";
 }
 
-<h1>@Model.Ticket.Title</h1>
-
 <div>
-    <h4>Ticket</h4>
+    <h1>@Model.Ticket.Title</h1>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -24,7 +21,6 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Ticket.Description)
         </dd>
-        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.TicketType)
         </dt>
@@ -81,12 +77,16 @@
         </dd>
     </dl>
 </div>
-
-    <hr />
-    <h4>Assigned To</h4>
+<hr />
+<div class="row">    
+    <div class="col-md-2">
+        <h4>Assigned To</h4>
+    </div>
+</div>
     <dd class="col-sm-10">
         <table class="table">
             <tr>
+                <th>Name</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Job Title</th>
@@ -95,18 +95,27 @@
             @foreach (var item in @Model.Ticket.AssignedTo)
             {
                 <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
                      <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
-                    <td><a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">Details</a></td>
-                    <td><a asp-controller="Projects" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id">Remove</a></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-secondary">
+                            <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Details</a>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-secondary"> 
+                            <a asp-controller="Projects" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Remove</a>
+                        </button>
+                    </td>
                 </tr>
             }
         </table>
     </dd>
 
-    <h4>Add a Contributer</h4>
+<h4>Add a Contributer</h4>
 <hr />
 <div class="col-md-4">   
     <form asp-controller="Tickets" asp-action="AssignUser" asp-route-id="@Model.Ticket.TicketId" method="post" role="form">

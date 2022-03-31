@@ -144,9 +144,19 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(string? projectId)
         {
-            ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description");
+            if (!String.IsNullOrEmpty(projectId))
+            {
+                var id = Guid.Parse(projectId);
+                var projectAssign = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                IEnumerable<Project> pl = new List<Project>() { projectAssign };
+                ViewData["Project"] = new SelectList(pl, "Id", "Description");
+            }
+            else
+            {
+                ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description");
+            }
             return View();
         }
 

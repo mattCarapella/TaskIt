@@ -1,18 +1,67 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+.btn-text {
+    color: white;
+    text-decoration: none;
+}
+
+    .btn-text:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+.btn-text-dark {
+    color: black;
+    text-decoration: none;
+}
+
+    .btn-text-dark:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+.btn-outline-primary-text {
+    text-decoration: none;
+}
+
+.btn-outline-primary-text:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.btn-outline-dark-text {
+    color: black;
+    text-decoration: none;
+}
+
+    .btn-outline-dark-text:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+.tickets--index {
+    padding-top: 3%;
+    padding-bottom:5%;
+}
+
+.projects--index {
+    padding-top: 3%;
+    padding-bottom: 5%;
 }

@@ -25,6 +25,15 @@ public class ApplicationUser : IdentityUser
 
     public string? JobTitle { get; set; }
 
+    [Display(Name = "Full Name")]
+    public string FullName
+    {
+        get
+        {
+            return FirstName + " " + LastName;
+        }
+    }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? LastLoggedInAt  { get; set; }
