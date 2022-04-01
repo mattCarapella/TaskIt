@@ -176,12 +176,14 @@ namespace TaskManager.Controllers
                     ticket.TicketId = Guid.NewGuid();
                     ticket.SubmittedBy = currentUser;
                     var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
+                    //var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == ticket.Project.Id); *****
                     project.Tickets.Add(ticket);
                     _context.Add(ticket);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+                //ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.Project.Id); ******
                 return View(ticket);
             }
             catch (DbUpdateException)
@@ -207,6 +209,7 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
             ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+            //ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.Project.Id); ********
             return View(ticket);
         }
 
@@ -341,7 +344,7 @@ namespace TaskManager.Controllers
                 ApplicationUserId = selectedUserId,
                 Ticket = ticket,
                 TicketId = ticket.TicketId,
-                AssignedBy = currentUser
+                //AssignedBy = currentUser
             };
 
             try

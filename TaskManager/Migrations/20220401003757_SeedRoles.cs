@@ -40,7 +40,7 @@ namespace TaskManager.Migrations
                 @$"INSERT [dbo].[AspNetUsers] ([Id], [FirstName], [LastName], [UserName], [NormalizedUserName], 
 [Email], [NormalizedEmail], [EmailConfirmed], [PasswordHash], [SecurityStamp], [ConcurrencyStamp], 
 [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount],
-[Photo], [EmployeeId], [JobTitle], [CreatedAt], [LastLoggedInAt]) 
+[ProfilePicture], [EmployeeId], [JobTitle], [CreatedAt], [LastLoggedInAt]) 
 VALUES 
 (N'{User1Id}', N'Joe', N'Blow', N'JoeBlow', N'JOEBLOW', 
 N'joe@test.com', N'JOE@TEST.COM', 0, 
@@ -52,9 +52,9 @@ N'', N'743116800', N'Developer II', NULL, NULL)");
                 @$"INSERT [dbo].[AspNetUsers] ([Id], [FirstName], [LastName], [UserName], [NormalizedUserName], 
 [Email], [NormalizedEmail], [EmailConfirmed], [PasswordHash], [SecurityStamp], [ConcurrencyStamp], 
 [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount],
-[Photo], [EmployeeId], [JobTitle], [CreatedAt], [LastLoggedInAt])
+[ProfilePicture], [EmployeeId], [JobTitle], [CreatedAt], [LastLoggedInAt])
 VALUES 
-(N'{User2Id}', N'Rico', N'Sauve', N'Rico69', N'RICO69', 
+(N'{User2Id}', N'Rico', N'Suave', N'Rico69', N'RICO69', 
 N'rico@test.com', N'RICO@TEST.COM', 0, 
 N'AQAAAAEAACcQAAAAEEdbMTTpvlGGIHC1yCPem2y1KClVlmYwsZ8NazGiHCniuYY+okEL9A12jXYY/78OMw==', 
 N'KBLZILOSEDV6FGP7KJKXC3WQCXQR6XWI', N'd8236396-195b-4bd3-81ad-dd154e6aad3b', NULL, 0, 0, NULL, 1, 0,

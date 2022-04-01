@@ -12,8 +12,8 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    [Migration("20220326200359_InitApplicationUser")]
-    partial class InitApplicationUser
+    [Migration("20220401003624_StartFreshDB")]
+    partial class StartFreshDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -173,6 +173,9 @@ namespace TaskManager.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -180,10 +183,19 @@ namespace TaskManager.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("EmployeeID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("JobTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastLoggedInAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -213,7 +225,7 @@ namespace TaskManager.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Photo")
+                    b.Property<string>("ProfilePicture")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -238,6 +250,139 @@ namespace TaskManager.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("TaskManager.Models.Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("GoalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Tag")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.ProjectAssignment", b =>
+                {
+                    b.Property<Guid>("ProjectAssignmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsManager")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProjectAssignmentId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectAssignments");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.Ticket", b =>
+                {
+                    b.Property<Guid>("TicketId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime?>("GoalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubmittedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Tag")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TicketType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Upvotes")
+                        .HasColumnType("int");
+
+                    b.HasKey("TicketId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("SubmittedById");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.TicketAssignment", b =>
+                {
+                    b.Property<Guid>("TicketAssignmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("TicketId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TicketAssignmentId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TicketAssignments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -289,6 +434,70 @@ namespace TaskManager.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TaskManager.Models.ProjectAssignment", b =>
+                {
+                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany("Projects")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("TaskManager.Models.Project", "Project")
+                        .WithMany("Contributers")
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.Ticket", b =>
+                {
+                    b.HasOne("TaskManager.Models.Project", "Project")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "SubmittedBy")
+                        .WithMany()
+                        .HasForeignKey("SubmittedById");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("SubmittedBy");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.TicketAssignment", b =>
+                {
+                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("TaskManager.Models.Ticket", "Ticket")
+                        .WithMany("AssignedTo")
+                        .HasForeignKey("TicketId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("TaskManager.Areas.Identity.Data.ApplicationUser", b =>
+                {
+                    b.Navigation("Projects");
+
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.Project", b =>
+                {
+                    b.Navigation("Contributers");
+
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("TaskManager.Models.Ticket", b =>
+                {
+                    b.Navigation("AssignedTo");
                 });
 #pragma warning restore 612, 618
         }

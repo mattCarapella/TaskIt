@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Core\ViewModels\Ticket\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

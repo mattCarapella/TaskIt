@@ -14,10 +14,10 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    public DbSet<Project> Projects { get; set; }
-    public DbSet<ProjectAssignment> ProjectAssignments { get; set; }
-    public DbSet<Ticket> Tickets { get; set; }
-    public DbSet<TicketAssignment> TicketAssignments { get; set; }
+    public DbSet<Project>? Projects { get; set; }
+    public DbSet<ProjectAssignment>? ProjectAssignments { get; set; }
+    public DbSet<Ticket>? Tickets { get; set; }
+    public DbSet<TicketAssignment>? TicketAssignments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -27,6 +27,10 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
         // Add your customizations after calling base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+
+        
+
+        
 
         builder.Entity<ProjectAssignment>()
             .HasOne(u => u.ApplicationUser)
@@ -38,10 +42,10 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
             .WithMany(u => u.Contributers)
             .HasForeignKey(pa => pa.ProjectId);
 
-        builder.Entity<Ticket>()
-            .HasOne(p => p.Project)
-            .WithMany(t => t.Tickets);
+        builder.Entity<ProjectAssignment>().HasKey(pa => new { pa.ProjectId, pa.ApplicationUserId });
 
+
+        
         builder.Entity<TicketAssignment>()
             .HasOne(u => u.ApplicationUser)
             .WithMany(t => t.Tickets)
@@ -51,6 +55,17 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
             .HasOne(t => t.Ticket)
             .WithMany(u => u.AssignedTo)
             .HasForeignKey(pa => pa.TicketId);
+
+        builder.Entity<TicketAssignment>().HasKey(ta => new { ta.TicketId, ta.ApplicationUserId });
+
+
+
+        builder.Entity<Ticket>()
+            .HasOne(p => p.Project)
+            .WithMany(t => t.Tickets)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
     }
 
 }

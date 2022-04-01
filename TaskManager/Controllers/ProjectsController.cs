@@ -144,7 +144,7 @@ namespace TaskManager.Controllers
                         ApplicationUser = currentUser,
                         Project = project,
                         IsManager = true,
-                        AssignedBy = currentUser
+                        //AssignedBy = currentUser
                     };
 
                     project.Id = Guid.NewGuid();
@@ -305,7 +305,7 @@ namespace TaskManager.Controllers
                 Project = project,
                 ProjectId = project.Id,
                 IsManager = false,
-                AssignedBy = currentUser
+                //AssignedBy = currentUser
             };
 
             try

@@ -9,7 +9,7 @@ public class UserViewModel
 {
     public ApplicationUser User { get; set; }
 
-    public List<string> Roles { get; set; }
+    public List<string>? Roles { get; set; }
 
 
 }

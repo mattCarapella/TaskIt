@@ -8,9 +8,9 @@ namespace TaskManager.Models
         public Guid? TicketId { get; set; }
         public string? ApplicationUserId { get; set; }
 
-        public Ticket? Ticket { get; set; }
-        public ApplicationUser? ApplicationUser { get; set; }
+        public virtual Ticket? Ticket { get; set; }
+        public virtual ApplicationUser? ApplicationUser { get; set; }
 
-        public ApplicationUser? AssignedBy { get; set; }
+        //public ApplicationUser? AssignedBy { get; set; }
     }
 }
