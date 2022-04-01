@@ -11,6 +11,6 @@ namespace TaskManager.Models
         public virtual Ticket? Ticket { get; set; }
         public virtual ApplicationUser? ApplicationUser { get; set; }
 
-        //public ApplicationUser? AssignedBy { get; set; }
+        public string? AssignedByUsedId { get; set; }
     }
 }

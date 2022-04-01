@@ -11,6 +11,7 @@ using TaskManager.Core;
 using TaskManager.Core.Enums;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
+using TaskManager.Core.ViewModels.Project;
 using TaskManager.Data;
 using TaskManager.Models;
 
@@ -115,9 +116,19 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
+            var contributers = project.Contributers.ToList();
+            var openTickets = project.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).ToList();
+            var closedTickets = project.Tickets.Where(t => t.Status == Enums.Status.COMPLETED).ToList();
+            
+            var vm = new ProjectDetailsViewModel()
+            {
+                Project = project,
+                Contributers = contributers,    
+                OpenTickets = openTickets,
+                ClosedTickets = closedTickets,
+            };
 
-
-            return View(project);
+            return View(vm);
         }
 
 

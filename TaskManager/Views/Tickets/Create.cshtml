@@ -5,58 +5,53 @@
     ViewData["Title"] = "Submit a Ticket";
 }
 
-<div class="container">
-    <h1>Submit a new ticket</h1>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Title" class="control-label"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Tag" class="control-label"></label>
-                    <input asp-for="Tag" class="form-control" />
-                    <span asp-validation-for="Tag" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="TicketType" control="control-label"></label>
-                    <select asp-for="TicketType" class="form-control" asp-items="Html.GetEnumSelectList<TicketType>()">
-                        <option value="">Select</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Priority" class="control-label"></label>
-                    <input asp-for="Priority" class="form-control" />
-                    <span asp-validation-for="Priority" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="GoalDate" class="control-label"></label>
-                    <input asp-for="GoalDate" class="form-control" />
-                    <span asp-validation-for="GoalDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Project" class="control-label"></label>
-                    <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.Project"></select>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
-                </div>
-            </form>
+<div><a href="javascript:history.go(-1)">Back</a></div>
+
+<div class="container create--container pt-5">
+    <h1 class="mb-3">Submit a ticket</h1>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
-    </div>
-    <div>
-        <a asp-action="Index">Back to Tickets</a>
-    </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="8"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Tag" class="control-label"></label>
+            <input asp-for="Tag" class="form-control" />
+            <span asp-validation-for="Tag" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TicketType" control="control-label"></label>
+            <select asp-for="TicketType" class="form-control" asp-items="Html.GetEnumSelectList<TicketType>()">
+                <option value=""> - Select - </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Priority" class="control-label">Priority <em>(1 to 5)</em></label>
+            <input asp-for="Priority" class="form-control" />
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="GoalDate" class="control-label"></label>
+            <input asp-for="GoalDate" class="form-control" />
+            <span asp-validation-for="GoalDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Project" class="control-label"></label>
+            <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.Project"></select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
+
 
 @section Scripts {
     @{

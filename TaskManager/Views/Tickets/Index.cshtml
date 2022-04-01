@@ -6,168 +6,181 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="tickets--index">
-    <h1>Tickets</h1>
-    <button type="submit" class="btn btn-outline-primary">
-        <a asp-action="Create" class="btn-outline-primary-text">Submit a new ticket</a>
-    </button>
+<div class="main-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12">
+                <div class="page-content">
+                    <div class="wrapper mb-2">
+                        <span class="header-text">Tickets</span>
+                        <span class="center-vert">
+                            <button class="btn btn-primary">
+                                <a asp-action="Create" class="btn-cstm-link-text-light">Submit a ticket</a>
+                            </button>
+                        </span>
+                    </div>
 
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p>
-                Search by name or description:
-                <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                <button type="submit" class="btn btn-outline-dark">Search</button>
-                <button type="submit" class="btn btn-outline-dark">
-                    <a asp-action="Index" class="btn-outline-dark-text">Clear</a>
-                </button>
-            </p>
+                    <form asp-action="Index" method="get">
+                        <div class="form-actions no-color">
+                            <p>
+                                <span class="pr-3">Search by name or description:</span>
+                                <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                                <button type="submit" class="btn btn-link">Search</button>
+                                @*<button type="submit" class="btn btn-link">*@
+                                <a asp-action="Index" class="btn-link">Clear</a>
+                                @*</button>*@
+                            </p>
+                        </div>
+                    </form>
+
+
+                    <table class="table mt-4">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Project
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Ticket
+                                    </a>
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["StatusSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Status
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Ticket Type
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["PrioritySortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Priority
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Goal Date
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Created On
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["UpvotesSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Upvotes
+                                    </a>
+                                </th>
+                                <th>
+                                    Last Updated
+                                </th>
+                                <th>
+                                    Tag
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Project.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TicketType)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Priority)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GoalDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Upvotes)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UpdatedAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Tag)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.TicketId">Details</a> |
+                                        <a asp-action="Edit" asp-route-id="@item.TicketId">Edit</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.TicketId">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @{
+                        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                    }
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex-1)" ;
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default @prevDisabled">
+                        Previous
+                    </a>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex+1)" ;
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default @nextDisabled">
+                        Next
+                    </a>
+                </div>
+            </div>
         </div>
-    </form>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Project
-                    </a>
-                </th>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Ticket
-                    </a>
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["StatusSortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Status
-                    </a>
-                </th>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Ticket Type
-                    </a>
-                </th>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["PrioritySortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Priority
-                    </a>
-                </th>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Goal Date
-                    </a>
-                </th>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Created On
-                    </a>
-                </th>
-                <th>
-                    <a class="index--sort-link"
-                       asp-action="Index"
-                       asp-route-sortOrder="@ViewData["UpvotesSortParam"]"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                        Upvotes
-                    </a>
-                </th>
-                <th>
-                    Last Updated
-                </th>
-                <th>
-                    Tag
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Project.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TicketType)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Priority)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GoalDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedAt)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Upvotes)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UpdatedAt)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tag)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.TicketId">Details</a> |
-                        <a asp-action="Edit" asp-route-id="@item.TicketId">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.TicketId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    @{
-        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-    }
-    <a asp-action="Index"
-       asp-route-sortOrder="@ViewData["CurrentSort"]"
-       asp-route-pageNumber="@(Model.PageIndex-1)" ;
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @prevDisabled">
-        Previous
-    </a>
-    <a asp-action="Index"
-       asp-route-sortOrder="@ViewData["CurrentSort"]"
-       asp-route-pageNumber="@(Model.PageIndex+1)" ;
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @nextDisabled">
-        Next
-    </a>
+    </div>
 </div>
 
 
@@ -179,13 +192,13 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-11">
-                
+
                 <div class="page-header">
                     <h1>Tickets</h1>
                     <p class="lead">Research, ideate and present brand concepts for client consideration</p>
                 </div>
-                
-                
+
+
                 <ul class="nav nav-tabs nav-fill" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="true">Tasks</a>
@@ -197,12 +210,12 @@
                         <a class="nav-link" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false">Activity</a>
                     </li>
                 </ul>
-                
-                
+
+
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tasks" role="tabpanel" data-filter-list="card-list-body">
-                        
-                        
+
+
                         <div class="row content-list-head">
                             <div class="col-auto">
                                 <h5>Submit a Ticket</h5>
@@ -226,7 +239,7 @@
                         <!--end of content list head-->
                         <div class="content-list-body">
                             <div class="card-list">
-                                
+
                                 <div class="card-list-head">
                                     <h6>Evaluation</h6>
                                     <div class="dropdown">
@@ -241,7 +254,7 @@
                                 </div>
 
                                 <div class="card-list-body">
-                                    
+
                                     @* ***** START OF TICKET ***** *@
                                     <div class="card card-task">
                                         <div class="progress">
@@ -391,8 +404,8 @@
 
                                 </div>
                             </div>
-                            
-                          
+
+
                             <!--end of content list body-->
                         </div>
                         <!--end of content list-->
@@ -643,7 +656,7 @@
 
 
 
-                   @* ***** START OF ACTIVITY ******@
+                    @* ***** START OF ACTIVITY ******@
                     <div class="tab-pane fade" id="activity" role="tabpanel" data-filter-list="list-group-activity">
                         <div class="content-list">
                             <div class="row content-list-head">

@@ -27,10 +27,31 @@ body {
     text-decoration: none;
 }
 
-    .btn-text:hover {
-        color: white;
-        text-decoration: none;
-    }
+.center-vert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn-cstm-link {
+    width: 70px;
+    border-radius: 5px;
+}
+
+.btn-cstm-link-text-light {
+    color: white;
+    text-decoration: none;
+}
+.btn-cstm-link-text-light:hover {
+    color: white;
+    text-decoration: none;
+}
+
+
+.btn-text:hover {
+    color: white;
+    text-decoration: none;
+}
 
 .btn-text-dark {
     color: black;
@@ -61,9 +82,20 @@ body {
         text-decoration: none;
     }
 
+.btn-link {
+    color: #6c757d !important;
+    text-decoration:underline;
+}
+
+.search-field {
+    border-radius: 17px;
+    padding-left:3px;
+    padding-right: 3px;
+}
+
 .tickets--index {
     padding-top: 3%;
-    padding-bottom:5%;
+    padding-bottom: 5%;
 }
 
 .projects--index {
@@ -71,11 +103,23 @@ body {
     padding-bottom: 5%;
 }
 
-.project-create--container {
+.create--container {
     width: 70%;
 }
 
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom:20px;
+}
 
+.header-text {
+    font-size: 3.5em;
+    font-weight: bold;
+    color: black;
+
+
+}
 
 .project-create--form {
     padding-top: 25px;
@@ -101,7 +145,7 @@ body {
 }
 
 .profile-pic {
-    height: 100%;
-    width: 100%;
+/*    height: 100%;
+    width: 100%;*/
     object-fit:cover;
 }

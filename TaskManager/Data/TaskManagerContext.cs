@@ -14,23 +14,17 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    public DbSet<Project>? Projects { get; set; }
-    public DbSet<ProjectAssignment>? ProjectAssignments { get; set; }
-    public DbSet<Ticket>? Tickets { get; set; }
-    public DbSet<TicketAssignment>? TicketAssignments { get; set; }
+    public virtual DbSet<Project>? Projects { get; set; }
+    public virtual DbSet<ProjectAssignment>? ProjectAssignments { get; set; }
+    public virtual DbSet<Ticket>? Tickets { get; set; }
+    public virtual DbSet<TicketAssignment>? TicketAssignments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
-        
-
-        
 
         builder.Entity<ProjectAssignment>()
             .HasOne(u => u.ApplicationUser)
@@ -45,7 +39,6 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ProjectAssignment>().HasKey(pa => new { pa.ProjectId, pa.ApplicationUserId });
 
 
-        
         builder.Entity<TicketAssignment>()
             .HasOne(u => u.ApplicationUser)
             .WithMany(t => t.Tickets)
@@ -59,12 +52,10 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
         builder.Entity<TicketAssignment>().HasKey(ta => new { ta.TicketId, ta.ApplicationUserId });
 
 
-
         builder.Entity<Ticket>()
             .HasOne(p => p.Project)
             .WithMany(t => t.Tickets)
             .OnDelete(DeleteBehavior.Cascade);
-
 
     }
 

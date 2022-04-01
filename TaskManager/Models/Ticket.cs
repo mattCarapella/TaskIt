@@ -51,7 +51,11 @@ public class Ticket
     [DataType(DataType.Date), Display(Name = "Updated At")]
     [DisplayFormat(DataFormatString ="{0:g}")]
     public DateTime? UpdatedAt { get; set; }
- 
+
+    [DataType(DataType.Date), Display(Name = "Closed At")]
+    [DisplayFormat(DataFormatString = "{0:g}")]
+    public DateTime? ClosedAt { get; set; }
+
     [Display(Name = "Submitted by")]
     public virtual ApplicationUser? SubmittedBy { get; set; }
 
