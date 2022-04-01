@@ -17,7 +17,7 @@ public class ApplicationUser : IdentityUser
     [Required, StringLength(50), Display(Name = "Last Name")]
     public string LastName { get; set; }
 
-    public string ProfilePicture { get; set; } = "";
+    public string? ProfilePicture { get; set; }
 
     [Display(Name = "Employee ID")]
     public string? EmployeeID { get; set; }
@@ -42,9 +42,9 @@ public class ApplicationUser : IdentityUser
 
 
 
-    public ICollection<ProjectAssignment>? Projects { get; set; }
+    public virtual ICollection<ProjectAssignment>? Projects { get; set; }
 
-    public ICollection<TicketAssignment>? Tickets { get; set; }
+    public virtual ICollection<TicketAssignment>? Tickets { get; set; }
 
 }
 

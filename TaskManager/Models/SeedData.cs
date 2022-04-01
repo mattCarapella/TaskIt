@@ -57,31 +57,31 @@ namespace TaskManager.Models
                     new ProjectAssignment
                     {
                         ProjectId = projectId1,
-                        ApplicationUserId = "f1142c8a-79f0-42d9-af4b-c7ca07c6f908",
+                        ApplicationUserId = "017b4647-8ff4-4093-a599-90fd2d1e56d7",
                         IsManager = true
                     },
                     new ProjectAssignment
                     {
                         ProjectId = projectId1,
-                        ApplicationUserId = "f98add5c-efdd-418d-a492-6e5a7b31cb7b",
+                        ApplicationUserId = "3dbb26d4-fbc1-4898-90bd-18d83a83f2ad",
                         IsManager = false
                     },
                     new ProjectAssignment
                     {
                         ProjectId = projectId2,
-                        ApplicationUserId = "f98add5c-efdd-418d-a492-6e5a7b31cb7b",
+                        ApplicationUserId = "3dbb26d4-fbc1-4898-90bd-18d83a83f2ad",
                         IsManager = true
                     },
                     new ProjectAssignment
                     {
                         ProjectId = projectId3,
-                        ApplicationUserId = "f1142c8a-79f0-42d9-af4b-c7ca07c6f908",
+                        ApplicationUserId = "017b4647-8ff4-4093-a599-90fd2d1e56d7",
                         IsManager = true
                     },
                     new ProjectAssignment
                     {
                         ProjectId = projectId3,
-                        ApplicationUserId = "f98add5c-efdd-418d-a492-6e5a7b31cb7b",
+                        ApplicationUserId = "3dbb26d4-fbc1-4898-90bd-18d83a83f2ad",
                         IsManager = false
                     }
                 };

@@ -12,8 +12,8 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    [Migration("20220331171412_ChangeTypeOfAssignedByForProjectAssignment")]
-    partial class ChangeTypeOfAssignedByForProjectAssignment
+    [Migration("20220401003757_SeedRoles")]
+    partial class SeedRoles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -225,7 +225,7 @@ namespace TaskManager.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Photo")
+                    b.Property<string>("ProfilePicture")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -294,9 +294,6 @@ namespace TaskManager.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AssignedById")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsManager")
                         .HasColumnType("bit");
 
@@ -306,8 +303,6 @@ namespace TaskManager.Migrations
                     b.HasKey("ProjectAssignmentId");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("AssignedById");
 
                     b.HasIndex("ProjectId");
 
@@ -378,17 +373,12 @@ namespace TaskManager.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AssignedById")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<Guid?>("TicketId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TicketAssignmentId");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("AssignedById");
 
                     b.HasIndex("TicketId");
 
@@ -452,17 +442,11 @@ namespace TaskManager.Migrations
                         .WithMany("Projects")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "AssignedBy")
-                        .WithMany()
-                        .HasForeignKey("AssignedById");
-
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Contributers")
                         .HasForeignKey("ProjectId");
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("AssignedBy");
 
                     b.Navigation("Project");
                 });
@@ -488,17 +472,11 @@ namespace TaskManager.Migrations
                         .WithMany("Tickets")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "AssignedBy")
-                        .WithMany()
-                        .HasForeignKey("AssignedById");
-
                     b.HasOne("TaskManager.Models.Ticket", "Ticket")
                         .WithMany("AssignedTo")
                         .HasForeignKey("TicketId");
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("AssignedBy");
 
                     b.Navigation("Ticket");
                 });

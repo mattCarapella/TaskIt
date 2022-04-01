@@ -24,10 +24,10 @@ public class Ticket
     public Guid TicketId { get; set; }
 
     [Required, StringLength(50)]
-    public string? Title { get; set; }
+    public string Title { get; set; } = "";
 
     [Required, StringLength(2000)]
-    public string? Description { get; set; }
+    public string Description { get; set; } = "";
 
     public string? Tag { get; set; }
 
@@ -35,7 +35,7 @@ public class Ticket
     public TicketType? TicketType { get; set; }
 
     [Required(ErrorMessage = "Ticket status is required"), Display(Name = "Ticket Status")]
-    public Status? Status { get; set; } = 0;
+    public Status Status { get; set; } = 0;
 
     public int Upvotes { get; set; } = 0;
 
@@ -51,16 +51,16 @@ public class Ticket
     [DataType(DataType.Date), Display(Name = "Updated At")]
     [DisplayFormat(DataFormatString ="{0:g}")]
     public DateTime? UpdatedAt { get; set; }
-
-    public Project? Project { get; set; }
-
+ 
     [Display(Name = "Submitted by")]
-    public ApplicationUser? SubmittedBy { get; set; }
+    public virtual ApplicationUser? SubmittedBy { get; set; }
 
-    //[Display(Name = "Assigned by")]
-    //public ApplicationUser? AssignedBy { get; set; }
 
-    public ICollection<TicketAssignment>? AssignedTo { get; set; }
+
+    public virtual ICollection<TicketAssignment>? AssignedTo { get; set; }
+
+
+    public virtual Project? Project { get; set; }
 
     public Guid? ProjectId { get; set; }
 

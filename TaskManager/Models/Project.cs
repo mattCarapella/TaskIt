@@ -7,10 +7,10 @@ public class Project
     public Guid Id { get; set; }
 
     [Required, StringLength(50)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = "";
 
     [Required, StringLength(1000)]
-    public string? Description { get; set; }
+    public string Description { get; set; } = "";
 
     public string? Tag { get; set; }
 
@@ -24,6 +24,7 @@ public class Project
     public DateTime? UpdatedAt { get; set; }
 
 
-    public ICollection<ProjectAssignment>? Contributers { get; set; } = new List<ProjectAssignment>();
-    public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+    public virtual ICollection<ProjectAssignment>? Contributers { get; set; } = new List<ProjectAssignment>();
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

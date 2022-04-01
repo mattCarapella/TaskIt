@@ -12,8 +12,8 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    [Migration("20220331180518_AddValidationToApplicationUserModel")]
-    partial class AddValidationToApplicationUserModel
+    [Migration("20220401014116_UpdateProjectAndTicketRelationships")]
+    partial class UpdateProjectAndTicketRelationships
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -226,7 +226,6 @@ namespace TaskManager.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePicture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -287,29 +286,21 @@ namespace TaskManager.Migrations
 
             modelBuilder.Entity("TaskManager.Models.ProjectAssignment", b =>
                 {
-                    b.Property<Guid>("ProjectAssignmentId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid?>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AssignedById")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsManager")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectAssignmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ProjectAssignmentId");
+                    b.HasKey("ProjectId", "ApplicationUserId");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("AssignedById");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectAssignments");
                 });
@@ -371,26 +362,18 @@ namespace TaskManager.Migrations
 
             modelBuilder.Entity("TaskManager.Models.TicketAssignment", b =>
                 {
-                    b.Property<Guid>("TicketAssignmentId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid?>("TicketId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AssignedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("TicketId")
+                    b.Property<Guid>("TicketAssignmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TicketAssignmentId");
+                    b.HasKey("TicketId", "ApplicationUserId");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("AssignedById");
-
-                    b.HasIndex("TicketId");
 
                     b.ToTable("TicketAssignments");
                 });
@@ -450,19 +433,17 @@ namespace TaskManager.Migrations
                 {
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
                         .WithMany("Projects")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "AssignedBy")
-                        .WithMany()
-                        .HasForeignKey("AssignedById");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Contributers")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("AssignedBy");
 
                     b.Navigation("Project");
                 });
@@ -471,7 +452,8 @@ namespace TaskManager.Migrations
                 {
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Tickets")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "SubmittedBy")
                         .WithMany()
@@ -486,19 +468,17 @@ namespace TaskManager.Migrations
                 {
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
                         .WithMany("Tickets")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "AssignedBy")
-                        .WithMany()
-                        .HasForeignKey("AssignedById");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TaskManager.Models.Ticket", "Ticket")
                         .WithMany("AssignedTo")
-                        .HasForeignKey("TicketId");
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("AssignedBy");
 
                     b.Navigation("Ticket");
                 });
