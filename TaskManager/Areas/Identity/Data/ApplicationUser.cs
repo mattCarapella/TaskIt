@@ -46,7 +46,7 @@ public class ApplicationUser : IdentityUser
 
     public ICollection<TicketAssignment> Tickets { get; set; } = new List<TicketAssignment>();
 
-    public ICollection<Note> Notes { get; set; } = new List<Note>();
+    public ICollection<PNote> Notes { get; set; } = new List<PNote>();
 }
 
 public class ApplicationRole : IdentityRole

@@ -140,7 +140,19 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
+
+
             return View(ticket);
+        }
+
+        public bool IsUserAssigned(string userId, Guid ticketId)
+        {
+            var ticketAssignment = _context.TicketAssignments.FirstOrDefault(t => t.TicketId == ticketId);
+            if (ticketAssignment.ApplicationUserId == userId)
+            {
+                return true;
+            }
+            return false;
         }
 
 
@@ -176,14 +188,12 @@ namespace TaskManager.Controllers
                     ticket.TicketId = Guid.NewGuid();
                     ticket.SubmittedBy = currentUser;
                     var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
-                    //var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == ticket.Project.Id); *****
                     project.Tickets.Add(ticket);
                     _context.Add(ticket);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
-                //ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.Project.Id); ******
                 return View(ticket);
             }
             catch (DbUpdateException)
@@ -336,7 +346,6 @@ namespace TaskManager.Controllers
 
             var ticket = await _context.Tickets.FirstOrDefaultAsync(p => p.TicketId == id);
             var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
-            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
             var assignee = new TicketAssignment
             {
                 TicketAssignmentId = Guid.NewGuid(),
@@ -344,7 +353,7 @@ namespace TaskManager.Controllers
                 ApplicationUserId = selectedUserId,
                 Ticket = ticket,
                 TicketId = ticket.TicketId,
-                //AssignedBy = currentUser
+                AssignedByUsedId = User.Identity.GetUserId()
             };
 
             try

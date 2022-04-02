@@ -30,6 +30,10 @@ body {
     padding-top: 4px;
 }
 
+.btn-link-offset {
+    padding-top: 5px;
+}
+
 .ticket-table-links {
     font-weight: 500;
     color: #424354;

@@ -10,8 +10,8 @@ public class ProjectAssignment
     public Guid? ProjectId { get; set; }
     
 
-    public virtual Project? Project { get; set; }
-    public virtual ApplicationUser? ApplicationUser { get; set; }
+    public Project? Project { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
 
 
     public bool IsManager { get; set; }

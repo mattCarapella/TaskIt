@@ -11,8 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TaskManagerContextConnection");
 
 builder.Services.AddDbContext<TaskManagerContext>(options =>
-    options.UseSqlServer(connectionString));
-
+    options
+        //.UseLazyLoadingProxies()
+        .UseSqlServer(connectionString)); 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<TaskManagerContext>();

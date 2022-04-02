@@ -3,6 +3,7 @@ using TaskManager.Core.Repositories;
 using TaskManager.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using TaskManager.Core.ViewModels;
 
 namespace TaskManager.Repositories;
 
@@ -28,15 +29,14 @@ public class UserRepository : IUserRepository
     {
         var user = await _context.Users
             .Include(u => u.Projects)
-            .ThenInclude(p => p.Project)
+                .ThenInclude(p => p.Project)
             .Include(u => u.Tickets)
-            .ThenInclude(t => t.Ticket)
+                .ThenInclude(t => t.Ticket)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
 
         return user;
     }
-
 
     public ApplicationUser UpdateUser(ApplicationUser user)
     {

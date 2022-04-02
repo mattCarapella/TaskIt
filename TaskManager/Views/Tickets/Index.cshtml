@@ -26,9 +26,7 @@
                                 <span class="pr-3">Search by name or description:</span>
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
                                 <button type="submit" class="btn btn-link">Search</button>
-                                @*<button type="submit" class="btn btn-link">*@
-                                <a asp-action="Index" class="btn-link">Clear</a>
-                                @*</button>*@
+                                <a asp-action="Index" class="btn-link btn-link-offset">Clear</a>
                             </p>
                         </div>
                     </form>
@@ -151,9 +149,25 @@
                                         @Html.DisplayFor(modelItem => item.Tag)
                                     </td>
                                     <td>
-                                        <a asp-action="Details" asp-route-id="@item.TicketId">Details</a> |
-                                        <a asp-action="Edit" asp-route-id="@item.TicketId">Edit</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.TicketId">Delete</a>
+                                        <div class="button-group ml-2">
+                                            <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="Ticket details">
+                                                <a asp-action="Details" asp-route-id="@item.TicketId">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </button>
+
+                                            <button class="btn btn-round pt-1 mr-1">
+                                                <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
+                                                    <i class="material-icons">create</i>
+                                                </a>
+                                            </button>
+
+                                            <button class="btn btn-round pt-1">
+                                                <a asp-action="Delete" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Delete ticket">
+                                                    <i class="material-icons">delete</i>
+                                                </a>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             }

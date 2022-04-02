@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using TaskManager.Areas.Identity.Data;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
+using TaskManager.Data;
+using TaskManager.Models;
 
 namespace TaskManager.Controllers;
 
@@ -12,13 +15,15 @@ public class UserController : Controller
     private readonly IUnitOfWork _unitOfWork;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly TaskManagerContext _context;
 
     public UserController(IUnitOfWork unitOfWork, SignInManager<ApplicationUser> signInManager,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment, TaskManagerContext context)
     {
         _unitOfWork = unitOfWork;
         _signInManager = signInManager;
         _webHostEnvironment = webHostEnvironment;
+        _context = context;
     }
 
     public IActionResult Index()
@@ -35,18 +40,43 @@ public class UserController : Controller
             return NotFound();
         }
 
-        var user = await _unitOfWork.User.GetUserWithProjects(id);
+        var user =  _unitOfWork.User.GetUser(id);
         if (user == null)
         {
             return NotFound();
         }
 
+        if (user.Tickets.Any())
+        {
+            var tickets = user.Tickets.Where(s => s.Ticket.Status != Core.Enums.Enums.Status.COMPLETED);
+        }
+
+
+        var pa = _context.ProjectAssignments
+            .Include(p => p.Project)
+            .ThenInclude(c => c.Contributers)
+            .Where(u => u.ApplicationUserId == id)
+            .ToList();
+
+        var ta = await _context.TicketAssignments
+            .Include(t => t.Ticket)
+            .ThenInclude(a => a.AssignedTo)
+            
+            .Where(u => u.ApplicationUserId == id)
+            .ToListAsync();
+
+        var open = ta.Where(x => x.Ticket.Status != Core.Enums.Enums.Status.COMPLETED);
+
         var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
         var vm = new UserViewModel
         {
             User = user,
-            Roles = (List<string>)userRoles
+            Roles = (List<string>)userRoles,
+            ProjectAssignments = pa,
+            TicketsAssignments = ta
         };
+
+        
 
         return View(vm);
     }
