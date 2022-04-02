@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManager.Data;
 
@@ -11,9 +12,10 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    partial class TaskManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220402042008_AddPNoteEntityAndRelationships")]
+    partial class AddPNoteEntityAndRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,7 +286,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Notes", (string)null);
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("TaskManager.Models.PNote", b =>
@@ -323,7 +325,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("PNote", (string)null);
+                    b.ToTable("PNote");
                 });
 
             modelBuilder.Entity("TaskManager.Models.Project", b =>
@@ -356,7 +358,7 @@ namespace TaskManager.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("TaskManager.Models.ProjectAssignment", b =>
@@ -380,7 +382,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("ProjectAssignments", (string)null);
+                    b.ToTable("ProjectAssignments");
                 });
 
             modelBuilder.Entity("TaskManager.Models.Ticket", b =>
@@ -438,7 +440,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("SubmittedById");
 
-                    b.ToTable("Tickets", (string)null);
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("TaskManager.Models.TicketAssignment", b =>
@@ -459,7 +461,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("TicketAssignments", (string)null);
+                    b.ToTable("TicketAssignments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

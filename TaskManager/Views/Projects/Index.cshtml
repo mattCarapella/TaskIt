@@ -30,7 +30,7 @@
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
                                 <button type="submit" class="btn btn-link">Search</button>
                                 @*<button type="submit" class="btn btn-link">*@
-                                    <a asp-action="Index" class="btn-link">Clear</a>
+                                <a asp-action="Index" class="btn-link">Clear</a>
                                 @*</button>*@
                             </p>
                         </div>
@@ -105,9 +105,25 @@
                                         @Html.DisplayFor(modelItem => item.Tag)
                                     </td>
                                     <td>
-                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        <div class="button-group ml-2">
+                                            <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="Project details">
+                                                <a asp-action="Details" asp-route-id="@item.Id">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </button>
+
+                                            <button class="btn btn-round pt-1 mr-1">
+                                                <a asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-title="Edit project">
+                                                    <i class="material-icons">create</i>
+                                                </a>
+                                            </button>
+
+                                            <button class="btn btn-round pt-1">
+                                                <a asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-title="Delete project">
+                                                    <i class="material-icons">delete</i>
+                                                </a>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             }

@@ -1,0 +1,39 @@
+﻿@model TaskManager.Core.ViewModels.Note.PNoteCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div><a href="javascript:history.go(-1)">Back</a></div>
+
+<div class="container create--container pt-5">
+    <h1 class="mb-3">Add a note</h1>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="@Model.Note.ProjectId" value="@Model.ProjectId" />
+        <div class="form-group">
+            <label asp-for="@Model.Note.Title" class="control-label"></label>
+            <input asp-for="@Model.Note.Title" class="form-control" />
+            <span asp-validation-for="@Model.Note.Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Note.Content">Description</label>
+            <textarea asp-for="@Model.Note.Content" class="form-control" rows="12"></textarea>
+            <span asp-validation-for="@Model.Note.Content" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Note.Link" class="control-label"></label>
+            <input asp-for="@Model.Note.Link" class="form-control" />
+            <span asp-validation-for="@Model.Note.Link" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

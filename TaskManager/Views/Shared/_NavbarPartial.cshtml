@@ -25,6 +25,14 @@
 
         <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
             <ul class="navbar-nav">
+
+                 @if (SignInManager.IsSignedIn(User))
+                {
+                    var currentUser = @UserManager.Users.FirstOrDefault(u => u.UserName == @UserManager.GetUserName(User));
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id">Dashboard</a>
+                    </li>
+                }
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
                 </li>

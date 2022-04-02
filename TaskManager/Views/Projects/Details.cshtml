@@ -13,7 +13,6 @@
             <div class="col-xl-10 col-lg-11">
                 <div class="page-header">
                     <div class="wrapper">
-                        @*<span class="header-text">@Html.DisplayFor(modelItem => @Model.Name)</span>*@
                         <span class="header-text">@Html.DisplayFor(modelItem => @Model.Project.Name)</span>
                         <span class="center-vert">
                             <button class="btn btn-primary btn-cstm-link">
@@ -22,7 +21,7 @@
                         </span>
                     </div>
 
-                    @*<h1 class="pb-3">@Html.DisplayFor(modelItem => @Model.Name)</h1>*@
+                    @***** PROJECT DETAILS *****@
                     <p class="lead">@Html.DisplayFor(modelItem => @Model.Project.Description)</p>
                     <div>
                         <dl class="row">
@@ -52,6 +51,8 @@
                             </dd>
                         </dl>
                     </div>
+
+                    @***** PROJECT CONTRIBUTERS *****@
                     <div class="d-flex align-items-center">
                         <ul class="avatars">
                             @foreach (var item in @Model.Contributers)
@@ -65,18 +66,18 @@
                                 </li>
                             }
                         </ul>
-                        @***** OPENS MODAL *****@
-                        <button class="btn btn-round flex-shrink-0" data-toggle="modal" data-target="#user-manage-modal">
-                            <i class="material-icons">add</i>
+                        <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage project members">
+                            <a asp-action="AddUser" asp-route-id="@Model?.Project.Id">      
+                                <i class="material-icons">add</i>
+                            </a>
                         </button>
                     </div>
                     <div>
-                       
                         <div class="d-flex justify-content-between text-small">
                             <div class="d-flex align-items-center">
-                                <span class="pt-1">@Model.Contributers.Count() contributers</span>                               
+                                <span class="pt-1">@Model.Contributers.Count() contributers</span>
                             </div>
-                            <span class="pt-1">Due </span>
+                            <span class="pt-1"> @*Calculate days to goal date*@</span>
                         </div>
                     </div>
                 </div>
@@ -104,14 +105,17 @@
                 <div class="tab-content">
                     @***** TAB: OPEN TICKETS & NOTES *****@
                     <div class="tab-pane fade show active" id="task" role="tabpanel">
+
+
                         <div class="content-list" data-filter-list="checklist">
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Open Tickets</h3>
-                                    @*<button class="btn btn-round" data-toggle="tooltip" data-title="New item">
-                                        <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Id"/>
-                                        <i class="material-icons pt-2">add</i>
-                                        </button>*@
+                                    <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Submit a ticket">
+                                        <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Project.Id">
+                                            <i class="material-icons">add</i>
+                                        </a>
+                                    </button>
                                 </div>
                                 <form class="col-md-auto">
                                     <div class="input-group input-group-round">
@@ -165,14 +169,15 @@
                             <!--end of content list body-->
                         </div>
                         <!--end of content list-->
-                        
                         @***** NOTES *****@
                         <div class="content-list" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Notes</h3>
-                                    <button class="btn btn-round" data-toggle="modal" data-target="#note-add-modal">
-                                        <i class="material-icons">add</i>
+                                    <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
+                                        <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
+                                            <i class="material-icons">add</i>
+                                        </a>
                                     </button>
                                 </div>
                                 <form class="col-md-auto">
@@ -186,99 +191,46 @@
                                     </div>
                                 </form>
                             </div>
-                            <!--end of content list head-->
+
+                            @***** NOTES *****@
                             <div class="content-list-body">
 
-                                <div class="card card-note">
-                                    <div class="card-header">
-                                        <div class="media align-items-center">
-                                            <img alt="Peggy Brown" src="~/assets/img/avatar-female-2.jpg" class="avatar" data-toggle="tooltip" data-title="Peggy Brown" data-filter-by="alt" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">First meeting notes</h6>
+                                @foreach (var note in @Model.Notes)
+                                {
+                                    <div class="card card-note">
+                                        <div class="card-header">
+                                            <div class="media align-items-center">
+                                                <img alt="@note.ApplicationUser.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
+                                                 data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                <div class="media-body">
+                                                    <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <span data-filter-by="text">Just now</span>
-                                            <div class="ml-1 dropdown card-options">
-                                                <button class="btn-options" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                                            <div class="d-flex align-items-center">
+                                                <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
+                                                <div class="ml-1 dropdown card-options">
+                                                    <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="material-icons">more_vert</i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-body" data-filter-by="text">
-                                        <p>Here&#39;s a quick rundown of companies the client expressed interest in on our call this morning:</p>
-                                        <ul>
-                                            <li><a href="#">Commonwealth Bank of Australia</a> for the bright, positive color scheme</li>
-                                            <li><a href="#">Bupa Health Insurance</a> for the adaptability of their logo around the site&#39;s layout</li>
-                                            <li><a href="#">OPSM</a> again for the color scheme, this time for the softer pallette</li>
-                                        </ul>
-
-                                    </div>
-                                </div>
-
-                                <div class="card card-note">
-                                    <div class="card-header">
-                                        <div class="media align-items-center">
-                                            <img alt="David Whittaker" src="~/assets/img/avatar-male-4.jpg" class="avatar" data-toggle="tooltip" data-title="David Whittaker" data-filter-by="alt" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Client preference</h6>
-                                            </div>
+                                        <div class="card-body" data-filter-by="text">
+                                            <p>@note.Content</p>
+                                            @if (@note.Link != null)
+                                            {
+                                                <span class="mt-2">
+                                                    <a href="@note.Link">@note.Link</a>
+                                                </span>
+                                            }
                                         </div>
-                                        <div class="d-flex align-items-center">
-                                            <span data-filter-by="text">Yesterday</span>
-                                            <div class="ml-1 dropdown card-options">
-                                                <button class="btn-options" type="button" id="note-dropdown-button-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body" data-filter-by="text">
-                                        <p>
-                                            Hi all, just wanted to add that the client has requested that we lean toward a &#39;friendly&#39; aesthetic. I know this seems a little vague but it does give us a starting point for the mood boards. I recommend we use larger
-                                            corporates who target &#39;youthful&#39; audiences as initial inspiration. <a href="#">Peggy</a> will take the lead from here.
-                                        </p>
 
                                     </div>
-                                </div>
-
-                                <div class="card card-note">
-                                    <div class="card-header">
-                                        <div class="media align-items-center">
-                                            <img alt="Ravi Singh" src="~/assets/img/avatar-male-3.jpg" class="avatar" data-toggle="tooltip" data-title="Ravi Singh" data-filter-by="alt" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Matboard links</h6>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <span data-filter-by="text">Just now</span>
-                                            <div class="ml-1 dropdown card-options">
-                                                <button class="btn-options" type="button" id="note-dropdown-button-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body" data-filter-by="text">
-                                        <p>
-                                            Hey guys, here&#39;s the link to the Matboards: <a href="#">https://matboard.io/3928462</a>
-                                        </p>
-
-                                    </div>
-                                </div>
+                                }
 
                             </div>
                         </div>

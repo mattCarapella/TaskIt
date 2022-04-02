@@ -25,6 +25,10 @@ public class Project
 
 
 
-    public virtual ICollection<ProjectAssignment>? Contributers { get; set; } = new List<ProjectAssignment>();
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+    public ICollection<ProjectAssignment>? Contributers { get; set; } = new List<ProjectAssignment>();
+
+    public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+    public ICollection<PNote> Notes { get; set; } = new List<PNote>();
+
 }

@@ -42,10 +42,11 @@ public class ApplicationUser : IdentityUser
 
 
 
-    public virtual ICollection<ProjectAssignment>? Projects { get; set; }
+    public ICollection<ProjectAssignment> Projects { get; set; } = new List<ProjectAssignment>();
 
-    public virtual ICollection<TicketAssignment>? Tickets { get; set; }
+    public ICollection<TicketAssignment> Tickets { get; set; } = new List<TicketAssignment>();
 
+    public ICollection<Note> Notes { get; set; } = new List<Note>();
 }
 
 public class ApplicationRole : IdentityRole

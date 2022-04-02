@@ -106,6 +106,8 @@ namespace TaskManager.Controllers
 
             var project = await _context.Projects
                 .Include(t => t.Tickets)
+                .Include(n => n.Notes)
+                .ThenInclude(u => u.ApplicationUser)
                 .Include(c => c.Contributers)
                 .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
@@ -119,6 +121,7 @@ namespace TaskManager.Controllers
             var contributers = project.Contributers.ToList();
             var openTickets = project.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).ToList();
             var closedTickets = project.Tickets.Where(t => t.Status == Enums.Status.COMPLETED).ToList();
+            var notes = project.Notes.ToList();
             
             var vm = new ProjectDetailsViewModel()
             {
@@ -126,6 +129,7 @@ namespace TaskManager.Controllers
                 Contributers = contributers,    
                 OpenTickets = openTickets,
                 ClosedTickets = closedTickets,
+                Notes = notes
             };
 
             return View(vm);
@@ -307,7 +311,6 @@ namespace TaskManager.Controllers
 
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
             var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
-            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
             var contributer = new ProjectAssignment
             {
                 ProjectAssignmentId = Guid.NewGuid(),
@@ -316,7 +319,7 @@ namespace TaskManager.Controllers
                 Project = project,
                 ProjectId = project.Id,
                 IsManager = false,
-                //AssignedBy = currentUser
+                AssignedByUsedId = User.Identity.GetUserId()
             };
 
             try
@@ -340,7 +343,7 @@ namespace TaskManager.Controllers
             var userList = (from user in _context.Users
                             select new SelectListItem()
                             {
-                                Text = user.UserName,
+                                Text = user.FullName,
                                 Value = user.Id.ToString()
                             }).ToList();
 

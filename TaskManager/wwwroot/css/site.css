@@ -22,6 +22,20 @@ body {
     margin-top: 45px;
 }
 
+.button-group {
+    display: flex;
+}
+
+.btn-icon-offset {
+    padding-top: 4px;
+}
+
+.ticket-table-links {
+    font-weight: 500;
+    color: #424354;
+    text-decoration: underline;
+}
+
 .btn-text {
     color: white;
     text-decoration: none;

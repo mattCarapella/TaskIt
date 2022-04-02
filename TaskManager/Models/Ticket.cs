@@ -57,14 +57,14 @@ public class Ticket
     public DateTime? ClosedAt { get; set; }
 
     [Display(Name = "Submitted by")]
-    public virtual ApplicationUser? SubmittedBy { get; set; }
+    public ApplicationUser? SubmittedBy { get; set; }
 
 
 
-    public virtual ICollection<TicketAssignment>? AssignedTo { get; set; }
+    public ICollection<TicketAssignment> AssignedTo { get; set; } = new List<TicketAssignment>();
 
 
-    public virtual Project? Project { get; set; }
+    public Project? Project { get; set; }
 
     public Guid? ProjectId { get; set; }
 

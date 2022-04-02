@@ -12,4 +12,6 @@ public class ProjectDetailsViewModel
 
     public List<Ticket> ClosedTickets   { get; set; }
 
+    public List<PNote> Notes { get; set; }
+
 }

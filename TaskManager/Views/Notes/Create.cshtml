@@ -1,0 +1,44 @@
+﻿@model TaskManager.Core.ViewModels.Note.PNoteCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Note</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Note.ProjectId" value="@Model.Project.Id" />
+            <div class="form-group">
+                <label asp-for="@Model.Note.Title" class="control-label"></label>
+                <input asp-for="@Model.Note.Title" class="form-control" />
+                <span asp-validation-for="@Model.Note.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Note.Content" class="control-label"></label>
+                <input asp-for="@Model.Note.Content" class="form-control" />
+                <span asp-validation-for="@Model.Note.Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Note.Link" class="control-label"></label>
+                <input asp-for="@Model.Note.Link" class="form-control" />
+                <span asp-validation-for="@Model.Note.Link" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
