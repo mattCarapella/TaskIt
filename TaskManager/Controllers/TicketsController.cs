@@ -21,11 +21,13 @@ namespace TaskManager.Controllers
     {
         private readonly TaskManagerContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public TicketsController(TaskManagerContext context, SignInManager<ApplicationUser> signInManager)
+        public TicketsController(TaskManagerContext context, SignInManager<ApplicationUser> signInManager, IUnitOfWork unitOfWork)
         {
             _context = context;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Tickets
@@ -52,8 +54,9 @@ namespace TaskManager.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var ticketContext = _context.Tickets.Include(t => t.Project);       // ******* TicketRepository: GetTicketsWithProjects()
-            var tickets = from t in ticketContext select t;
+            //var ticketContext = _context.Tickets.Include(t => t.Project);   
+            var ticketList = await _unitOfWork.TicketRepository.GetTicketsWithProjects();
+            var tickets = from t in ticketList select t;
             
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -114,17 +117,23 @@ namespace TaskManager.Controllers
                     tickets = tickets.OrderBy(t => t.Project.Name);
                     break;
             }
-
+            var tList = tickets.ToList();
             int pageSize = 9;
-            //return View(await PaginatedList<Ticket>.CreateAsync(tickets.AsNoTracking(), pageNumber ?? 1, pageSize));
-            return View(await tickets.AsNoTracking().ToListAsync());
+
+            // Temporarily sets AsNoTracking() which is needed in return
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            return View(PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize));
+
+            //return View(await PaginatedListAsync2<Ticket>.CreateAsync(tickets, pageNumber ?? 1, pageSize));
+            //return View(await tickets.AsNoTracking().ToListAsync());
         }
 
 
         // GET: Tickets/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -225,9 +234,9 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -246,9 +255,9 @@ namespace TaskManager.Controllers
         // POST: Tickets/Edit/5
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(Guid? id)
+        public async Task<IActionResult> EditPost(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -278,9 +287,9 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/Delete/{id}
-        public async Task<IActionResult> Delete(Guid? id, bool? saveChangesError = false)
+        public async Task<IActionResult> Delete(Guid id, bool? saveChangesError = false)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -328,10 +337,10 @@ namespace TaskManager.Controllers
         }
 
 
-        // GET: AssignUser/{id}
-        public async Task<IActionResult> AssignUser(Guid? id)
+        // GET: ManageUsers/{id}
+        public async Task<IActionResult> ManageUsers(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -352,13 +361,13 @@ namespace TaskManager.Controllers
         }
 
 
-        // POST: AssignUser/{id}
+        // POST: ManageUsers/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignUser(Guid? id, AssignUserTicketViewModel ticketViewModel)
+        public async Task<IActionResult> ManageUsers(Guid id, AssignUserTicketViewModel ticketViewModel)
         {
             var selectedUserId = ticketViewModel.UserId;
-            if (selectedUserId == null || id == null)
+            if (selectedUserId == null || id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -380,7 +389,7 @@ namespace TaskManager.Controllers
 
                 _context.TicketAssignments.Add(assignee);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", new { id = ticket.TicketId });
+                return RedirectToAction("ManageUsers", new { id = ticket.TicketId });
             }
             catch (DbUpdateException)
             {
@@ -416,6 +425,22 @@ namespace TaskManager.Controllers
                 ListOfUsers = userList
             };
             return vm;
+        }
+
+
+        // POST: RemoveUser
+        [HttpPost]
+        public async Task<IActionResult> RemoveUser(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var entryToRemove = await _context.TicketAssignments.FirstOrDefaultAsync(t => t.ApplicationUserId == id);  // ***************** ProjectAssignmentRepository
+            var ticketId = entryToRemove.TicketId;
+            _context.TicketAssignments.Remove(entryToRemove);          // ***************** ProjectAssignmentRepository
+            await _unitOfWork.SaveAsync();
+            return RedirectToAction(nameof(ManageUsers), new { id = ticketId });
         }
 
 

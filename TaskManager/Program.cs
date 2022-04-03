@@ -13,7 +13,11 @@ var connectionString = builder.Configuration.GetConnectionString("TaskManagerCon
 builder.Services.AddDbContext<TaskManagerContext>(options =>
     options
         //.UseLazyLoadingProxies()
-        .UseSqlServer(connectionString)); 
+        .UseSqlServer(
+            connectionString,
+            // Enable split queries with .AsSingleQuery().ToList()
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))); 
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<TaskManagerContext>();

@@ -107,7 +107,7 @@
                     </td>
                     <td>
                         <button type="button" class="btn btn-outline-secondary"> 
-                            <a asp-controller="Projects" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Remove</a>
+                            <a asp-controller="Tickets" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Remove</a>
                         </button>
                     </td>
                 </tr>
@@ -118,7 +118,7 @@
 <h4>Add a Contributer</h4>
 <hr />
 <div class="col-md-4">   
-    <form asp-controller="Tickets" asp-action="AssignUser" asp-route-id="@Model.Ticket.TicketId" method="post" role="form">
+    <form asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model.Ticket.TicketId" method="post" role="form">
         <div class="form-group">
             <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
             <label asp-for="UserId"></label>

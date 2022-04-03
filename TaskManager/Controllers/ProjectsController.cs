@@ -91,6 +91,10 @@ namespace TaskManager.Controllers
             var pList = projects.ToList();
 
             int pageSize = 10;
+            
+            // Temporarily sets AsNoTracking() which is needed in return
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
             return View(PaginatedList<Project>.Create(pList, pageNumber ?? 1, pageSize));
             //return View(await projects.AsNoTracking().ToListAsync());
         }
@@ -155,6 +159,7 @@ namespace TaskManager.Controllers
 
                     project.Id = Guid.NewGuid();
                     project.Contributers.Add(contributer);
+                    project.CreatedByUserId = currentUser.Id;
                     await _unitOfWork.ProjectRepository.AddProject(project);
                     await _unitOfWork.SaveAsync();
                     return RedirectToAction(nameof(Index));
@@ -266,8 +271,8 @@ namespace TaskManager.Controllers
         }
 
 
-        // GET: AddUser/{id}
-        public async Task<IActionResult> AddUser(Guid id)
+        // GET: ManageUsers/{id}
+        public async Task<IActionResult> ManageUsers(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -286,10 +291,10 @@ namespace TaskManager.Controllers
         }
 
 
-        // POST: AddUser/{id}
+        // POST: ManageUsers/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(Guid id, AddUserProjectViewModel projectViewModel)
+        public async Task<IActionResult> ManageUsers(Guid id, AddUserProjectViewModel projectViewModel)
         {
             var selectedUserId = projectViewModel.UserId;
             if (selectedUserId == null || id == Guid.Empty)
@@ -316,7 +321,7 @@ namespace TaskManager.Controllers
             {
                 _context.ProjectAssignments.Add(contributer);           // ***************** ProjectAssignmentRepository
                 await _unitOfWork.SaveAsync();
-                return RedirectToAction("Details", "Projects", project);
+                return RedirectToAction("ManageUsers", "Projects", project);
             }
             catch (DbUpdateException)
             {
@@ -365,7 +370,7 @@ namespace TaskManager.Controllers
             var projectId = entryToRemove.ProjectId;
             _context.ProjectAssignments.Remove(entryToRemove);          // ***************** ProjectAssignmentRepository
             await _unitOfWork.SaveAsync();
-            return RedirectToAction(nameof(AddUser), new { id = projectId });
+            return RedirectToAction(nameof(ManageUsers), new { id = projectId });
         }
 
 

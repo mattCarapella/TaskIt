@@ -27,6 +27,7 @@ public class ProjectRepository : IProjectRepository
                 .Include(c => c.Contributers)
                 .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == projectId);
     }
 
@@ -39,6 +40,7 @@ public class ProjectRepository : IProjectRepository
                 .Include(c => c.Contributers)
                 .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == projectId);
     }
 

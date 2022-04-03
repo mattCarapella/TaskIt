@@ -12,10 +12,3 @@ public interface IProjectRepository
     Task AddProject(Project project);
     Task DeleteProject(Guid projectId);
 }
-
-
-
-
-
-//Project GetProject(Guid projectId);
-//IQueryable<Project> GetProjectsWithTickets();

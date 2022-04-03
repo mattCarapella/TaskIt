@@ -23,6 +23,8 @@ public class Project
     [Display(Name = "Updated At"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime? UpdatedAt { get; set; }
 
+    public string CreatedByUserId { get; set; } = String.Empty;
+
 
 
     public ICollection<ProjectAssignment>? Contributers { get; set; } = new List<ProjectAssignment>();
