@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Areas.Identity.Data;
 using TaskManager.Core;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
@@ -18,12 +20,12 @@ namespace TaskManager.Controllers
     public class TicketsController : Controller
     {
         private readonly TaskManagerContext _context;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public TicketsController(TaskManagerContext context, IUnitOfWork unitOfWork)
+        public TicketsController(TaskManagerContext context, SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
-            _unitOfWork = unitOfWork;
+            _signInManager = signInManager;
         }
 
         // GET: Tickets
@@ -50,7 +52,7 @@ namespace TaskManager.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var ticketContext = _context.Tickets.Include(t => t.Project);
+            var ticketContext = _context.Tickets.Include(t => t.Project);       // ******* TicketRepository: GetTicketsWithProjects()
             var tickets = from t in ticketContext select t;
             
             if (!String.IsNullOrEmpty(searchString))
@@ -127,6 +129,7 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
+            // ******** TicketRepository: GetTicketsWithProjects(Guid id) ********  
             var ticket = await _context.Tickets
                 .Include(t => t.Project)
                 .Include(t => t.SubmittedBy)
@@ -141,9 +144,25 @@ namespace TaskManager.Controllers
             }
 
 
+            // ******** TicketRepository: GetTicketAssignments(Ticket ticket) ********  
+            var t = ticket.AssignedTo;
 
-            return View(ticket);
+
+            // ******** UserRepository: GetCurrentUser() ********  
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+
+            // ******** UserRepository: GetUserRoles(ApplicationUser user) ******** 
+            var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
+
+            //if (ticket.AssignedTo.Any(u => u.ApplicationUserId == User.Identity.GetUserId()))
+            //{
+                return View(ticket);
+            //}
+
+            //return RedirectToAction(nameof(Index));
+
         }
+
 
         public bool IsUserAssigned(string userId, Guid ticketId)
         {

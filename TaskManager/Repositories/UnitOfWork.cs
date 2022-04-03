@@ -1,19 +1,43 @@
 ﻿using TaskManager.Core.Repositories;
+using TaskManager.Data;
 
 namespace TaskManager.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
-    public IUserRepository User { get;  }
-    public IRoleRepository Role { get; }
+    private readonly TaskManagerContext _context;
 
-    //public ITicketRepository Ticket { get; }
-
-    public UnitOfWork(IUserRepository user, IRoleRepository role)//, ITicketRepository ticket)
+    public UnitOfWork(TaskManagerContext context)
     {
-        User = user;
-        Role = role;
-        //Ticket = ticket;
+        _context = context;
+    }
+
+    public IUserRepository UserRepository => new UserRepository(_context);
+    public IRoleRepository RoleRepository => new RoleRepository(_context);
+    public IProjectRepository ProjectRepository => new ProjectRepository(_context);
+    public ITicketRepository TicketRepository => new TicketRepository(_context);
+
+    public async Task<bool> SaveAsync()
+    {
+        return await _context.SaveChangesAsync() > 0;
     }
 
 }
+
+
+
+
+
+
+
+
+    //public IUserRepository User { get;  }
+    //public IRoleRepository Role { get; }
+
+    //public UnitOfWork(IUserRepository user, IRoleRepository role)//, ITicketRepository ticket)
+    //{
+    //    User = user;
+    //    Role = role;
+    //}
+
+

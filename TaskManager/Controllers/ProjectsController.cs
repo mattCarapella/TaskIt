@@ -31,6 +31,10 @@ namespace TaskManager.Controllers
         // GET: Projects
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            // :::   TO DO   :::
+            // If user is admin or project manager => get all projects
+            // If user role is developer => get assigned projects
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["CreatedOnSortParam"] = sortOrder == "createdOn" ? "createdOn_desc" : "createdOn";
             ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
@@ -48,9 +52,7 @@ namespace TaskManager.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var projectsInContext = _context.Projects.Include(p => p.Tickets);
-
-            var projects = from p in projectsInContext select p;
+            var projects = _unitOfWork.ProjectRepository.GetProjectsWithTickets();
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -88,30 +90,17 @@ namespace TaskManager.Controllers
             int pageSize = 10;
             return View(await PaginatedList<Project>.CreateAsync(projects.AsNoTracking(), pageNumber ?? 1, pageSize));
             //return View(await projects.AsNoTracking().ToListAsync());
-
-
-            // ::: TO DO:::
-            //
-            // If user is admin or project manager => get all projects
-            // If user role is developer => get assigned projects
         }
 
         // GET: Projects/Details/{id}
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .Include(t => t.Tickets)
-                .Include(n => n.Notes)
-                .ThenInclude(u => u.ApplicationUser)
-                .Include(c => c.Contributers)
-                .ThenInclude(u => u.ApplicationUser)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var project = await _unitOfWork.ProjectRepository.GetProjectWithTicketsNotesUsers(id);
 
             if (project == null)
             {
@@ -151,7 +140,6 @@ namespace TaskManager.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == HttpContext.User.Identity.Name);
                     var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
                     var contributer = new ProjectAssignment
                     {
@@ -159,13 +147,13 @@ namespace TaskManager.Controllers
                         ApplicationUser = currentUser,
                         Project = project,
                         IsManager = true,
-                        //AssignedBy = currentUser
+                        AssignedByUsedId = currentUser.Id
                     };
 
                     project.Id = Guid.NewGuid();
                     project.Contributers.Add(contributer);
-                    _context.Projects.Add(project);
-                    await _context.SaveChangesAsync();
+                    _unitOfWork.ProjectRepository.AddProject(project);
+                    await _unitOfWork.SaveAsync();
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -179,14 +167,14 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Edit/{id}
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _unitOfWork.ProjectRepository.GetProjectAsync(id);
             if (project == null)
             {
                 return NotFound();
@@ -198,20 +186,20 @@ namespace TaskManager.Controllers
         // POST: Projects/Edit/{id}
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(Guid? id)
+        public async Task<IActionResult> EditPost(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
-            var projectToUpdate = await _context.Projects.FirstOrDefaultAsync(x => x.Id == id);
+            var projectToUpdate = await _unitOfWork.ProjectRepository.GetProjectAsync(id);
             if (await TryUpdateModelAsync<Project>(
                 projectToUpdate, "", p => p.Name, p => p.Description, p => p.Tag, p => p.GoalDate))
             {
                 try
                 {
                     projectToUpdate.UpdatedAt = DateTime.UtcNow;
-                    await _context.SaveChangesAsync();
+                    await _unitOfWork.SaveAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateException)
@@ -224,16 +212,17 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Delete/{id}
-        public async Task<IActionResult> Delete(Guid? id, bool? saveChangeErrors = false)
+        public async Task<IActionResult> Delete(Guid id, bool? saveChangeErrors = false)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id);
+            //var project = await _context.Projects
+            //    .AsNoTracking()
+            //    .FirstOrDefaultAsync(p => p.Id == id);
+            var project = await _unitOfWork.ProjectRepository.GetProjectAsync(id);
 
             if (project == null)
             {
@@ -255,7 +244,7 @@ namespace TaskManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _unitOfWork.ProjectRepository.GetProjectAsync(id);
             if (project == null)
             {
                 return NotFound();
@@ -263,8 +252,8 @@ namespace TaskManager.Controllers
 
             try
             {
-                _context.Projects.Remove(project);
-                await _context.SaveChangesAsync();
+                _unitOfWork.ProjectRepository.DeleteProject(project.Id);
+                await _unitOfWork.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException)
@@ -275,18 +264,14 @@ namespace TaskManager.Controllers
 
 
         // GET: AddUser/{id}
-        public async Task<IActionResult> AddUser(Guid? id)
+        public async Task<IActionResult> AddUser(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .Include(c => c.Contributers)
-                .ThenInclude(u => u.ApplicationUser)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var project = await _unitOfWork.ProjectRepository.GetProjectWithUsers(id);
 
             if (project == null)
             {
@@ -301,16 +286,18 @@ namespace TaskManager.Controllers
         // POST: AddUser/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(Guid? id, AddUserProjectViewModel projectViewModel)
+        public async Task<IActionResult> AddUser(Guid id, AddUserProjectViewModel projectViewModel)
         {
             var selectedUserId = projectViewModel.UserId;
-            if (selectedUserId == null || id == null)
+            if (selectedUserId == null || id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
-            var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
+            //var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
+            //var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
+            var project = await _unitOfWork.ProjectRepository.GetProjectAsync(id);
+            var selectedUser = await _unitOfWork.UserRepository.GetUserAsync(selectedUserId);
             var contributer = new ProjectAssignment
             {
                 ProjectAssignmentId = Guid.NewGuid(),
@@ -324,8 +311,8 @@ namespace TaskManager.Controllers
 
             try
             {
-                _context.ProjectAssignments.Add(contributer);
-                await _context.SaveChangesAsync();
+                _context.ProjectAssignments.Add(contributer);           // ***************** ProjectAssignmentRepository
+                await _unitOfWork.SaveAsync();
                 return RedirectToAction("Details", "Projects", project);
             }
             catch (DbUpdateException)
@@ -365,12 +352,17 @@ namespace TaskManager.Controllers
 
         // POST: RemoveUser
         [HttpPost]
-        public async Task<IActionResult> RemoveUser(Guid paID)
+        public async Task<IActionResult> RemoveUser(string id)
         {
-            var entryToRemove = await _context.ProjectAssignments.FirstOrDefaultAsync(p => p.ProjectAssignmentId == paID);
-            _context.ProjectAssignments.Remove(entryToRemove);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var entryToRemove = await _context.ProjectAssignments.FirstOrDefaultAsync(p => p.ApplicationUserId == id);  // ***************** ProjectAssignmentRepository
+            var projectId = entryToRemove.ProjectId;
+            _context.ProjectAssignments.Remove(entryToRemove);          // ***************** ProjectAssignmentRepository
+            await _unitOfWork.SaveAsync();
+            return RedirectToAction(nameof(AddUser), new { id = projectId });
         }
 
 
@@ -464,3 +456,28 @@ namespace TaskManager.Controllers
 //    }
 //    return View(project);
 //}
+
+
+
+
+
+
+
+
+
+
+//public async Task<IActionResult> Details(Guid id)
+//{
+//    if (id == null)
+//    {
+//        return NotFound();
+//    }
+//     ....
+            //var project = await _context.Projects
+            //    .Include(t => t.Tickets)
+            //    .Include(n => n.Notes)
+            //    .ThenInclude(u => u.ApplicationUser)
+            //    .Include(c => c.Contributers)
+            //    .ThenInclude(u => u.ApplicationUser)
+            //    .AsNoTracking()
+            //    .FirstOrDefaultAsync(x => x.Id == id);

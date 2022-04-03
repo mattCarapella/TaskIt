@@ -28,7 +28,7 @@ public class UserController : Controller
 
     public IActionResult Index()
     {
-        var users = _unitOfWork.User.GetUsers();
+        var users = _unitOfWork.UserRepository.GetUsers();
         return View(users);
     }
 
@@ -40,7 +40,7 @@ public class UserController : Controller
             return NotFound();
         }
 
-        var user =  _unitOfWork.User.GetUser(id);
+        var user =  _unitOfWork.UserRepository.GetUser(id);
         if (user == null)
         {
             return NotFound();
@@ -84,8 +84,8 @@ public class UserController : Controller
 
     public async Task<IActionResult> Edit(string id )
     {
-        var user = _unitOfWork.User.GetUser(id);
-        var roles = _unitOfWork.Role.GetRoles();
+        var user = _unitOfWork.UserRepository.GetUser(id);
+        var roles = _unitOfWork.RoleRepository.GetRoles();
 
         var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
 
@@ -118,7 +118,7 @@ public class UserController : Controller
     [HttpPost]
     public async Task<IActionResult> OnPostAsync(EditUserViewModel data)
     {
-        var user = _unitOfWork.User.GetUser(data.User.Id);
+        var user = _unitOfWork.UserRepository.GetUser(data.User.Id);
         if (user == null)
         {
             return NotFound();
@@ -169,7 +169,8 @@ public class UserController : Controller
         user.Email = data.User.Email;
         user.ProfilePicture = uploadedFileName;
 
-        _unitOfWork.User.UpdateUser(user);
+        _unitOfWork.UserRepository.UpdateUser(user);
+        await _unitOfWork.SaveAsync();
 
         return RedirectToAction("Details", new { id = user.Id });
 

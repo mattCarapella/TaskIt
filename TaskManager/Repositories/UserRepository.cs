@@ -21,8 +21,13 @@ public class UserRepository : IUserRepository
     }
 
     public ApplicationUser GetUser(string id)
-    {
+    {   
         return _context.Users.FirstOrDefault(u => u.Id == id);
+    }
+
+    public async Task<ApplicationUser> GetUserAsync(string id)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task<ApplicationUser> GetUserWithProjects(string id)
@@ -41,8 +46,10 @@ public class UserRepository : IUserRepository
     public ApplicationUser UpdateUser(ApplicationUser user)
     {
         _context.Update(user);
-        _context.SaveChanges();
+        //_context.SaveChanges();
         return user;
     }
+
+
 
 }

@@ -81,7 +81,11 @@
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
                     <td><a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">Details</a></td>
-                    <td><a asp-controller="Projects" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id">Remove</a></td>
+                    <td>
+                        <form asp-controller="Projects" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id" method="post" role="form">
+                            <input id="Submit" class="btn btn-primary" type="submit" value="Remove" />
+                        </form>
+                    </td>
                 </tr>
             }
         </table>

@@ -2,10 +2,16 @@
 
 public interface IUnitOfWork
 {
-    IUserRepository User { get; }
-
-    IRoleRepository Role { get; }
-
-    //ITicketRepository Ticket { get; }
-
+    IUserRepository UserRepository { get; }
+    IRoleRepository RoleRepository { get; }
+    IProjectRepository ProjectRepository { get;  }
+    ITicketRepository TicketRepository { get; }
+    Task<bool> SaveAsync();
 }
+
+
+
+
+
+//IUserRepository User { get; }
+//IRoleRepository Role { get; }
