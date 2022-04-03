@@ -116,8 +116,8 @@ namespace TaskManager.Controllers
             }
 
             int pageSize = 9;
-            return View(await PaginatedList<Ticket>.CreateAsync(tickets.AsNoTracking(), pageNumber ?? 1, pageSize));
-            //return View(await tickets.AsNoTracking().ToListAsync());
+            //return View(await PaginatedList<Ticket>.CreateAsync(tickets.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await tickets.AsNoTracking().ToListAsync());
         }
 
 

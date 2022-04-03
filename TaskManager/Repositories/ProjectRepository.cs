@@ -15,12 +15,8 @@ public class ProjectRepository : IProjectRepository
         _context = context;
     }
 
-    public Project GetProject(Guid projectId)
-    {
-        return _context.Projects.Find(projectId);
-    }
 
-    public async Task<Project> GetProjectAsync(Guid projectId)
+    public async Task<Project> GetProject(Guid projectId)
     {
         return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
     }
@@ -46,29 +42,52 @@ public class ProjectRepository : IProjectRepository
                 .FirstOrDefaultAsync(x => x.Id == projectId);
     }
 
-    public ICollection<Project> GetProjects()
+    public async Task<ICollection<Project>> GetProjects()
     {
-        return _context.Projects.ToList();
+        return await _context.Projects.ToListAsync();
     }
 
-    public IQueryable<Project> GetProjectsWithTickets()
+
+    public async Task<List<Project>> GetProjectsWithTickets()
     {
-        return _context.Projects.Include(p => p.Tickets);
+        return await _context.Projects.Include(p => p.Tickets).ToListAsync();
     }
 
-    public void AddProject(Project project)
+
+    public async Task AddProject(Project project)
     {
-        _context.Projects.Add(project);
+        await _context.Projects.AddAsync(project);
     }
 
-    public void UpdateProject(Project project)
-    {
-        _context.Projects.Update(project);
-    }
 
-    public void DeleteProject(Guid projectId)
+    public async Task DeleteProject(Guid projectId)
     {
-        var project = _context.Projects.Find(projectId);
+        var project = await _context.Projects.FindAsync(projectId);
         _context.Projects.Remove(project);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//public Project GetProject(Guid projectId)
+//{
+//    return _context.Projects.Find(projectId);
+//}
+
+
+//public IQueryable<Project> GetProjectsWithTickets()
+//{
+//    return _context.Projects.Include(p => p.Tickets);
+//}

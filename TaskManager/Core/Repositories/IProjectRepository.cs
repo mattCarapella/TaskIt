@@ -4,17 +4,18 @@ namespace TaskManager.Core.Repositories;
 
 public interface IProjectRepository
 {
-    Project GetProject(Guid projectId);
-    Task<Project> GetProjectAsync(Guid projectId);
+    Task<Project> GetProject(Guid projectId);
     Task<Project> GetProjectWithUsers(Guid projectId);
     Task<Project> GetProjectWithTicketsNotesUsers(Guid projectId);
-
-    ICollection<Project> GetProjects();
-    IQueryable<Project> GetProjectsWithTickets();
-
-    void AddProject(Project project);
-
-    void UpdateProject(Project project);
-
-    void DeleteProject(Guid projectId);
+    Task<ICollection<Project>> GetProjects();
+    Task<List<Project>> GetProjectsWithTickets();
+    Task AddProject(Project project);
+    Task DeleteProject(Guid projectId);
 }
+
+
+
+
+
+//Project GetProject(Guid projectId);
+//IQueryable<Project> GetProjectsWithTickets();
