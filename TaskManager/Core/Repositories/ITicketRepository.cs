@@ -7,13 +7,15 @@ public interface ITicketRepository
 {
    
 
-    Task<Ticket> GetTicket(Guid id);
-    Task<Ticket> GetTicketWithProject(Guid id);
-    Task<Ticket> GetTicketWithAssignedUsers(Guid id);
-    Task<ICollection<Ticket>> GetTicketsAssignedToUser(Guid ticketId, string userId);
+    Task<Ticket> GetTicket(Guid ticketId);
+    Task<Ticket> GetTicketWithProject(Guid ticketId);
+    Task<Ticket> GetTicketWithAssignedUsers(Guid ticketId);
+    Task<Ticket> GetTicketWithProjectAndUserDetails(Guid ticketId);
+    //Task<ICollection<Ticket>> GetTicketWithProjectAndUserDetails(Guid ticketId);
     Task<ICollection<Ticket>> GetTickets();
     Task<List<Ticket>> GetTicketsWithProjects();
+    Task<List<Ticket>> GetTicketsAssignedToUser(Guid ticketId, string userId);
     Task AddTicket(Ticket ticket);
-    Task DeleteTicket(Guid id);
+    Task DeleteTicket(Guid ticketId);
 
 }

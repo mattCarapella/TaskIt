@@ -20,29 +20,7 @@ body {
 
 .container-body {
     margin-top: 45px;
-}
-
-.button-group {
-    display: flex;
-}
-
-.btn-icon-offset {
-    padding-top: 4px;
-}
-
-.btn-link-offset {
-    padding-top: 5px;
-}
-
-.ticket-table-links {
-    font-weight: 500;
-    color: #424354;
-    text-decoration: underline;
-}
-
-.btn-text {
-    color: white;
-    text-decoration: none;
+    margin-bottom: 175px;
 }
 
 .center-vert {
@@ -51,8 +29,168 @@ body {
     justify-content: center;
 }
 
-.btn-cstm-link {
-    width: 70px;
+.header-text {
+    font-size: 3.5em;
+    font-weight: bold;
+    color: black;
+}
+
+.search-field {
+    border-radius: 17px;
+    padding-left:3px;
+    padding-right: 3px;
+}
+
+
+
+/***************************************************/
+/*   PROJECTS                                       */
+/***************************************************/
+
+.projects--index {
+    padding-top: 3%;
+    padding-bottom: 5%;
+}
+
+.project-create--form {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.create--container {
+    width: 70%;
+}
+
+
+.project-create--form {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.navbar-brand {
+    font-size: 1.4em;
+    padding-left: 30px;
+    padding-top: 10px;
+}
+
+
+
+
+/***************************************************/
+/*   TICKETS                                       */
+/***************************************************/
+
+.card-details {
+    /*background: #feffea;*/
+    padding: 2em;
+    border-radius: 12px;
+    color: #474747;
+}
+
+.contributers-header {
+    height: 75px;
+    align-items: center !important;
+}
+
+.ticket-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ticket-header-text {
+    font-size: 3.5em;
+    font-weight: bold;
+    color: #202020 !important;
+}
+
+.ticket-header-subtext {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
+
+.ticket-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ticket-details-page-header {
+    padding-top: 1.65rem;
+    padding-bottom: 1.65rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    margin-bottom: 3rem;
+    background: #e9ecef;
+    border-radius: 0.5rem;
+}
+
+.tickets--index {
+    padding-top: 3%;
+    padding-bottom: 5%;
+}
+
+.ticket-table-links {
+    font-weight: 500;
+    color: #424354;
+    text-decoration: underline;
+}
+
+/***************************************************/
+/*   USERS                                         */
+/***************************************************/
+
+.user-details--header {
+    padding-top: 30px;
+}
+
+
+
+
+/***************************************************/
+/*   BUTTONS / LINKS                               */
+/***************************************************/
+
+
+.button-group {
+    display: flex;
+}
+
+.account-button {
+    font-size: 2rem !important;
+    padding-top: 4px;
+}
+
+    .account-button:hover {
+        color: #585858 !important;
+        font-size: 2rem !important;
+        padding-top: 4px;
+    }
+
+.plus-button {
+    font-size: 1.3rem !important;
+    padding-top: 7px;
+}
+
+    .plus-button:hover {
+        color: #525151 !important;
+        /*font-size: 1.3rem !important;*/
+        /*padding-top: 7px;*/
+    }
+
+.name-link {
+    color: #414141 !important;
+    text-decoration: underline;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.btn-cstm-wide {
+    width: 110px;
     border-radius: 5px;
 }
 
@@ -60,11 +198,11 @@ body {
     color: white;
     text-decoration: none;
 }
-.btn-cstm-link-text-light:hover {
-    color: white;
-    text-decoration: none;
-}
 
+    .btn-cstm-link-text-light:hover {
+        color: white;
+        text-decoration: none;
+    }
 
 .btn-text:hover {
     color: white;
@@ -85,10 +223,10 @@ body {
     text-decoration: none;
 }
 
-.btn-outline-primary-text:hover {
-    color: white;
-    text-decoration: none;
-}
+    .btn-outline-primary-text:hover {
+        color: white;
+        text-decoration: none;
+    }
 
 .btn-outline-dark-text {
     color: black;
@@ -102,58 +240,31 @@ body {
 
 .btn-link {
     color: #6c757d !important;
-    text-decoration:underline;
+    text-decoration: underline;
 }
 
-.search-field {
-    border-radius: 17px;
-    padding-left:3px;
-    padding-right: 3px;
+.btn-icon-offset {
+    padding-top: 4px;
 }
 
-.tickets--index {
-    padding-top: 3%;
-    padding-bottom: 5%;
+.btn-link-offset {
+    padding-top: 5px;
 }
 
-.projects--index {
-    padding-top: 3%;
-    padding-bottom: 5%;
+.btn-text {
+    color: white;
+    text-decoration: none;
 }
 
-.create--container {
-    width: 70%;
+.btn-cstm-link {
+    width: 70px;
+    border-radius: 5px;
 }
 
-.wrapper {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom:20px;
-}
 
-.header-text {
-    font-size: 3.5em;
-    font-weight: bold;
-    color: black;
-
-
-}
-
-.project-create--form {
-    padding-top: 25px;
-    padding-bottom: 25px;
-}
-
-.navbar-brand {
-    font-size: 1.4em;
-    padding-left: 30px;
-    padding-top: 10px;
-}
-
-.user-details--header {
-    padding-top:30px;
-}
-
+/***************************************************/
+/*   AVATARS                                       */
+/***************************************************/
 .navbar-avatar {
     object-fit: cover;
     width: 48px;
@@ -163,7 +274,15 @@ body {
 }
 
 .profile-pic {
-/*    height: 100%;
+    /*    height: 100%;
     width: 100%;*/
-    object-fit:cover;
+    object-fit: cover;
+}
+
+.details-avatar {
+    /*height: 55px;
+    width: 55px;*/
+    height: 3.3rem !important;
+    width: 3.3rem !important;
+    object-fit: cover;
 }

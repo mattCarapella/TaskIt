@@ -8,9 +8,9 @@ public class ProjectDetailsViewModel
 
     public List<ProjectAssignment> Contributers { get; set; }
 
-    public List<Ticket> OpenTickets { get; set; }
+    public List<Models.Ticket> OpenTickets { get; set; }
 
-    public List<Ticket> ClosedTickets   { get; set; }
+    public List<Models.Ticket> ClosedTickets   { get; set; }
 
     public List<PNote> Notes { get; set; }
 

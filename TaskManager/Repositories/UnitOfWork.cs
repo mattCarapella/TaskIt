@@ -1,4 +1,6 @@
-﻿using TaskManager.Core.Repositories;
+﻿using Microsoft.AspNetCore.Identity;
+using TaskManager.Areas.Identity.Data;
+using TaskManager.Core.Repositories;
 using TaskManager.Data;
 
 namespace TaskManager.Repositories;
@@ -6,14 +8,16 @@ namespace TaskManager.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly TaskManagerContext _context;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public UnitOfWork(TaskManagerContext context)
+    public UnitOfWork(TaskManagerContext context, SignInManager<ApplicationUser> signInManager)
     {
         _context = context;
+        _signInManager = signInManager;
     }
 
-    public IUserRepository UserRepository => new UserRepository(_context);
-    public IRoleRepository RoleRepository => new RoleRepository(_context);
+    public IUserRepository UserRepository => new UserRepository(_context, _signInManager);
+    public IRoleRepository RoleRepository => new RoleRepository(_context, _signInManager);
     public IProjectRepository ProjectRepository => new ProjectRepository(_context);
     public ITicketRepository TicketRepository => new TicketRepository(_context);
 

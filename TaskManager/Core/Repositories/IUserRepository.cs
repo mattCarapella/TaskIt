@@ -13,5 +13,6 @@ public interface IUserRepository
 
     ApplicationUser UpdateUser(ApplicationUser user);
 
+    Task<IList<string>> GetUserRoles(string id);
 
 }

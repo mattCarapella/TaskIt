@@ -1,132 +1,537 @@
-﻿@model TaskManager.Models.Ticket
+﻿@*@model TaskManager.Models.Ticket*@
+@model TaskManager.Core.ViewModels.Ticket.TicketDetailsViewModel;
 
 @{
     ViewData["Title"] = "Ticket Details";
 }
 
-<div>
-    <h1>@Model.Title</h1>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Project)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Project.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TicketType)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TicketType)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Priority)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Priority)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GoalDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GoalDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Upvotes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Upvotes)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tag)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tag)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SubmittedBy)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SubmittedBy.FullName)
-        </dd>
-    </dl>
-</div>
-<hr />
-<div class="row">    
-    <div class="col-md-2">
-        <h4>Contributers</h4>
+<div><a href="javascript:history.go(-1)">Back</a></div>
+
+<div class="main-container">
+    <div class="container pb-2">
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12">
+                <div class="page-header mb-2">
+                    <div class="wrapper">
+                        <div class="media">
+                            <img alt="Image" src="~/images/user.jpg" class="profile-pic avatar avatar-lg mt-1" overflow="hidden" />
+                            <div class="media-body ml-3">
+                                <h1 class="mb-0">@Model.Ticket.Title</h1>
+                                <p class="lead">
+                                    <strong>Project: </strong>
+                                    <a class="name-link" asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project.Id">
+                                        @Model.Project.Name
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <span class="center-vert">
+                            <button class="btn btn-primary">
+                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Ticket.TicketId" class="btn-cstm-link-text-light">Edit Details</a>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <hr />
+                <div>
+                    @***** TICKET DESCRIPTION ***** *@
+                    <dl class="row">
+                        <dt class="col-lg-12">
+                            @Html.DisplayFor(model => model.Ticket.Description)
+                        </dt>
+                    </dl>
+                    <div class="row">
+                        @***** TICKET DETAILS *****@
+                        <div class="col-xl-6 col-lg-6 mt-2">
+                            <div class="container">
+                                <dl class="row">
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.TicketType)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.TicketType)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.Status)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.Status)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.Priority)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.Priority)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.GoalDate)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.GoalDate)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.Upvotes)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.Upvotes)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.Tag)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.Tag)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.UpdatedAt)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.UpdatedAt)
+                                    </dd>
+                                </dl>
+                                <p class="mt-2 mb-4">
+                                    Submitted by
+                                    <a class="name-link" asp-controller="User" asp-action="Details" asp-route-id="@Model.Ticket.SubmittedBy.Id">
+                                        <strong>@Model.Ticket.SubmittedBy.FullName </strong>
+                                    </a> on  </strong>@Model.Ticket.CreatedAt</strong>
+                                </p>
+                            </div>
+                        </div>
+                        @****** ASSIGN USER DROPDOWN ******@
+                        <div class="col-xl-6 col-lg-6 mt-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-2">
-        <button type="button" class="btn btn-outline-secondary">
-            <a asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model.TicketId" class="btn-text-dark">Assign to User</a>
-        </button>
-    </div>
 </div>
-<dd class="col-sm-10">
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Job Title</th>
-            <th>Employee ID</th>
-        </tr>
-        @foreach (var item in Model.AssignedTo)
+@***** TICKET ASSIGNED TO *****@
+<div class="d-flex align-items-center">
+    <ul class="avatars">
+        @foreach (var item in @Model.AssignedTo)
         {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</td>
-                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
-                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
-                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
-                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
-                <td>
-                    <button type="button" class="btn btn-outline-secondary">
-                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Details</a>
-                    </button>        
-                </td>
-
-            </tr>
+            <li>
+                <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
+               data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                    <img alt="@item.ApplicationUser.UserName" class="avatar profile-pic details-avatar"
+                     src="~/images/@item.ApplicationUser.ProfilePicture" />
+                </a>
+            </li>
         }
-    </table>
-</dd>
-
-<hr />
+    </ul>
+    <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage ticket assignments">
+        <a asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model?.Ticket.TicketId">
+            <i class="material-icons">add</i>
+        </a>
+    </button>
+</div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.TicketId">Edit</a> |
-    <a asp-action="Index">Back to All Tickets</a>
+    <div class="d-flex justify-content-between text-small">
+        <div class="d-flex align-items-center">
+            <span class="pt-1 mb-3">Assigned to @Model.AssignedTo.Count() people</span>
+        </div>
+        <span class="pt-1"> @*Calculate days to goal date*@</span>
+    </div>
 </div>
 
 
 
-@*<td>
-    @using(Html.BeginForm("RemoveUser", "Projects"))
-    {
-        <input type="hidden" name="paID" value="@item.TicketAssignmentId" />
-        <input type="submit" value="Remove" />
-    }
-</td>*@
+@***** TAB SELECTION *****@
+<ul class="nav nav-tabs nav-fill" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="true">Notes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false">Activity</a>
+    </li>
+</ul>
+
+
+<div class="tab-content">
+    @***** TAB: NOTES *****@
+    <div class="tab-pane fade show active" id="task" role="tabpanel">
+
+
+        @***** NOTES *****@
+        <div class="content-list" data-filter-list="content-list-body">
+            <div class="row content-list-head">
+                <div class="col-auto">
+                    <h3>Notes</h3>
+                    @*<button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
+                        <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
+                        <i class="material-icons">add</i>
+                        </a>
+                        </button>*@
+                </div>
+                <form class="col-md-auto">
+                    <div class="input-group input-group-round">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="material-icons">filter_list</i>
+                            </span>
+                        </div>
+                        <input type="search" class="form-control filter-list-input" placeholder="Filter notes" aria-label="Filter notes">
+                    </div>
+                </form>
+            </div>
+
+            @***** NOTES *****@
+            <div class="content-list-body">
+
+                @*@foreach (var note in @Model.Notes)
+                    {
+                    <div class="card card-note">
+                    <div class="card-header">
+                    <div class="media align-items-center">
+                    <img alt="@note.ApplicationUser.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
+                    data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                    <div class="media-body">
+                    <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
+                    </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                    <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
+                    <div class="ml-1 dropdown card-options">
+                    <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">Edit</a>
+                    <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="card-body" data-filter-by="text">
+                    <p>@note.Content</p>
+                    @if (@note.Link != null)
+                    {
+                    <span class="mt-2">
+                    <a href="@note.Link">@note.Link</a>
+                    </span>
+                    }
+                    </div>
+
+                    </div>
+                    }*@
+
+            </div>
+        </div>
+    </div>
+
+    @***** TAB: FILES *****@
+    <div class="tab-pane fade" id="files" role="tabpanel" data-filter-list="dropzone-previews">
+        <div class="content-list">
+            <div class="row content-list-head">
+                <div class="col-auto">
+                    <h3>Files</h3>
+                </div>
+                <form class="col-md-auto">
+                    <div class="input-group input-group-round">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="material-icons">filter_list</i>
+                            </span>
+                        </div>
+                        <input type="search" class="form-control filter-list-input" placeholder="Filter files" aria-label="Filter Tasks">
+                    </div>
+                </form>
+            </div>
+            <!--end of content list head-->
+            <div class="content-list-body">
+                <ul class="d-none dz-template">
+                    <li class="list-group-item dz-preview dz-file-preview">
+                        <div class="media align-items-center dz-details">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary dz-file-representation">
+                                        <i class="material-icons">attach_file</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="David Whittaker" src="~/assets/img/avatar-male-4.jpg" class="avatar" data-title="David Whittaker" data-toggle="tooltip" />
+                                </li>
+                            </ul>
+                            <div class="media-body d-flex justify-content-between align-items-center">
+                                <div class="dz-file-details">
+                                    <a href="#" class="dz-filename">
+                                        <span data-dz-name></span>
+                                    </a>
+                                    <br>
+                                    <span class="text-small dz-size" data-dz-size></span>
+                                </div>
+                                <img alt="Loader" src="~/assets/img/loader.svg" class="dz-loading" />
+                                <div class="dropdown">
+                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Download</a>
+                                        <a class="dropdown-item" href="#">Share</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#" data-dz-remove>Delete</a>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger btn-sm dz-remove" data-dz-remove>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                        <div class="progress dz-progress">
+                            <div class="progress-bar dz-upload" data-dz-uploadprogress></div>
+                        </div>
+                    </li>
+                </ul>
+                <form class="dropzone" action="https://mediumra.re/dropzone/upload.php">
+                    <span class="dz-message">Drop files here or click here to upload</span>
+                </form>
+
+                <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
+
+                    <li class="list-group-item">
+                        <div class="media align-items-center">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary">
+                                        <i class="material-icons">insert_drive_file</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="Peggy Brown" src="~/assets/img/avatar-female-2.jpg" class="avatar" data-title="Peggy Brown" data-toggle="tooltip" data-filter-by="data-title" />
+                                </li>
+                            </ul>
+                            <div class="media-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="#" data-filter-by="text">client-questionnaire</a>
+                                    <br>
+                                    <span class="text-small" data-filter-by="text">48kb Text Doc</span>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Download</a>
+                                        <a class="dropdown-item" href="#">Share</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media align-items-center">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary">
+                                        <i class="material-icons">folder</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="Harry Xai" src="~/assets/img/avatar-male-2.jpg" class="avatar" data-title="Harry Xai" data-toggle="tooltip" data-filter-by="data-title" />
+                                </li>
+                            </ul>
+                            <div class="media-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="#" data-filter-by="text">moodboard_images</a>
+                                    <br>
+                                    <span class="text-small" data-filter-by="text">748kb ZIP</span>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Download</a>
+                                        <a class="dropdown-item" href="#">Share</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media align-items-center">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary">
+                                        <i class="material-icons">image</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="Ravi Singh" src="assets/img/avatar-male-3.jpg" class="avatar" data-title="Ravi Singh" data-toggle="tooltip" data-filter-by="data-title" />
+                                </li>
+                            </ul>
+                            <div class="media-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="#" data-filter-by="text">possible-hero-image</a>
+                                    <br>
+                                    <span class="text-small" data-filter-by="text">1.2mb JPEG image</span>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Download</a>
+                                        <a class="dropdown-item" href="#">Share</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media align-items-center">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary">
+                                        <i class="material-icons">insert_drive_file</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="Claire Connors" src="assets/img/avatar-female-1.jpg" class="avatar" data-title="Claire Connors" data-toggle="tooltip" data-filter-by="data-title" />
+                                </li>
+                            </ul>
+                            <div class="media-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="#" data-filter-by="text">LandingPrototypes</a>
+                                    <br>
+                                    <span class="text-small" data-filter-by="text">415kb Sketch Doc</span>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Download</a>
+                                        <a class="dropdown-item" href="#">Share</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media align-items-center">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary">
+                                        <i class="material-icons">insert_drive_file</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="David Whittaker" src="assets/img/avatar-male-4.jpg" class="avatar" data-title="David Whittaker" data-toggle="tooltip" data-filter-by="data-title" />
+                                </li>
+                            </ul>
+                            <div class="media-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="#" data-filter-by="text">Branding-Proforma</a>
+                                    <br>
+                                    <span class="text-small" data-filter-by="text">15kb Text Document</span>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Download</a>
+                                        <a class="dropdown-item" href="#">Share</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end of content list-->
+    </div>
+
+    @***** TAB: ACTIVITY *****@
+    <div class="tab-pane fade" id="activity" role="tabpanel" data-filter-list="list-group-activity">
+        <div class="content-list">
+            <div class="row content-list-head">
+                <div class="col-auto">
+                    <h3>Activity</h3>
+                </div>
+                <form class="col-md-auto">
+                    <div class="input-group input-group-round">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="material-icons">filter_list</i>
+                            </span>
+                        </div>
+                        <input type="search" class="form-control filter-list-input" placeholder="Filter activity" aria-label="Filter activity">
+                    </div>
+                </form>
+            </div>
+            <!--end of content list head-->
+            <div class="content-list-body">
+                <ol class="list-group list-group-activity">
+
+                    <li class="list-group-item">
+                        <div class="media align-items-center">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary">
+                                        <i class="material-icons">edit</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="Peggy" src="assets/img/avatar-female-2.jpg" class="avatar" data-filter-by="alt" />
+                                </li>
+                            </ul>
+                            <div class="media-body">
+                                <div>
+                                    <span class="h6" data-filter-by="text">Peggy</span>
+                                    <span data-filter-by="text">added the note</span><a href="#" data-filter-by="text">Client Meeting Notes</a>
+                                </div>
+                                <span class="text-small" data-filter-by="text">Yesterday</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media align-items-center">
+                            <ul class="avatars">
+                                <li>
+                                    <div class="avatar bg-primary">
+                                        <i class="material-icons">add</i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img alt="David" src="assets/img/avatar-male-4.jpg" class="avatar" data-filter-by="alt" />
+                                </li>
+                            </ul>
+                            <div class="media-body">
+                                <div>
+                                    <span class="h6" data-filter-by="text">David</span>
+                                    <span data-filter-by="text">started the task</span>
+                                </div>
+                                <span class="text-small" data-filter-by="text">6 days ago</span>
+                            </div>
+                        </div>
+                    </li>
+
+                </ol>
+            </div>
+        </div>
+        <!--end of content list-->
+    </div>
+</div>
+  

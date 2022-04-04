@@ -15,28 +15,40 @@ public class TicketRepository : ITicketRepository
         _context = context;
     }
 
-    public async Task<Ticket> GetTicket(Guid id)
+    public async Task<Ticket> GetTicket(Guid ticketId)
     {
-        return await _context.Tickets.FindAsync(id);
+        return await _context.Tickets.FindAsync(ticketId);
     }
 
 
-    public async Task<Ticket> GetTicketWithProject(Guid id)
+    public async Task<Ticket> GetTicketWithProject(Guid ticketId)
     {
         return await _context.Tickets
                         .Include(p => p.Project)
-                        .FirstOrDefaultAsync(x => x.TicketId == id);
+                        .FirstOrDefaultAsync(x => x.TicketId == ticketId);
     }
 
 
-    public async Task<Ticket> GetTicketWithAssignedUsers(Guid id)
+    public async Task<Ticket> GetTicketWithAssignedUsers(Guid ticketId)
     {
         return await _context.Tickets
                         .Include(a => a.AssignedTo)
                         .ThenInclude(u => u.ApplicationUser)
-                        .FirstOrDefaultAsync(x => x.TicketId == id);
+                        .FirstOrDefaultAsync(x => x.TicketId == ticketId);
     }
 
+
+    //public async Task<Ticket> GetTicketToAssignUser(Guid id)
+    public async Task<Ticket> GetTicketWithProjectAndUserDetails(Guid ticketId)
+    {
+        return await _context.Tickets
+                .Include(p => p.Project)
+                .Include(s => s.SubmittedBy)
+                .Include(c => c.AssignedTo)
+                    .ThenInclude(u => u.ApplicationUser)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.TicketId == ticketId);
+    }
 
     public async Task<ICollection<Ticket>> GetTickets()
     {
@@ -52,12 +64,14 @@ public class TicketRepository : ITicketRepository
     }
 
 
-    public async Task<ICollection<Ticket>> GetTicketsAssignedToUser(Guid ticketId, string userId)
+    public async Task<List<Ticket>> GetTicketsAssignedToUser(Guid ticketId, string userId)
     {
         var user = _context.Users.Find(userId);
         var tickets = await _context.Tickets
-                               .Include(t => t.AssignedTo)
-                               .ThenInclude(x => x.ApplicationUser)
+                               .Include(t => t.AssignedTo 
+                                    .Where(u => u.ApplicationUserId == userId))
+                                    .ThenInclude(x => x.ApplicationUser)
+                               .OrderBy(u => u.Title)
                                .ToListAsync();
         return tickets;
     }
@@ -69,9 +83,9 @@ public class TicketRepository : ITicketRepository
     }
 
 
-    public async Task DeleteTicket(Guid id)
+    public async Task DeleteTicket(Guid ticketId)
     {
-        var ticket = await _context.Tickets.FindAsync(id); 
+        var ticket = await _context.Tickets.FindAsync(ticketId); 
         _context.Tickets.Remove(ticket);
     }
 

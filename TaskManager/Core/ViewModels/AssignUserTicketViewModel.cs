@@ -5,7 +5,8 @@ namespace TaskManager.Core.ViewModels;
 
 public class AssignUserTicketViewModel
 {
-    public Ticket Ticket { get; set; }
+    public Models.Ticket Ticket { get; set; }
+    public Models.Project Project { get; set; }
     public string UserId { get; set; }
     public List<SelectListItem> ListOfUsers { get; set; }
 

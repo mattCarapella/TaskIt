@@ -88,14 +88,10 @@ namespace TaskManager.Controllers
                     projects = projects.OrderBy(p => p.CreatedAt);
                     break;
             }
+
             var pList = projects.ToList();
-
             int pageSize = 10;
-            
-            // Temporarily sets AsNoTracking() which is needed in return
-            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-            return View(PaginatedList<Project>.Create(pList, pageNumber ?? 1, pageSize));
+            return View(PaginatedList<Project>.Create(pList, pageNumber ?? 1, pageSize));       //   pList should have .AsNoTracking()... find out if it can work with async calls
             //return View(await projects.AsNoTracking().ToListAsync());
         }
 

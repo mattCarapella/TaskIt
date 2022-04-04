@@ -12,6 +12,7 @@ using TaskManager.Areas.Identity.Data;
 using TaskManager.Core;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
+using TaskManager.Core.ViewModels.Ticket;
 using TaskManager.Data;
 using TaskManager.Models;
 
@@ -138,34 +139,38 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            // ******** TicketRepository: GetTicketsWithProjects(Guid id) ********  
-            var ticket = await _context.Tickets
-                .Include(t => t.Project)
-                .Include(t => t.SubmittedBy)
-                .Include(c => c.AssignedTo)
-                    .ThenInclude(u => u.ApplicationUser)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.TicketId == id);
+            var ticket = await _unitOfWork.TicketRepository.GetTicketWithProjectAndUserDetails(id);
 
             if (ticket == null)
             {
                 return NotFound();
             }
 
+            var assignedTo = ticket.AssignedTo;
 
-            // ******** TicketRepository: GetTicketAssignments(Ticket ticket) ********  
-            var t = ticket.AssignedTo;
+            
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());        // ******** UserRepository: GetCurrentUser() ********  
+
+            var submit = ticket.SubmittedBy;
+            var submitId = ticket.SubmittedBy.Id;
+            //var submittedByUser = await _unitOfWork.UserRepository.GetUser(submitId);
+
+            var vm = new TicketDetailsViewModel()
+            {
+                Ticket = ticket,
+                AssignedTo = ticket.AssignedTo.ToList(),
+                Project = ticket.Project,
+                SubmittedBy = ticket.SubmittedBy
+            };
 
 
-            // ******** UserRepository: GetCurrentUser() ********  
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
-
-            // ******** UserRepository: GetUserRoles(ApplicationUser user) ******** 
             var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
+            //var userRoles = _unitOfWork.UserRepository.GetUserRoles(user.Id);
+
 
             //if (ticket.AssignedTo.Any(u => u.ApplicationUserId == User.Identity.GetUserId()))
             //{
-                return View(ticket);
+            return View(vm);
             //}
 
             //return RedirectToAction(nameof(Index));
@@ -293,10 +298,8 @@ namespace TaskManager.Controllers
             {
                 return NotFound();
             }
-
-            var ticket = await _context.Tickets
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.TicketId == id);
+            
+            var ticket = await _unitOfWork.TicketRepository.GetTicket(id);      //   This should have .AsNoTracking()... find out if it can work with async calls
 
             if (ticket == null)
             {
@@ -315,18 +318,17 @@ namespace TaskManager.Controllers
         // POST: Tickets/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid? id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
+            if (id == Guid.Empty)
             {
                 return RedirectToAction(nameof(Index));
             }
 
             try
             {
-                _context.Tickets.Remove(ticket);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.TicketRepository.DeleteTicket(id);
+                await _unitOfWork.SaveAsync();
                 return RedirectToAction(nameof(Index));
 
             }
@@ -345,11 +347,7 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Tickets
-                .Include(c => c.AssignedTo)
-                .ThenInclude(u => u.ApplicationUser)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.TicketId == id);
+            var ticket = await _unitOfWork.TicketRepository.GetTicketWithProjectAndUserDetails(id);
 
             if (ticket == null)
             {
@@ -372,8 +370,17 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(p => p.TicketId == id);
-            var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
+
+            var ticket = await _unitOfWork.TicketRepository.GetTicket(id);
+            
+            
+            
+            // ****** dont forget to make user repository async and change this
+            var selectedUser = _unitOfWork.UserRepository.GetUser(selectedUserId);
+            
+            
+            
+            
             var assignee = new TicketAssignment
             {
                 TicketAssignmentId = Guid.NewGuid(),
@@ -388,7 +395,7 @@ namespace TaskManager.Controllers
             {
 
                 _context.TicketAssignments.Add(assignee);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.SaveAsync();
                 return RedirectToAction("ManageUsers", new { id = ticket.TicketId });
             }
             catch (DbUpdateException)
@@ -401,34 +408,7 @@ namespace TaskManager.Controllers
         }
 
 
-        private AssignUserTicketViewModel GetViewModel(Ticket ticket)
-        {
-            var userList = (from user in _context.Users
-                            select new SelectListItem()
-                            {
-                                Text = user.UserName,
-                                Value = user.Id.ToString()
-                            }).ToList();
-
-            userList.Insert(0, new SelectListItem()
-            {
-                Text = "----Select----",
-                Value = String.Empty
-            });
-
-            
-
-            ViewBag.ListOfUsers = userList;
-            var vm = new AssignUserTicketViewModel
-            {
-                Ticket = ticket,
-                ListOfUsers = userList
-            };
-            return vm;
-        }
-
-
-        // POST: RemoveUser
+        // POST: RemoveUser/{id}
         [HttpPost]
         public async Task<IActionResult> RemoveUser(string id)
         {
@@ -441,6 +421,32 @@ namespace TaskManager.Controllers
             _context.TicketAssignments.Remove(entryToRemove);          // ***************** ProjectAssignmentRepository
             await _unitOfWork.SaveAsync();
             return RedirectToAction(nameof(ManageUsers), new { id = ticketId });
+        }
+
+
+        private AssignUserTicketViewModel GetViewModel(Ticket ticket)
+        {
+            var userList = (from user in _context.Users.OrderBy(u => u.LastName)
+                            select new SelectListItem()
+                            {
+                                Text = user.FullName, // + " (" + user.EmployeeID + ")",
+                                Value = user.Id.ToString()
+                            }).ToList();
+
+            userList.Insert(0, new SelectListItem()
+            {
+                Text = "----Select----",
+                Value = String.Empty
+            });
+
+            ViewBag.ListOfUsers = userList;
+            var vm = new AssignUserTicketViewModel
+            {
+                Ticket = ticket,
+                Project = ticket.Project,
+                ListOfUsers = userList
+            };
+            return vm;
         }
 
 

@@ -1,137 +1,144 @@
-﻿@using TaskManager.Core.ViewModels
+﻿@* Tickets => ManageUsers *@
+
+@using TaskManager.Core.ViewModels
 @model AssignUserTicketViewModel
 
 @{
     ViewData["Title"] = "Assign Ticket";
 }
 
-<div>
-    <h1>@Model.Ticket.Title</h1>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Project)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.Project.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.TicketType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.TicketType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Priority)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.Priority)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.GoalDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.GoalDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Upvotes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.Upvotes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Tag)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.Tag)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.UpdatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.SubmittedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.SubmittedBy.UserName)
-        </dd>
-    </dl>
+<div><a href="javascript:history.go(-1)">Back</a></div>
+
+<div class="main-container">
+    <div class="container pb-2">
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12">
+                <div class="page-header mb-2">
+                    <div class="wrapper">
+                        <div class="media">
+                            <img alt="Image" src="~/images/user.jpg" class="profile-pic avatar avatar-lg mt-1" overflow="hidden" />
+                            <div class="media-body ml-3">
+                                <h1 class="mb-0">@Model.Ticket.Title</h1>
+                                <p class="lead">
+                                    <strong>Project: </strong>
+                                    <a class="name-link" asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project.Id">
+                                        @Model.Project.Name
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        @*[edit button in details]*@
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    @***** TICKET DESCRIPTION ***** *@
+                    <dl class="row">
+                        <dt class="col-lg-12">
+                            @Html.DisplayFor(model => model.Ticket.Description)
+                        </dt>
+                    </dl>
+                    <div class="row">
+                        @***** TICKET DETAILS *****@
+                        <div class="col-xl-6 col-lg-6 mt-2">
+                            <div class="container">
+                                <dl class="row">
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.TicketType)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.TicketType)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.Status)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.Status)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.Priority)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.Priority)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Ticket.GoalDate)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Ticket.GoalDate)
+                                    </dd>
+                                </dl>
+                                <p class="mt-2 mb-4">
+                                    Submitted by
+                                    <a class="name-link" asp-controller="User" asp-action="Details" asp-route-id="@Model.Ticket.SubmittedBy.Id">
+                                        <strong>@Model.Ticket.SubmittedBy.FullName </strong>
+                                    </a> on  </strong>@Model.Ticket.CreatedAt</strong>
+                                </p>
+                            </div>
+                        </div>
+                        @****** ASSIGN USER DROPDOWN ******@
+                        <div class="col-xl-6 col-lg-6 mt-2">
+                            <h2 class="display-5 fw-bold">Add a user</h2>
+                            <form asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model.Ticket.TicketId" method="post" role="form">
+                                <div class="form-group">
+                                    <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
+                                    <label asp-for="UserId"></label>
+                                    <select asp-for="UserId" class="form-control" asp-items="@(new SelectList(ViewBag.ListOfUsers, "Value", "Text"))"></select>
+                                </div>
+                                <div class="form-group">
+                                    <input id="Submit" class="btn btn-primary" type="submit" value="Submit" style="float: right;" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<hr />
-<div class="row">    
+<hr class="mt-0 mb-3"/>
+
+@* ***** ASSIGNED TO USER TABLE ***** *@
+<div class="row">
     <div class="col-md-2">
         <h4>Assigned To</h4>
     </div>
 </div>
-    <dd class="col-sm-10">
-        <table class="table">
+<dd>
+    <div class="">
+        <table class="table table-light">
             <tr>
                 <th>Name</th>
+                <th>Employee ID</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Job Title</th>
-                <th>Employee ID</th>
+                <th></th>
+                <th></th>
             </tr>
             @foreach (var item in @Model.Ticket.AssignedTo)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</td>
+                    <td><strong>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</strong></td>
+                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
-                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-secondary">
-                            <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Details</a>
+                     <td>
+                        <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="View @item.ApplicationUser.FirstName's Profile">
+                            <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">
+                                <i class="material-icons account-button">account_circle</i>
+                            </a>
                         </button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-outline-secondary"> 
-                            <a asp-controller="Tickets" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id" class="btn-text-dark">Remove</a>
-                        </button>
+                        <form asp-controller="Tickets" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id" method="post" role="form">
+                            <input id="Submit" class="btn btn-link" type="submit" value="Remove" />
+                        </form>
                     </td>
                 </tr>
             }
         </table>
-    </dd>
+    </div>
+</dd>
 
-<h4>Add a Contributer</h4>
-<hr />
-<div class="col-md-4">   
-    <form asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model.Ticket.TicketId" method="post" role="form">
-        <div class="form-group">
-            <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
-            <label asp-for="UserId"></label>
-            <select asp-for="UserId" class="form-control" asp-items="@(new SelectList(ViewBag.ListOfUsers, "Value", "Text"))"></select>"
-        </div>
-        <div class="form-group">
-            <input id="Submit" class="btn btn-success" type="submit" value="Submit" />
-        </div>
-    </form>
-</div>
-<hr />
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Ticket.TicketId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
