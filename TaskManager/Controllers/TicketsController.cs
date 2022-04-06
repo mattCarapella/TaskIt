@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,7 @@ using TaskManager.Core.ViewModels;
 using TaskManager.Core.ViewModels.Ticket;
 using TaskManager.Data;
 using TaskManager.Models;
+using Constants = TaskManager.Core.Constants;
 
 namespace TaskManager.Controllers
 {
@@ -59,6 +61,106 @@ namespace TaskManager.Controllers
             var ticketList = await _unitOfWork.TicketRepository.GetTicketsWithProjects();
             var tickets = from t in ticketList select t;
             
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tickets = tickets.Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "projectName":
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+                case "projectName_desc":
+                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    break;
+                case "ticketTitle":
+                    tickets = tickets.OrderBy(t => t.Title);
+                    break;
+                case "ticketTitle_desc":
+                    tickets = tickets.OrderByDescending(t => t.Title);
+                    break;
+                case "goalDate":
+                    tickets = tickets.OrderBy(t => t.GoalDate);
+                    break;
+                case "goalDate_desc":
+                    tickets = tickets.OrderByDescending(t => t.GoalDate);
+                    break;
+                case "status":
+                    tickets = tickets.OrderBy(t => t.Status);
+                    break;
+                case "status_desc":
+                    tickets = tickets.OrderByDescending(t => t.Status);
+                    break;
+                case "priority":
+                    tickets = tickets.OrderBy(t => t.Priority);
+                    break;
+                case "priority_desc":
+                    tickets = tickets.OrderByDescending(t => t.Priority);
+                    break;
+                case "createdOn":
+                    tickets = tickets.OrderBy(t => t.CreatedAt);
+                    break;
+                case "createdOn_desc":
+                    tickets = tickets.OrderByDescending(t => t.CreatedAt);
+                    break;
+                case "upvotes":
+                    tickets = tickets.OrderBy(t => t.Upvotes);
+                    break;
+                case "upvotes_desc":
+                    tickets = tickets.OrderByDescending(t => t.Upvotes);
+                    break;
+                case "ticketType":
+                    tickets = tickets.OrderBy(t => t.TicketType);
+                    break;
+                case "ticketType_desc":
+                    tickets = tickets.OrderByDescending(t => t.TicketType);
+                    break;
+                default:
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+            }
+            var tList = tickets.ToList();
+            int pageSize = 9;
+
+            // Temporarily sets AsNoTracking() which is needed in return
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            return View(PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize));
+
+            //return View(await PaginatedListAsync2<Ticket>.CreateAsync(tickets, pageNumber ?? 1, pageSize));
+            //return View(await tickets.AsNoTracking().ToListAsync());
+        }
+
+
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        public async Task<IActionResult> AllTickets(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["ProjectNameSortParam"] = sortOrder == "projectName" ? "projectName_desc" : "projectName";
+            ViewData["TicketTitleSortParam"] = sortOrder == "ticketTitle" ? "ticketTitle_desc" : "ticketTitle";
+            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
+            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
+            ViewData["PrioritySortParam"] = sortOrder == "priority" ? "priority_desc" : "priority";
+            ViewData["CreatedOnSortParam"] = sortOrder == "createdOn" ? "createdOn_desc" : "createdOn";
+            ViewData["UpvotesSortParam"] = sortOrder == "upvotes" ? "upvotes_desc" : "upvotes";
+            ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
+            ViewData["CurrentFilter"] = searchString;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            //var ticketContext = _context.Tickets.Include(t => t.Project);   
+            var ticketList = await _unitOfWork.TicketRepository.GetTicketsWithProjects();
+            var tickets = from t in ticketList select t;
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 tickets = tickets.Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString));

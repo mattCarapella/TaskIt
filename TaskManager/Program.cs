@@ -84,4 +84,6 @@ void AddScoped()
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
     builder.Services.AddScoped<ITicketRepository, TicketRepository>();
     builder.Services.AddScoped<IProjectAssignmentRepository, ProjectAssignmentRepository>();
+    builder.Services.AddScoped<ITicketAssignmentRepository, TicketAssignmentRepository>();
+    
 }
