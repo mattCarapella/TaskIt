@@ -158,7 +158,7 @@ public class UserController : Controller
             await _signInManager.UserManager.RemoveFromRolesAsync(user, rolesToDelete);
         }
 
-        string uploadedFileName = UploadFile(data);
+        string uploadedFileName = UploadFile(data) ?? user.ProfilePicture;
 
         user.FirstName = data.User.FirstName;
         user.LastName = data.User.LastName;

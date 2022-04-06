@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Areas.Identity.Data;
@@ -66,6 +67,10 @@ void AddAuthorizationPolicies(IServiceCollection services)
 {
     builder.Services.AddAuthorization(options =>
     {
+        options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+
         options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
     });
 

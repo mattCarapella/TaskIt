@@ -115,7 +115,9 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Project.Name)
+                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">
+                                            @Html.DisplayFor(modelItem => item.Project.Name)
+                                        </a>
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Title)

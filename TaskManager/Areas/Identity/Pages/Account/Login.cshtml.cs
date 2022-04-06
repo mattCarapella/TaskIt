@@ -19,6 +19,7 @@ using System.Security.Claims;
 
 namespace TaskManager.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -46,7 +47,7 @@ namespace TaskManager.Areas.Identity.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
-
+        
         public class InputModel
         {
             /// <summary>

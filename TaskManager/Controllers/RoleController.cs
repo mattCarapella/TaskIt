@@ -18,6 +18,7 @@ public class RoleController : Controller
     }
 
     [Authorize(Policy = Constants.Policies.RequireManager)]
+    //[Authorize(Roles = $"{Constant.Roles.Administrator},{Constants.Roles.Manager}")]
     public IActionResult Manager()
     {
         return View();

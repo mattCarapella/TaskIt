@@ -22,6 +22,7 @@ using TaskManager.Areas.Identity.Data;
 
 namespace TaskManager.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
