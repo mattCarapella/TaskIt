@@ -7,7 +7,7 @@ public interface ITicketRepository
 {
    
 
-    Task<Ticket> GetTicket(Guid ticketId);
+    Task<Ticket> GetTicket(Guid ticketId, bool tracking = true);
     Task<Ticket> GetTicketWithProject(Guid ticketId);
     Task<Ticket> GetTicketWithAssignedUsers(Guid ticketId);
     Task<Ticket> GetTicketWithProjectAndUserDetails(Guid ticketId);

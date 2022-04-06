@@ -7,6 +7,7 @@ public interface IUnitOfWork
     IProjectRepository ProjectRepository { get;  }
     ITicketRepository TicketRepository { get; }
     IProjectAssignmentRepository ProjectAssignmentRepository { get; }
+    ITicketAssignmentRepository TicketAssignmentRepository { get; }
     Task<bool> SaveAsync();
 }
 

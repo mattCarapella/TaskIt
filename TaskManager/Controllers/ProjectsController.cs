@@ -50,7 +50,7 @@ namespace TaskManager.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+            //var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
 
             var projectList = await _unitOfWork.ProjectAssignmentRepository.GetProjectAssignmentsWithTicketsForUser(User.Identity.GetUserId());
             var projects = from p in projectList select p.Project;

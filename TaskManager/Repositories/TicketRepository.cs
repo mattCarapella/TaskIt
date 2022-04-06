@@ -15,8 +15,12 @@ public class TicketRepository : ITicketRepository
         _context = context;
     }
 
-    public async Task<Ticket> GetTicket(Guid ticketId)
+    public async Task<Ticket> GetTicket(Guid ticketId, bool tracking=true)
     {
+        if (!tracking)
+        {
+            return await _context.Tickets.AsNoTracking().FirstOrDefaultAsync(t => t.TicketId == ticketId);
+        }
         return await _context.Tickets.FindAsync(ticketId);
     }
 
@@ -24,7 +28,7 @@ public class TicketRepository : ITicketRepository
     public async Task<Ticket> GetTicketWithProject(Guid ticketId)
     {
         return await _context.Tickets
-                        .Include(p => p.Project)
+                        .Include(p => p.Project.Id)
                         .FirstOrDefaultAsync(x => x.TicketId == ticketId);
     }
 
@@ -47,12 +51,13 @@ public class TicketRepository : ITicketRepository
                 .Include(c => c.AssignedTo)
                     .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
     }
 
     public async Task<ICollection<Ticket>> GetTickets()
     {
-        return await _context.Tickets.ToListAsync();
+        return await _context.Tickets.AsNoTracking().ToListAsync();
     }
 
 
@@ -60,6 +65,7 @@ public class TicketRepository : ITicketRepository
     {
         return await _context.Tickets
                         .Include(p => p.Project)
+                        .AsNoTracking()
                         .ToListAsync();
     }
 

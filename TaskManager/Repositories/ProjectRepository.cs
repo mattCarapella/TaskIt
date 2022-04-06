@@ -24,6 +24,15 @@ public class ProjectRepository : IProjectRepository
         return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
     }
 
+    public async Task<Project> GetProjectWithTickets(Guid projectId, bool tracking = true)
+    {
+        if (!tracking)
+        {
+            return await _context.Projects.Include(t=>t.Tickets).AsNoTracking().FirstOrDefaultAsync(p => p.Id == projectId);
+        }
+        return await _context.Projects.Include(t => t.Tickets).FirstOrDefaultAsync(p => p.Id == projectId);
+    }
+
     public async Task<Project> GetProjectWithUsers(Guid projectId)
     {
         return await _context.Projects

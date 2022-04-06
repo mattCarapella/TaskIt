@@ -5,6 +5,7 @@ namespace TaskManager.Core.Repositories;
 public interface IProjectRepository
 {
     Task<Project> GetProject(Guid projectId, bool tracking=true);
+    Task<Project> GetProjectWithTickets(Guid projectId, bool tracking = true);
     Task<Project> GetProjectWithUsers(Guid projectId);
     Task<Project> GetProjectWithTicketsNotesUsers(Guid projectId);
 

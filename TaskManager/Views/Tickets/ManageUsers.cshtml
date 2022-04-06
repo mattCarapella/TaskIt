@@ -132,7 +132,14 @@
                         </button>
                     </td>
                     <td>
-                        <form asp-controller="Tickets" asp-action="RemoveUser" asp-route-id="@item.ApplicationUser.Id" method="post" role="form">
+                        <form 
+                            asp-controller="Tickets" 
+                            asp-action="RemoveUser" 
+                            asp-route-ticketId="@item.Ticket.TicketId"
+                            asp-route-taId="@item.TicketAssignmentId"
+                            method="post" 
+                            role="form"
+                        >
                             <input id="Submit" class="btn btn-link" type="submit" value="Remove" />
                         </form>
                     </td>
