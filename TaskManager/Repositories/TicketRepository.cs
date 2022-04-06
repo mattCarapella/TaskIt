@@ -70,15 +70,21 @@ public class TicketRepository : ITicketRepository
     }
 
 
-    public async Task<List<Ticket>> GetTicketsAssignedToUser(Guid ticketId, string userId)
+    public async Task<List<Ticket>> GetTicketsAssignedToUser(string userId)
     {
         var user = _context.Users.Find(userId);
         var tickets = await _context.Tickets
-                               .Include(t => t.AssignedTo 
-                                    .Where(u => u.ApplicationUserId == userId))
-                                    .ThenInclude(x => x.ApplicationUser)
-                               .OrderBy(u => u.Title)
-                               .ToListAsync();
+                            .Include(t => t.Project)
+                            .Include(u => u.AssignedTo)
+                                .ThenInclude(a => a.ApplicationUser)
+                             .AsNoTracking()
+                            .ToListAsync();
+
+                               //.Include(t => t.AssignedTo 
+                               //     .Where(u => u.ApplicationUserId == userId))
+                               //     .ThenInclude(x => x.ApplicationUser)
+                               //.OrderBy(u => u.Title)
+                               //.ToListAsync();
         return tickets;
     }
 

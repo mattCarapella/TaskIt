@@ -176,10 +176,15 @@ namespace TaskManager.Controllers
             }
 
             var contributers = project.Contributers.ToList();
+            
             var openTickets = project.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).ToList();
             var closedTickets = project.Tickets.Where(t => t.Status == Enums.Status.COMPLETED).ToList();
             var notes = project.Notes.ToList();
+
+            var ticketList = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
+
             
+
             var vm = new ProjectDetailsViewModel()
             {
                 Project = project,
@@ -340,7 +345,7 @@ namespace TaskManager.Controllers
 
 
         // GET: ManageUsers/{id}
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> ManageUsers(Guid id)
         {
             if (id == Guid.Empty)
@@ -362,7 +367,7 @@ namespace TaskManager.Controllers
 
         // POST: ManageUsers/{id}
         [HttpPost]
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageUsers(Guid id, AddUserProjectViewModel projectViewModel)
         {
@@ -403,7 +408,7 @@ namespace TaskManager.Controllers
 
         // POST: RemoveUser
         [HttpPost]
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> RemoveUser(Guid projectId, Guid paId)
         {
             if (paId == Guid.Empty || projectId == Guid.Empty)

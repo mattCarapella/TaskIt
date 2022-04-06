@@ -37,11 +37,13 @@ public class ProjectRepository : IProjectRepository
     {
         return await _context.Projects
                 .Include(c => c.Contributers)
-                .ThenInclude(u => u.ApplicationUser)
+                    .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == projectId);
     }
+
+
 
     public async Task<Project> GetProjectWithTicketsNotesUsers(Guid projectId)
     {
@@ -49,6 +51,7 @@ public class ProjectRepository : IProjectRepository
                 .Include(c => c.Contributers)
                     .ThenInclude(u => u.ApplicationUser)
                 .Include(t => t.Tickets)
+                    .ThenInclude(a => a.AssignedTo)
                 .Include(n => n.Notes)
                     .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()

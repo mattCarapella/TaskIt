@@ -32,6 +32,7 @@ public class TicketAssignmentRepository : ITicketAssignmentRepository
     {
         return await _context.TicketAssignments
             .Where(u => u.ApplicationUserId == userId)
+            .Include(t => t.Ticket)
             .AsNoTracking()
             .ToListAsync();
     }

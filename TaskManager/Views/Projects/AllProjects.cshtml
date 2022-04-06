@@ -83,10 +83,19 @@
                                 var ticketCount = item.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count();
                                 <tr>
                                     <td>
-                                        <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id">
+                                            <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                                        </a>
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Description)
+                                        @if (@item.Description.Length > 200)
+                                        {
+                                            <p>@item.Description.Substring(0, 199)...</p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => ticketCount)

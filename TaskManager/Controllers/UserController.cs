@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using TaskManager.Areas.Identity.Data;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
@@ -40,43 +41,27 @@ public class UserController : Controller
             return NotFound();
         }
 
-        var user =  _unitOfWork.UserRepository.GetUser(id);
+        var user =  await _unitOfWork.UserRepository.GetUserWithProjectsAndTickets(id);
         if (user == null)
         {
             return NotFound();
         }
 
-        if (user.Tickets.Any())
-        {
-            var tickets = user.Tickets.Where(s => s.Ticket.Status != Core.Enums.Enums.Status.COMPLETED);
-        }
+        //var pa = await _unitOfWork.UserRepository.GetProjectsForUser(id);
 
 
-        var pa = _context.ProjectAssignments
-            .Include(p => p.Project)
-            .ThenInclude(c => c.Contributers)
-            .Where(u => u.ApplicationUserId == id)
-            .ToList();
-
-        var ta = await _context.TicketAssignments
-            .Include(t => t.Ticket)
-            .ThenInclude(a => a.AssignedTo)
-            
-            .Where(u => u.ApplicationUserId == id)
-            .ToListAsync();
-
-        var open = ta.Where(x => x.Ticket.Status != Core.Enums.Enums.Status.COMPLETED);
+        var open = user.Tickets.Where(x => x.Ticket.Status != Core.Enums.Enums.Status.COMPLETED);
 
         var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
         var vm = new UserViewModel
         {
             User = user,
             Roles = (List<string>)userRoles,
-            ProjectAssignments = pa,
-            TicketsAssignments = ta
+            ProjectAssignments = user.Projects,
+            TicketsAssignments = user.Tickets
         };
 
-        
+    
 
         return View(vm);
     }
@@ -84,7 +69,7 @@ public class UserController : Controller
 
     public async Task<IActionResult> Edit(string id )
     {
-        var user = _unitOfWork.UserRepository.GetUser(id);
+        var user = await _unitOfWork.UserRepository.GetUserAsync(id);
         var roles = _unitOfWork.RoleRepository.GetRoles();
 
         var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
@@ -118,7 +103,7 @@ public class UserController : Controller
     [HttpPost]
     public async Task<IActionResult> OnPostAsync(EditUserViewModel data)
     {
-        var user = _unitOfWork.UserRepository.GetUser(data.User.Id);
+        var user = await _unitOfWork.UserRepository.GetUserAsync(data.User.Id);
         if (user == null)
         {
             return NotFound();

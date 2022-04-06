@@ -37,17 +37,17 @@
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
+                                       asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Project
+                                        Ticket
                                     </a>
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
+                                       asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Ticket
+                                        Project
                                     </a>
                                 </th>
                                 <th>
@@ -95,18 +95,18 @@
                                 </th>
                                 @*<th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["UpvotesSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Upvotes
+                                    asp-action="Index"
+                                    asp-route-sortOrder="@ViewData["UpvotesSortParam"]"
+                                    asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                    Upvotes
                                     </a>
-                                </th>*@
+                                    </th>*@
                                 @*<th>
                                     Last Updated
-                                </th>
-*@@*                                <th>
+                                    </th>
+                                *@@*                                <th>
                                     Tag
-                                </th>*@
+                                    </th>*@
                                 <th></th>
                             </tr>
                         </thead>
@@ -115,17 +115,19 @@
                             {
                                 <tr>
                                     <td>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </a>
+                                    </td>
+                                    <td>
                                         <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">
                                             @Html.DisplayFor(modelItem => item.Project.Name)
                                         </a>
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Title)
-                                    </td>
-                                    <td>
-                                        @if (@item.Description.Length > 100)
+                                        @if (@item.Description.Length > 200)
                                         {
-                                            <p>@item.Description.Substring(0, 99)...</p>
+                                            <p>@item.Description.Substring(0, 199)...</p>
                                         }
                                         else
                                         {
@@ -147,15 +149,15 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.CreatedAt)
                                     </td>
-                                   @* <td>
+                                    @* <td>
                                         @Html.DisplayFor(modelItem => item.Upvotes)
-                                    </td>*@
+                                        </td>*@
                                     @*<td>
                                         @Html.DisplayFor(modelItem => item.UpdatedAt)
-                                    </td>*@
+                                        </td>*@
                                     @*<td>
                                         @Html.DisplayFor(modelItem => item.Tag)
-                                    </td>*@
+                                        </td>*@
                                     <td>
                                         <div class="button-group ml-2">
                                             <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="Ticket details">

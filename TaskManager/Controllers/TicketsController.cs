@@ -64,6 +64,7 @@ namespace TaskManager.Controllers
             var ticketList = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
             var tickets = from t in ticketList select t.Ticket;
 
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 tickets = tickets.Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString));
@@ -280,7 +281,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/Create
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> Create(string? projectId)
         {
             if (!String.IsNullOrEmpty(projectId))
@@ -300,7 +301,7 @@ namespace TaskManager.Controllers
 
         // POST: Tickets/Create
         [HttpPost]
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Description,Tag,TicketType,Status,Priority," +
             "GoalDate,ProjectId,SubmittedBy")] Ticket ticket)
@@ -331,7 +332,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/Edit/5
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == Guid.Empty)
@@ -351,7 +352,7 @@ namespace TaskManager.Controllers
 
         // POST: Tickets/Edit/5
         [HttpPost, ActionName("Edit")]
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(Guid id)
         {
@@ -435,7 +436,7 @@ namespace TaskManager.Controllers
 
 
         // GET: ManageUsers/{id}
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> ManageUsers(Guid id)
         {
             if (id == Guid.Empty)
@@ -457,7 +458,7 @@ namespace TaskManager.Controllers
 
         // POST: ManageUsers/{id}
         [HttpPost]
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageUsers(Guid id, AssignUserTicketViewModel ticketViewModel)
         {
@@ -498,7 +499,7 @@ namespace TaskManager.Controllers
 
         // POST: RemoveUser
         [HttpPost]
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> RemoveUser(Guid ticketId, Guid taId)
         {
             if (taId == Guid.Empty || ticketId == Guid.Empty)

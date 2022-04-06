@@ -41,7 +41,6 @@ public class Ticket
     [DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime? ClosedAt { get; set; }
 
-    public string SubmittedById { get; set; }
 
     [Display(Name = "Submitted by")]
     public ApplicationUser? SubmittedBy { get; set; }

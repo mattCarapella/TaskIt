@@ -1,18 +1,16 @@
 ﻿using TaskManager.Areas.Identity.Data;
+using TaskManager.Models;
 
 namespace TaskManager.Core.Repositories;
 
 public interface IUserRepository
 {
     ICollection<ApplicationUser> GetUsers();
-
-    ApplicationUser GetUser(string id);
     Task<ApplicationUser> GetUserAsync(string id);
-
-    Task<ApplicationUser> GetUserWithProjects(string id);
-
+    Task<ApplicationUser> GetUserWithProjectsAndTickets(string id);
     ApplicationUser UpdateUser(ApplicationUser user);
-
     Task<IList<string>> GetUserRoles(string id);
+
+    Task<ICollection<ProjectAssignment>> GetProjectsForUser(string userId);
 
 }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TaskManager.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using TaskManager.Models;
 
 namespace TaskManager.Repositories;
 
@@ -25,17 +26,12 @@ public class UserRepository : IUserRepository
         return _context.Users.ToList();
     }
 
-    public ApplicationUser GetUser(string id)
-    {   
-        return _context.Users.FirstOrDefault(u => u.Id == id);
-    }
-
     public async Task<ApplicationUser> GetUserAsync(string id)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task<ApplicationUser> GetUserWithProjects(string id)
+    public async Task<ApplicationUser> GetUserWithProjectsAndTickets(string id)
     {
         return await _context.Users
             .Include(u => u.Projects)
@@ -59,6 +55,15 @@ public class UserRepository : IUserRepository
         return await _signInManager.UserManager.GetRolesAsync(user);
     }
 
-
+    public async Task<ICollection<ProjectAssignment>> GetProjectsForUser(string userId)
+    {
+        return await _context.ProjectAssignments
+            .Where(pa => pa.ApplicationUser.Id == userId)
+            .Include(p => p.Project)
+                .ThenInclude(x=>x.Tickets)
+            .Include(u=>u.ApplicationUser)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 
 }

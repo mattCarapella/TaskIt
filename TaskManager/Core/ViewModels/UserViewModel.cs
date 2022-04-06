@@ -12,8 +12,8 @@ public class UserViewModel
 
     public List<string>? Roles { get; set; }
 
-    public List<ProjectAssignment>? ProjectAssignments { get; set; }
+    public ICollection<ProjectAssignment>? ProjectAssignments { get; set; }
 
-    public List<TicketAssignment>? TicketsAssignments { get; set;  }
+    public ICollection<TicketAssignment>? TicketsAssignments { get; set;  }
 
 }

@@ -26,9 +26,12 @@
                             </div>
                         </div>
                         <span class="center-vert">
-                            <button class="btn btn-primary">
-                                <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Ticket.TicketId" class="btn-cstm-link-text-light">Edit Details</a>
-                            </button>
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded) 
+                            {
+                                <button class="btn btn-primary">
+                                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Ticket.TicketId" class="btn-cstm-link-text-light">Edit Details</a>
+                                </button>
+                            }
                         </span>
                     </div>
                 </div>
@@ -119,11 +122,14 @@
             </li>
         }
     </ul>
-    <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage ticket assignments">
-        <a asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model?.Ticket.TicketId">
-            <i class="material-icons">add</i>
-        </a>
-    </button>
+    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+    {
+        <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage ticket assignments">
+            <a asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model?.Ticket.TicketId">
+                <i class="material-icons">add</i>
+            </a>
+        </button>
+    }
 </div>
 <div>
     <div class="d-flex justify-content-between text-small">
@@ -160,11 +166,16 @@
             <div class="row content-list-head">
                 <div class="col-auto">
                     <h3>Notes</h3>
-                    @*<button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
-                        <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
-                        <i class="material-icons">add</i>
-                        </a>
-                        </button>*@
+                    @*
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                    {
+                        <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
+                            <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
+                                <i class="material-icons">add</i>
+                            </a>
+                        </button>
+                    }
+                    *@
                 </div>
                 <form class="col-md-auto">
                     <div class="input-group input-group-round">
@@ -534,4 +545,4 @@
         <!--end of content list-->
     </div>
 </div>
-  
+

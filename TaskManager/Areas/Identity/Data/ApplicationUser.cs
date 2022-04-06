@@ -42,6 +42,7 @@ public class ApplicationUser : IdentityUser
 
 
 
+
     public ICollection<ProjectAssignment> Projects { get; set; } = new List<ProjectAssignment>();
 
     public ICollection<TicketAssignment> Tickets { get; set; } = new List<TicketAssignment>();

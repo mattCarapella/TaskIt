@@ -14,10 +14,10 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    public DbSet<Project>? Projects { get; set; }
-    public DbSet<ProjectAssignment>? ProjectAssignments { get; set; }
-    public DbSet<Ticket>? Tickets { get; set; }
-    public DbSet<TicketAssignment>? TicketAssignments { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<ProjectAssignment> ProjectAssignments { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<TicketAssignment> TicketAssignments { get; set; }
     //public DbSet<Note> Notes { get; set; }
     public DbSet<PNote> PNote { get; set; }
 

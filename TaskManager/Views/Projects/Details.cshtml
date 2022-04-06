@@ -14,11 +14,14 @@
                 <div class="page-header">
                     <div class="wrapper">
                         <span class="header-text">@Html.DisplayFor(modelItem => @Model.Project.Name)</span>
-                        <span class="center-vert">
-                            <button class="btn btn-primary btn-cstm-link">
-                                <a asp-action="Edit" asp-route-id="@Model?.Project.Id" class="btn-cstm-link-text-light">Edit</a>
-                            </button>
-                        </span>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                        {
+                            <span class="center-vert">
+                                <button class="btn btn-primary btn-cstm-link">
+                                    <a asp-action="Edit" asp-route-id="@Model?.Project.Id" class="btn-cstm-link-text-light">Edit</a>
+                                </button>
+                            </span>
+                        }
                     </div>
 
                     @***** PROJECT DETAILS *****@
@@ -66,11 +69,14 @@
                                 </li>
                             }
                         </ul>
-                        <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage project members">
-                            <a asp-controller="Projects" asp-action="ManageUsers" asp-route-id="@Model?.Project.Id">      
-                                <i class="material-icons plus-button">add</i>
-                            </a>
-                        </button>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                        {
+                            <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage project members">
+                                <a asp-controller="Projects" asp-action="ManageUsers" asp-route-id="@Model?.Project.Id">
+                                    <i class="material-icons plus-button">add</i>
+                                </a>
+                            </button>
+                        }
                     </div>
                     <div>
                         <div class="d-flex justify-content-between text-small">
@@ -85,8 +91,9 @@
                 @***** TAB SELECTION *****@
                 <ul class="nav nav-tabs nav-fill" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Tickets</a>
+                        <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Your Tickets</a>
                     </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
                     </li>
@@ -96,6 +103,7 @@
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#closed" role="tab" aria-controls="closed" aria-selected="false">Closed Tickets</a>
                     </li>
+                  
                 </ul>
 
                 <div class="tab-content">
@@ -106,11 +114,14 @@
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Open Tickets</h3>
-                                    <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Submit a ticket">
-                                        <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Project.Id">
-                                            <i class="material-icons plus-button">add</i>
-                                        </a>
-                                    </button>
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                    {
+                                        <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Submit a ticket">
+                                            <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Project.Id">
+                                                <i class="material-icons plus-button">add</i>
+                                            </a>
+                                        </button>
+                                    }
                                 </div>
                                 <form class="col-md-auto">
                                     <div class="input-group input-group-round">
@@ -178,11 +189,14 @@
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Notes</h3>
-                                    <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
-                                        <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
-                                            <i class="material-icons">add</i>
-                                        </a>
-                                    </button>
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                    {
+                                        <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
+                                            <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
+                                                <i class="material-icons">add</i>
+                                            </a>
+                                        </button>
+                                    }
                                 </div>
                                 <form class="col-md-auto">
                                     <div class="input-group input-group-round">
@@ -239,6 +253,8 @@
                             </div>
                         </div>
                     </div>
+
+                    
 
                     @***** TAB: FILES *****@
                     <div class="tab-pane fade" id="files" role="tabpanel" data-filter-list="dropzone-previews">
@@ -689,7 +705,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+
+
+              
 
 
 
@@ -697,12 +715,10 @@
 
 
 
-
-               
             </div>
         </div>
     </div>
-    
+
 
 </div>
 
