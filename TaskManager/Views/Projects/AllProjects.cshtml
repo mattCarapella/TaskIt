@@ -134,7 +134,7 @@
                         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
                     }
 
-                    <a asp-action="Index"
+                    <a asp-action="AllProjects"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex-1)" ;
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -142,7 +142,7 @@
                         Previous
                     </a>
 
-                    <a asp-action="Index"
+                    <a asp-action="AllProjects"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex+1)" ;
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
