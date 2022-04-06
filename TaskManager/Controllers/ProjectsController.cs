@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using TaskManager.Core.ViewModels;
 using TaskManager.Core.ViewModels.Project;
 using TaskManager.Data;
 using TaskManager.Models;
+using Constants = TaskManager.Core.Constants;
 
 namespace TaskManager.Controllers
 {
@@ -31,9 +33,71 @@ namespace TaskManager.Controllers
         // GET: Projects
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-            // :::   TO DO   :::
-            // If user is admin or project manager => get all projects
-            // If user role is developer => get assigned projects
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CreatedOnSortParam"] = sortOrder == "createdOn" ? "createdOn_desc" : "createdOn";
+            ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
+            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
+            ViewData["OpenTicketSortParam"] = sortOrder == "openTickets" ? "openTickets_desc" : "openTickets";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+
+            var projectList = await _unitOfWork.ProjectAssignmentRepository.GetProjectAssignmentsWithTicketsForUser(User.Identity.GetUserId());
+            var projects = from p in projectList select p.Project;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                projects = projects.Where(s => s.Name.Contains(searchString) || s.Description.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name":
+                    projects = projects.OrderBy(p => p.Name);
+                    break;
+                case "name_desc":
+                    projects = projects.OrderByDescending(p => p.Name);
+                    break;
+                case "createdOn_desc":
+                    projects = projects.OrderByDescending(p => p.CreatedAt);
+                    break;
+                case "goalDate":
+                    projects = projects.OrderBy(p => p.GoalDate);
+                    break;
+                case "goalDate_desc":
+                    projects = projects.OrderByDescending(p => p.GoalDate);
+                    break;
+                case "openTickets":
+                    projects = projects.OrderBy(p => p.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count());
+                    break;
+                case "openTickets_desc":
+                    projects = projects.OrderByDescending(p => p.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count());
+                    break;
+                default:
+                    projects = projects.OrderBy(p => p.CreatedAt);
+                    break;
+            }
+
+            var pList = projects.ToList();
+            int pageSize = 10;
+            return View(PaginatedList<Project>.Create(pList, pageNumber ?? 1, pageSize));       //   pList should have .AsNoTracking()... find out if it can work with async calls
+            //return View(await projects.AsNoTracking().ToListAsync());
+        }
+
+        // GET: AllProjects
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        public async Task<IActionResult> AllProjects(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        {
 
             ViewData["CurrentSort"] = sortOrder;
             ViewData["CreatedOnSortParam"] = sortOrder == "createdOn" ? "createdOn_desc" : "createdOn";
@@ -95,6 +159,7 @@ namespace TaskManager.Controllers
             //return View(await projects.AsNoTracking().ToListAsync());
         }
 
+
         // GET: Projects/Details/{id}
         public async Task<IActionResult> Details(Guid id)
         {
@@ -129,13 +194,16 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Create
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public IActionResult Create()
         {
             return View();
         }
 
+
         // POST: Projects/Create
         [HttpPost]
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Tag,GoalDate")] Project project)
         {
@@ -171,6 +239,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Edit/{id}
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == Guid.Empty)
@@ -179,6 +248,7 @@ namespace TaskManager.Controllers
             }
 
             var project = await _unitOfWork.ProjectRepository.GetProject(id);
+
             if (project == null)
             {
                 return NotFound();
@@ -189,6 +259,7 @@ namespace TaskManager.Controllers
 
         // POST: Projects/Edit/{id}
         [HttpPost, ActionName("Edit")]
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(Guid id)
         {
@@ -196,7 +267,9 @@ namespace TaskManager.Controllers
             {
                 return NotFound();
             }
-            var projectToUpdate = await _unitOfWork.ProjectRepository.GetProject(id);
+
+            var projectToUpdate = await _unitOfWork.ProjectRepository.GetProject(id, true);
+
             if (await TryUpdateModelAsync<Project>(
                 projectToUpdate, "", p => p.Name, p => p.Description, p => p.Tag, p => p.GoalDate))
             {
@@ -216,6 +289,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Delete/{id}
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> Delete(Guid id, bool? saveChangeErrors = false)
         {
             if (id == Guid.Empty)
@@ -223,10 +297,7 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            //var project = await _context.Projects
-            //    .AsNoTracking()
-            //    .FirstOrDefaultAsync(p => p.Id == id);
-            var project = await _unitOfWork.ProjectRepository.GetProject(id);
+            var project = await _unitOfWork.ProjectRepository.GetProject(id, false);
 
             if (project == null)
             {
@@ -245,6 +316,7 @@ namespace TaskManager.Controllers
 
         // POST: Projects/Delete/{id}
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
@@ -268,6 +340,7 @@ namespace TaskManager.Controllers
 
 
         // GET: ManageUsers/{id}
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> ManageUsers(Guid id)
         {
             if (id == Guid.Empty)
@@ -289,6 +362,7 @@ namespace TaskManager.Controllers
 
         // POST: ManageUsers/{id}
         [HttpPost]
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageUsers(Guid id, AddUserProjectViewModel projectViewModel)
         {
@@ -298,8 +372,6 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            //var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
-            //var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == selectedUserId);
             var project = await _unitOfWork.ProjectRepository.GetProject(id);
             var selectedUser = await _unitOfWork.UserRepository.GetUserAsync(selectedUserId);
             var contributer = new ProjectAssignment
@@ -315,7 +387,7 @@ namespace TaskManager.Controllers
 
             try
             {
-                _context.ProjectAssignments.Add(contributer);           // ***************** ProjectAssignmentRepository
+                await _unitOfWork.ProjectAssignmentRepository.AddProjectAssignment(contributer); 
                 await _unitOfWork.SaveAsync();
                 return RedirectToAction("ManageUsers", "Projects", project);
             }
@@ -329,9 +401,41 @@ namespace TaskManager.Controllers
         }
 
 
+        // POST: RemoveUser
+        [HttpPost]
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        public async Task<IActionResult> RemoveUser(Guid projectId, Guid paId)
+        {
+            if (paId == Guid.Empty || projectId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.ProjectAssignmentRepository.DeleteProjectAssignment(paId);
+            await _unitOfWork.SaveAsync();
+            return RedirectToAction(nameof(ManageUsers), new { id = projectId });
+        }
+
+
+
+
+
         private AddUserProjectViewModel GetViewModel(Project project)
         {
-            var userList = (from user in _context.Users
+            /* Creates a dropdown list of users to add to a project. Users who are already contributers
+               are removed from the dropdown here as well. */
+
+            var inList = _context.ProjectAssignments
+                                .Where(p => p.ProjectId == project.Id)
+                                .AsNoTracking()
+                                .Include(a => a.ApplicationUser);
+
+            var notInList = _context.Users
+                                .Where(a => !inList.Any(b => b.ApplicationUserId == a.Id))
+                                .AsNoTracking()
+                                .ToList();
+
+            var userList = (from user in notInList
                             select new SelectListItem()
                             {
                                 Text = user.FullName,
@@ -344,29 +448,14 @@ namespace TaskManager.Controllers
                 Value = String.Empty
             });
 
-            ViewBag.ListOfUsers = userList;
+            ViewBag.ListOfUsers = userList.OrderBy(x => x.Text);
             var vm = new AddUserProjectViewModel
             {
                 Project = project,
                 ListOfUsers = userList
             };
+
             return vm;
-        }
-
-
-        // POST: RemoveUser
-        [HttpPost]
-        public async Task<IActionResult> RemoveUser(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var entryToRemove = await _context.ProjectAssignments.FirstOrDefaultAsync(p => p.ApplicationUserId == id);  // ***************** ProjectAssignmentRepository
-            var projectId = entryToRemove.ProjectId;
-            _context.ProjectAssignments.Remove(entryToRemove);          // ***************** ProjectAssignmentRepository
-            await _unitOfWork.SaveAsync();
-            return RedirectToAction(nameof(ManageUsers), new { id = projectId });
         }
 
 

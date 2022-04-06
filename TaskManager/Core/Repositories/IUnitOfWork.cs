@@ -6,6 +6,7 @@ public interface IUnitOfWork
     IRoleRepository RoleRepository { get; }
     IProjectRepository ProjectRepository { get;  }
     ITicketRepository TicketRepository { get; }
+    IProjectAssignmentRepository ProjectAssignmentRepository { get; }
     Task<bool> SaveAsync();
 }
 

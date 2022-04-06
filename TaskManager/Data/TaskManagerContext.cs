@@ -18,8 +18,8 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
     public DbSet<ProjectAssignment>? ProjectAssignments { get; set; }
     public DbSet<Ticket>? Tickets { get; set; }
     public DbSet<TicketAssignment>? TicketAssignments { get; set; }
-    public DbSet<Note> Notes { get; set; }
-
+    //public DbSet<Note> Notes { get; set; }
+    public DbSet<PNote> PNote { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -70,7 +70,7 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
 
 
 
-    public DbSet<TaskManager.Models.PNote> PNote { get; set; }
+    
 
 }
 

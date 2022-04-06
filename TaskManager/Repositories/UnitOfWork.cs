@@ -20,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
     public IRoleRepository RoleRepository => new RoleRepository(_context, _signInManager);
     public IProjectRepository ProjectRepository => new ProjectRepository(_context);
     public ITicketRepository TicketRepository => new TicketRepository(_context);
+    public IProjectAssignmentRepository ProjectAssignmentRepository => new ProjectAssignmentRepository(_context);   
 
     public async Task<bool> SaveAsync()
     {

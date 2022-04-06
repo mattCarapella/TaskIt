@@ -15,9 +15,12 @@ public class ProjectRepository : IProjectRepository
         _context = context;
     }
 
-
-    public async Task<Project> GetProject(Guid projectId)
+    public async Task<Project> GetProject(Guid projectId, bool tracking=true)
     {
+        if (!tracking)
+        {
+            return await _context.Projects.AsNoTracking().FirstOrDefaultAsync(p => p.Id == projectId);
+        }
         return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
     }
 
@@ -34,25 +37,32 @@ public class ProjectRepository : IProjectRepository
     public async Task<Project> GetProjectWithTicketsNotesUsers(Guid projectId)
     {
         return await _context.Projects
+                .Include(c => c.Contributers)
+                    .ThenInclude(u => u.ApplicationUser)
                 .Include(t => t.Tickets)
                 .Include(n => n.Notes)
-                .ThenInclude(u => u.ApplicationUser)
-                .Include(c => c.Contributers)
-                .ThenInclude(u => u.ApplicationUser)
+                    .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == projectId);
     }
 
+
+
+    // Get all projects - For Admin or Manager
     public async Task<ICollection<Project>> GetProjects()
     {
-        return await _context.Projects.ToListAsync();
+        return await _context.Projects.AsNoTracking().ToListAsync();
     }
 
 
     public async Task<List<Project>> GetProjectsWithTickets()
     {
-        return await _context.Projects.Include(p => p.Tickets).ToListAsync();
+        return await _context.Projects
+            .Include(p => p.Tickets)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .ToListAsync();
     }
 
 
