@@ -86,11 +86,11 @@
                                 }
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id">Profile</a>
-                                <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
-                                <form id="logoutForm" class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout"
+                                <a class="dropdown-item text-dark" asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id">Profile</a>
+                                <a class="dropdown-item text-dark" asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" >Account Settings</a>
+                                <form id="logoutForm" class="dropdown-item text-dark pl-0 pt-0" asp-area="Identity" asp-page="/Account/Logout"
                                   asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button id="logout" type="submit" class="btn btn-link dropdown-item">Logout</button>
+                                    <button id="logout" type="submit" class="dropdown-item text-dark">Logout</button>
                                 </form>
                             </div>
                         </div>
