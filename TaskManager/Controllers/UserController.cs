@@ -61,8 +61,6 @@ public class UserController : Controller
             TicketsAssignments = user.Tickets
         };
 
-    
-
         return View(vm);
     }
 

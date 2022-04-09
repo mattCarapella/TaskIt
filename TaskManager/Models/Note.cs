@@ -16,12 +16,4 @@ public class Note
 
     public DateTime? UpdatedAt { get; set; }
 
-
-    public ApplicationUser ApplicationUser { get; set; }
-
-
-    public Project? Project { get; set; }
-
-    public Guid? ProjectId { get; set; }
-
 }

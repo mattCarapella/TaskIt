@@ -52,11 +52,23 @@ public class ProjectRepository : IProjectRepository
                     .ThenInclude(u => u.ApplicationUser)
                 .Include(t => t.Tickets)
                     .ThenInclude(a => a.AssignedTo)
+                        .ThenInclude(u=>u.ApplicationUser)
                 .Include(n => n.Notes)
                     .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == projectId);
+
+        //return await _context.Projects
+        //    .Include(p => p.Contributers)
+        //        .ThenInclude(p => p.ApplicationUser)
+        //            .ThenInclude(p => p.Tickets)
+        //                .ThenInclude(p => p.Ticket)
+        //    .Include(p => p.Notes)
+        //        .ThenInclude(p=>p.ApplicationUser)
+        //    .AsNoTracking()
+        //    .OrderBy(p => p.GoalDate)
+        //    .FirstOrDefaultAsync(p => p.Id == projectId);
     }
 
 

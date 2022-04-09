@@ -8,7 +8,6 @@ using TaskManager.Models;
 
 namespace TaskManager.Areas.Identity.Data;
 
-// Add profile data for application users by adding properties to the ApplicationUser class
 public class ApplicationUser : IdentityUser
 {
     [Required, StringLength(50), Display(Name = "First Name")]
@@ -39,8 +38,6 @@ public class ApplicationUser : IdentityUser
 
     [Display(Name = "Last Login"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime? LastLoggedInAt  { get; set; }
-
-
 
 
     public ICollection<ProjectAssignment> Projects { get; set; } = new List<ProjectAssignment>();

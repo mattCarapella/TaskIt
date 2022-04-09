@@ -11,7 +11,7 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="page-content">
                     <div class="wrapper mb-2">
-                        <span class="header-text">Tickets</span>
+                        <span class="header-text">Your Tickets</span>
                         <span class="center-vert">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                             {
@@ -119,7 +119,7 @@
                                 <tr>
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
-                                            @Html.DisplayFor(modelItem => item.Title)
+                                            <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
                                         </a>
                                     </td>
                                     <td>
@@ -152,24 +152,16 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.CreatedAt)
                                     </td>
-                                    @* <td>
-                                        @Html.DisplayFor(modelItem => item.Upvotes)
-                                        </td>*@
-                                    @*<td>
-                                        @Html.DisplayFor(modelItem => item.UpdatedAt)
-                                        </td>*@
-                                    @*<td>
-                                        @Html.DisplayFor(modelItem => item.Tag)
-                                        </td>*@
                                     <td>
                                         <div class="button-group ml-2">
-                                            <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="Ticket details">
-                                                <a asp-action="Details" asp-route-id="@item.TicketId">
-                                                    <i class="material-icons">add</i>
-                                                </a>
-                                            </button>
+                                            
                                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                             {
+                                                <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="Ticket details">
+                                                    <a asp-action="Details" asp-route-id="@item.TicketId">
+                                                        <i class="material-icons">add</i>
+                                                    </a>
+                                                </button>
                                                 <button class="btn btn-round pt-1 mr-1">
                                                     <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
                                                         <i class="material-icons">create</i>

@@ -130,7 +130,8 @@ namespace TaskManager.Controllers
             // Temporarily sets AsNoTracking() which is needed in return
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-            return View(PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize));
+            var paginatedTicketList = PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize);
+            return View(paginatedTicketList);
             //return View(await tickets.AsNoTracking().ToListAsync());
         }
 

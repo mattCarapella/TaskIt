@@ -169,29 +169,44 @@ namespace TaskManager.Controllers
             }
 
             var project = await _unitOfWork.ProjectRepository.GetProjectWithTicketsNotesUsers(id);
-
             if (project == null)
             {
                 return NotFound();
             }
 
-            var contributers = project.Contributers.ToList();
-            
-            var openTickets = project.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).ToList();
-            var closedTickets = project.Tickets.Where(t => t.Status == Enums.Status.COMPLETED).ToList();
-            var notes = project.Notes.ToList();
 
-            var ticketList = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
-
-            
-
+            var userTicketsForProj = new List<Ticket>();
+            if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+            {
+                // Displays all tickets for the project
+                userTicketsForProj = project.Tickets.ToList();
+            }
+            else
+            {
+                // Displays only the tickets assigned to the currently logged in user
+                var userTickets = await _context.TicketAssignments
+                    .AsNoTracking()
+                    .Where(t => t.ApplicationUserId == User.Identity.GetUserId())
+                    .Include(t => t.Ticket)
+                        .ThenInclude(t => t.Project)
+                    .ToListAsync();
+                
+                foreach (var t in userTickets)
+                {
+                    if (t.Ticket.Project.Id == id)
+                    {
+                        userTicketsForProj.Add(t.Ticket);
+                    }
+                }
+            }
+                
             var vm = new ProjectDetailsViewModel()
             {
                 Project = project,
-                Contributers = contributers,    
-                OpenTickets = openTickets,
-                ClosedTickets = closedTickets,
-                Notes = notes
+                Contributers = project.Contributers.ToList(),    
+                OpenTickets = userTicketsForProj.Where(t => t.Status != Enums.Status.COMPLETED).ToList(),
+                ClosedTickets = userTicketsForProj.Where(t => t.Status == Enums.Status.COMPLETED).ToList(),
+                Notes = project.Notes
             };
 
             return View(vm);
@@ -420,9 +435,6 @@ namespace TaskManager.Controllers
             await _unitOfWork.SaveAsync();
             return RedirectToAction(nameof(ManageUsers), new { id = projectId });
         }
-
-
-
 
 
         private AddUserProjectViewModel GetViewModel(Project project)

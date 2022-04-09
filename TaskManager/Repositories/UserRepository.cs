@@ -33,13 +33,15 @@ public class UserRepository : IUserRepository
 
     public async Task<ApplicationUser> GetUserWithProjectsAndTickets(string id)
     {
-        return await _context.Users
+        var u = await _context.Users
             .Include(u => u.Projects)
                 .ThenInclude(p => p.Project)
+                    .ThenInclude(x => x.Tickets)
             .Include(u => u.Tickets)
                 .ThenInclude(t => t.Ticket)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
+        return u;
     }
 
     public ApplicationUser UpdateUser(ApplicationUser user)
