@@ -55,15 +55,28 @@ public class TicketRepository : ITicketRepository
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
     }
 
+
+
     public async Task<ICollection<Ticket>> GetTickets()
     {
-        return await _context.Tickets.AsNoTracking().ToListAsync();
+        return await _context.Tickets
+                        .AsNoTracking()
+                        .ToListAsync();
     }
 
 
     public async Task<List<Ticket>> GetTicketsWithProjects()
     {
         return await _context.Tickets
+                        .AsNoTracking()
+                        .Include(p => p.Project)
+                        .ToListAsync();
+    }
+
+    public async Task<List<Ticket>> GetTicketsForReview()
+    {
+        return await _context.Tickets
+                        .Where(t=>t.Status == Core.Enums.Enums.Status.SUBMITTED)
                         .Include(p => p.Project)
                         .AsNoTracking()
                         .ToListAsync();

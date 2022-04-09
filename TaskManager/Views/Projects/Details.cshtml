@@ -708,7 +708,15 @@
                                                         @Html.DisplayFor(modelItem => ticket.Title)
                                                     </a>
                                                 </td>
-                                                <td>@Html.DisplayFor(modelItem => ticket.Description)</td>
+                                                <td>
+                                                    @if (@ticket.Description.Length > 275)
+                                                    {
+                                                        <p>@ticket.Description.Substring(0, 274)...</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.DisplayFor(modelItem => ticket.Description)
+                                                    }
                                                 <td>@Html.DisplayFor(modelItem => ticket.Status)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.TicketType)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.ClosedAt)</td>

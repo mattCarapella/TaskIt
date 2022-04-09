@@ -121,7 +121,7 @@ namespace TaskManager.Controllers
                     tickets = tickets.OrderByDescending(t => t.TicketType);
                     break;
                 default:
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Status);
                     break;
             }
             var tList = tickets.ToList();
@@ -235,6 +235,91 @@ namespace TaskManager.Controllers
         }
 
 
+        // GET: Tickets/SubmittedForReview
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        public async Task<IActionResult> SubmittedForReview(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["ProjectNameSortParam"] = sortOrder == "projectName" ? "projectName_desc" : "projectName";
+            ViewData["TicketTitleSortParam"] = sortOrder == "ticketTitle" ? "ticketTitle_desc" : "ticketTitle";
+            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
+            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
+            ViewData["PrioritySortParam"] = sortOrder == "priority" ? "priority_desc" : "priority";
+            ViewData["CreatedOnSortParam"] = sortOrder == "createdOn" ? "createdOn_desc" : "createdOn";
+            ViewData["UpvotesSortParam"] = sortOrder == "upvotes" ? "upvotes_desc" : "upvotes";
+            ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
+            ViewData["CurrentFilter"] = searchString;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            var ticketList = await _unitOfWork.TicketRepository.GetTicketsForReview();
+            var tickets = from t in ticketList select t;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tickets = tickets.Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "projectName":
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+                case "projectName_desc":
+                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    break;
+                case "ticketTitle":
+                    tickets = tickets.OrderBy(t => t.Title);
+                    break;
+                case "ticketTitle_desc":
+                    tickets = tickets.OrderByDescending(t => t.Title);
+                    break;
+                case "goalDate":
+                    tickets = tickets.OrderBy(t => t.GoalDate);
+                    break;
+                case "goalDate_desc":
+                    tickets = tickets.OrderByDescending(t => t.GoalDate);
+                    break;
+                case "priority":
+                    tickets = tickets.OrderBy(t => t.Priority);
+                    break;
+                case "priority_desc":
+                    tickets = tickets.OrderByDescending(t => t.Priority);
+                    break;
+                case "createdOn":
+                    tickets = tickets.OrderBy(t => t.CreatedAt);
+                    break;
+                case "createdOn_desc":
+                    tickets = tickets.OrderByDescending(t => t.CreatedAt);
+                    break;
+                case "ticketType":
+                    tickets = tickets.OrderBy(t => t.TicketType);
+                    break;
+                case "ticketType_desc":
+                    tickets = tickets.OrderByDescending(t => t.TicketType);
+                    break;
+                default:
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+            }
+            var tList = tickets.ToList();
+            int pageSize = 9;
+
+            // Temporarily sets AsNoTracking() which is needed in return
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            return View(PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize));
+        }
+
+
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
@@ -318,7 +403,7 @@ namespace TaskManager.Controllers
                     project.Tickets.Add(ticket);
                     _context.Add(ticket);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Details", new { id = ticket.TicketId });
                 }
                 ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
                 return View(ticket);
@@ -362,7 +447,7 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var ticketToUpdate = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketId == id);
+            var ticketToUpdate = await _unitOfWork.TicketRepository.GetTicket(id);
 
             if (await TryUpdateModelAsync<Ticket>(
                     ticketToUpdate,
@@ -485,6 +570,10 @@ namespace TaskManager.Controllers
             try
             {
                 await _unitOfWork.TicketAssignmentRepository.AddTicketAssignment(assignee);
+                if (ticket.Status == Core.Enums.Enums.Status.TODO)
+                {
+                    ticket.Status = Core.Enums.Enums.Status.INPROGRESS;
+                }
                 await _unitOfWork.SaveAsync();
                 return RedirectToAction("ManageUsers", new { id = ticket.TicketId });
             }
@@ -514,6 +603,53 @@ namespace TaskManager.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> SubmitForReview(Guid ticketId)
+        {
+            if (ticketId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var ticketToSubmit = await _unitOfWork.TicketRepository.GetTicket(ticketId);
+
+            try
+            {
+                ticketToSubmit.Status = Core.Enums.Enums.Status.SUBMITTED;
+                ticketToSubmit.UpdatedAt = DateTime.Now;
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "There was a problem submitting this ticket. Please try again.");
+            }
+            return RedirectToAction("Details", new { id = ticketToSubmit.TicketId });
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        public async Task<IActionResult> MarkAsCompleted(Guid ticketId)
+        {
+            if (ticketId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var ticketToSubmit = await _unitOfWork.TicketRepository.GetTicket(ticketId);
+
+            try
+            {
+                ticketToSubmit.Status = Core.Enums.Enums.Status.COMPLETED;
+                ticketToSubmit.UpdatedAt = DateTime.Now;
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "There was a problem closing this ticket. Please try again.");
+            }
+            return RedirectToAction("Details", new { id = ticketToSubmit.TicketId });
+        }
 
 
         private AssignUserTicketViewModel GetViewModel(Ticket ticket)

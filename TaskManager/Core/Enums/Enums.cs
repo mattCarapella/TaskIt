@@ -18,7 +18,7 @@ public class Enums
         TODO,
         [Display(Name = "In Progress")]
         INPROGRESS = 1,
-        [Display(Name = "Submitted")]
+        [Display(Name = "Submitted for Review")]
         SUBMITTED = 2,
         [Display(Name = "Completed")]
         COMPLETED = 3
