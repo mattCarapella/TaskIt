@@ -40,10 +40,23 @@ public class TicketAssignmentRepository : ITicketAssignmentRepository
     public async Task<List<TicketAssignment>> GetTicketAssignmentsWithProjectForUser(string userId)
     {
         return await _context.TicketAssignments
+                    .AsNoTracking()
                     .Where(u => u.ApplicationUserId == userId)
+                    .Where(t => t.Ticket.Status != Core.Enums.Enums.Status.COMPLETED)
                     .Include(t => t.Ticket)
                         .ThenInclude(p => p.Project)
+                    .ToListAsync();
+    }
+
+
+    public async Task<List<TicketAssignment>> GetClosedTicketAssignmentsWithProjectForUser(string userId)
+    {
+        return await _context.TicketAssignments
                     .AsNoTracking()
+                    .Where(u => u.ApplicationUserId == userId)
+                    .Where(t => t.Ticket.Status == Core.Enums.Enums.Status.COMPLETED)
+                    .Include(t => t.Ticket)
+                        .ThenInclude(p => p.Project)
                     .ToListAsync();
     }
 

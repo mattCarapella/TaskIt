@@ -57,6 +57,7 @@ public class TicketRepository : ITicketRepository
 
 
 
+
     public async Task<ICollection<Ticket>> GetTickets()
     {
         return await _context.Tickets

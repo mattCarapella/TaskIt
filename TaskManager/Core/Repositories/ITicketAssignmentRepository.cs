@@ -10,6 +10,8 @@ public interface ITicketAssignmentRepository
     Task<List<TicketAssignment>> GetTicketAssignmentsForUser(string userId);
     Task<List<TicketAssignment>> GetTicketAssignmentsWithProjectForUser(string userId);
 
+    Task<List<TicketAssignment>> GetClosedTicketAssignmentsWithProjectForUser(string userId);
+
     Task AddTicketAssignment(TicketAssignment ta);
     Task DeleteTicketAssignment(Guid taId);
 }
