@@ -18,7 +18,7 @@ public class Project
     public DateTime? GoalDate { get; set; }
 
     [Display(Name = "Created On"), DataType(DataType.Date)]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     [Display(Name = "Updated At"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime? UpdatedAt { get; set; }

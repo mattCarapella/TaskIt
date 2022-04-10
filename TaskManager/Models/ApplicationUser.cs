@@ -34,7 +34,7 @@ public class ApplicationUser : IdentityUser
     }
 
     [Display(Name = "Created On"), DataType(DataType.Date)]
-    public DateTime? CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
     [Display(Name = "Last Login"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime? LastLoggedInAt  { get; set; }

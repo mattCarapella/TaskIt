@@ -31,7 +31,7 @@ public class Ticket
     public DateTime? GoalDate { get; set; }
 
     [DataType(DataType.Date), Display(Name = "Created On")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     [DataType(DataType.Date), Display(Name = "Updated At")]
     [DisplayFormat(DataFormatString ="{0:g}")]

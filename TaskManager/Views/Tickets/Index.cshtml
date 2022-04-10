@@ -27,8 +27,8 @@
                             <p>
                                 <span class="pr-3">Search by name or description:</span>
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                                <button type="submit" class="btn btn-link">Search</button>
-                                <a asp-action="Index" class="btn-link btn-link-offset">Clear</a>
+                                <button type="submit" class="btn btn-link pb-1">Search</button>
+                                <a asp-action="Index" class="btn-link">Clear</a>
                             </p>
                         </div>
                     </form>
@@ -83,17 +83,17 @@
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
+                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Goal Date
+                                        Created On
                                     </a>
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                                       asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Created On
+                                        Goal Date
                                     </a>
                                 </th>
                                 @*<th>
@@ -147,10 +147,10 @@
                                         @Html.DisplayFor(modelItem => item.Priority)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.GoalDate)
+                                        @Html.DisplayFor(modelItem => item.CreatedAt)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                                        @Html.DisplayFor(modelItem => item.GoalDate)
                                     </td>
                                     <td>
                                         <div class="button-group ml-2">
