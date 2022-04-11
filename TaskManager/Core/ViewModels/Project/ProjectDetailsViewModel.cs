@@ -8,11 +8,11 @@ public class ProjectDetailsViewModel
 
     public ICollection<ProjectAssignment> Contributers { get; set; }
 
-    public ICollection<Models.Ticket> OpenTickets { get; set; }
-
-    public ICollection<Models.Ticket> ClosedTickets   { get; set; }
-
     public ICollection<Models.Ticket> AllOpenTickets { get; set; }
+
+    public PaginatedList<Models.Ticket> OpenTicketsPaginated { get; set; }
+
+    public PaginatedList<Models.Ticket> ClosedTicketsPaginated { get; set; }
 
     public ICollection<PNote> Notes { get; set; }
 

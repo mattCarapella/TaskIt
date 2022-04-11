@@ -14,6 +14,4 @@ public class Constants
         public const string RequireAdmin = "RequireAdmin";
         public const string RequireManager = "RequireManager";
     }
-
 }
-

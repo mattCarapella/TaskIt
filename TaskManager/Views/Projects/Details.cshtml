@@ -29,12 +29,6 @@
                     <div>
                         <dl class="row">
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Project.Description)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Project.Description)
-                            </dd>
-                            <dt class="col-sm-2">
                                 @Html.DisplayNameFor(model => model.Project.Tag)
                             </dt>
                             <dd class="col-sm-10">
@@ -91,24 +85,24 @@
                 @***** TAB SELECTION *****@
                 <ul class="nav nav-tabs nav-fill" role="tablist">
                     <li class="nav-item">
-                        
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                            {
-                                <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
-                                    Open Tickets
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
-                                    Your Tickets
-                                </a>
-                                
-                            }
+
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                        {
+                            <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
+                                Open Tickets
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
+                                Your Tickets
+                            </a>
+
+                        }
 
                         </a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
                     </li>
@@ -118,7 +112,7 @@
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#closed" role="tab" aria-controls="closed" aria-selected="false">Closed Tickets</a>
                     </li>
-                  
+
                 </ul>
 
                 <div class="tab-content">
@@ -154,19 +148,59 @@
                                 <div class="col">
                                     <table class="table">
                                         <tr>
-                                            <th>Name</th>
+                                            <th>
+                                                <a class="index--sort-link"
+                                                   asp-action="Details"
+                                                   asp-route-id="@Model.Project.Id"
+                                                   asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
+                                                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    Ticket
+                                                </a>
+                                            </th>
                                             <th>Description</th>
-                                            <th>Status</th>
-                                            <th>Type</th>
-                                            <th>Priority</th>
-                                            <th>Goal</th>
+                                            <th>
+                                                <a class="index--sort-link"
+                                                   asp-action="Details"
+                                                   asp-route-id="@Model.Project.Id"
+                                                   asp-route-sortOrder="@ViewData["StatusSortParam"]"
+                                                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    Status
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <a class="index--sort-link"
+                                                   asp-action="Details"
+                                                   asp-route-id="@Model.Project.Id"
+                                                   asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
+                                                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    Type
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <a class="index--sort-link"
+                                                   asp-action="Details"
+                                                   asp-route-id="@Model.Project.Id"
+                                                   asp-route-sortOrder="@ViewData["PrioritySortParam"]"
+                                                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    Priority
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <a class="index--sort-link"
+                                                   asp-action="Details"
+                                                   asp-route-id="@Model.Project.Id"
+                                                   asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
+                                                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    Goal Date
+                                                </a>
+                                            </th>
                                         </tr>
-                                        @foreach (var ticket in Model.OpenTickets)
+                                        @foreach (var ticket in Model.OpenTicketsPaginated)
                                         {
                                             <tr>
                                                 <td>
                                                     <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.TicketId">
-                                                        @Html.DisplayFor(modelItem => ticket.Title)
+                                                        <strong>@Html.DisplayFor(modelItem => ticket.Title)</strong>
                                                     </a>
                                                 </td>
                                                 <td>
@@ -183,18 +217,52 @@
                                                 <td>@Html.DisplayFor(modelItem => ticket.TicketType)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.Priority)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.GoalDate)</td>
-                                                @*<td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.TicketId">Details</a></td>*@
                                             </tr>
                                         }
                                     </table>
+                                    @{
+                                        var prevDisabled = !Model.OpenTicketsPaginated.HasPreviousPage ? "disabled" : "";
+                                        var nextDisabled = !Model.OpenTicketsPaginated.HasNextPage ? "disabled" : "";
+                                    }
+                                    <a asp-action="Details"
+                                       asp-route-id="@Model.Project.Id"
+                                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                       asp-route-pageNumber="@(Model.OpenTicketsPaginated.PageIndex-1)" ;
+                                       class="btn btn-default @prevDisabled">
+                                        Previous
+                                    </a>
+                                    <a asp-action="Details"
+                                       asp-route-id="@Model.Project.Id"
+                                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                       asp-route-pageNumber="@(Model.OpenTicketsPaginated. PageIndex+1)" ;
+                                       class="btn btn-default @nextDisabled">
+                                        Next
+                                    </a>
                                 </div>
 
 
-                                <div class="drop-to-delete">
+                                @*
+                                    <a asp-action="Index"
+                                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                    asp-route-pageNumber="@(Model.OpenTicketsPaginated.PageIndex-1)" ;
+                                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                    class="btn btn-default @prevDisabled">
+                                    Previous
+                                    </a>
+                                    <a asp-action="Index"
+                                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                    asp-route-pageNumber="@(Model.OpenTicketsPaginated. PageIndex+1)" ;
+                                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                    class="btn btn-default @nextDisabled">
+                                    Next
+                                    </a>*@
+
+
+                                @*<div class="drop-to-delete">
                                     <div class="drag-to-delete-title">
-                                        <i class="material-icons">delete</i>
+                                    <i class="material-icons">delete</i>
                                     </div>
-                                </div>
+                                    </div>*@
                             </div>
                             <!--end of content list body-->
                         </div>
@@ -269,7 +337,7 @@
                         </div>
                     </div>
 
-                    
+
 
                     @***** TAB: FILES *****@
                     <div class="tab-pane fade" id="files" role="tabpanel" data-filter-list="dropzone-previews">
@@ -694,18 +762,30 @@
                                 <div class="col">
                                     <table class="table">
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Status</th>
-                                            <th>Type</th>
-                                            <th>Closed</th>
+                                            <th>
+                                                Ticket
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>
+                                                Status
+                                            </th>
+                                            <th>
+                                               Type
+                                            </th>
+                                            <th>
+                                                Closed At
+                                            </th>
+
+                                           
                                         </tr>
-                                        @foreach (var ticket in Model.ClosedTickets)
+                                        @foreach (var ticket in Model.ClosedTicketsPaginated)
                                         {
                                             <tr>
                                                 <td>
                                                     <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.TicketId">
-                                                        @Html.DisplayFor(modelItem => ticket.Title)
+                                                        <strong>@Html.DisplayFor(modelItem => ticket.Title)</strong>
                                                     </a>
                                                 </td>
                                                 <td>
@@ -720,17 +800,35 @@
                                                 <td>@Html.DisplayFor(modelItem => ticket.Status)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.TicketType)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.ClosedAt)</td>
-                                                @*<td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.TicketId">Details</a></td>*@
                                             </tr>
                                         }
                                     </table>
+                                    @{
+                                        var prevDisabledCl = !Model.ClosedTicketsPaginated.HasPreviousPage ? "disabled" : "";
+                                        var nextDisabledCl = !Model.ClosedTicketsPaginated.HasNextPage ? "disabled" : "";
+                                    }
+                                    <a asp-action="Details"
+                                       asp-route-id="@Model.Project.Id"
+                                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                       asp-route-pageNumber="@(Model.ClosedTicketsPaginated.PageIndex-1)"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                       class="btn btn-default @prevDisabledCl">
+                                        Previous
+                                    </a>
+                                    <a asp-action="Details"
+                                       asp-route-id="@Model.Project.Id"
+                                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                       asp-route-pageNumber="@(Model.ClosedTicketsPaginated. PageIndex+1)"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                       class="btn btn-default @nextDisabledCl">
+                                        Next
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
-              
 
 
 
@@ -738,51 +836,13 @@
 
 
 
+
+                </div>
             </div>
         </div>
+
+
     </div>
-
-
-</div>
-
-
-
-
-
-
-
-
-@*
-
-    <div class="row">
-    <div class="col-md-2">
-    <h4>Tickets</h4>
-    </div>
-    <div class="col-md-2">
-    <button type="button" class="btn btn-secondary mb-3">
-    <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Id" class="btn-text">
-    Submit a Ticket
-    </a>
-    </button>
-    </div>
-    </div>
-
-    <hr />
-    <div class="row">
-    <div class="col-md-2">
-    <h4>Contributers</h4>
-    </div>
-    <div class="col-md-2">
-    <button type="button" class="btn btn-secondary mb-3">
-    <a asp-controller="Projects" asp-action="AddUser" asp-route-id="@Model.Id" class="btn-text">Add a User</a>
-    </button>
-    </div>
-    </div>
-
-
-
-    <hr /
-    >*@
 
 
 
@@ -790,128 +850,167 @@
 
 
 
-@*
+
+    @*
+
+        <div class="row">
+        <div class="col-md-2">
+        <h4>Tickets</h4>
+        </div>
+        <div class="col-md-2">
+        <button type="button" class="btn btn-secondary mb-3">
+        <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Id" class="btn-text">
+        Submit a Ticket
+        </a>
+        </button>
+        </div>
+        </div>
+
+        <hr />
+        <div class="row">
+        <div class="col-md-2">
+        <h4>Contributers</h4>
+        </div>
+        <div class="col-md-2">
+        <button type="button" class="btn btn-secondary mb-3">
+        <a asp-controller="Projects" asp-action="AddUser" asp-route-id="@Model.Id" class="btn-text">Add a User</a>
+        </button>
+        </div>
+        </div>
 
 
-    <form class="checklist">
 
-    <div class="row">
-    <div class="form-group col">
-    <span class="checklist-reorder">
-    <i class="material-icons">reorder</i>
-    </span>
-    <div class="custom-control custom-checkbox col">
-    <input type="checkbox" class="custom-control-input" id="checklist-item-1" checked>
-    <label class="custom-control-label" for="checklist-item-1"></label>
-    <div>
-    <input type="text" placeholder="Checklist item" value="Create boards in Matboard" data-filter-by="value" />
-    <div class="checklist-strikethrough"></div>
-    </div>
-    </div>
-    </div>
-    <!--end of form group-->
-    </div>
+        <hr /
+        >*@
 
-    <div class="row">
-    <div class="form-group col">
-    <span class="checklist-reorder">
-    <i class="material-icons">reorder</i>
-    </span>
-    <div class="custom-control custom-checkbox col">
-    <input type="checkbox" class="custom-control-input" id="checklist-item-2" checked>
-    <label class="custom-control-label" for="checklist-item-2"></label>
-    <div>
-    <input type="text" placeholder="Checklist item" value="Invite team to boards" data-filter-by="value" />
-    <div class="checklist-strikethrough"></div>
-    </div>
-    </div>
-    </div>
-    <!--end of form group-->
-    </div>
 
-    <div class="row">
-    <div class="form-group col">
-    <span class="checklist-reorder">
-    <i class="material-icons">reorder</i>
-    </span>
-    <div class="custom-control custom-checkbox col">
-    <input type="checkbox" class="custom-control-input" id="checklist-item-3" checked>
-    <label class="custom-control-label" for="checklist-item-3"></label>
-    <div>
-    <input type="text" placeholder="Checklist item" value="Identify three distinct aesthetic styles for boards" data-filter-by="value" />
-    <div class="checklist-strikethrough"></div>
-    </div>
-    </div>
-    </div>
-    <!--end of form group-->
-    </div>
 
-    <div class="row">
-    <div class="form-group col">
-    <span class="checklist-reorder">
-    <i class="material-icons">reorder</i>
-    </span>
-    <div class="custom-control custom-checkbox col">
-    <input type="checkbox" class="custom-control-input" id="checklist-item-4">
-    <label class="custom-control-label" for="checklist-item-4"></label>
-    <div>
-    <input type="text" placeholder="Checklist item" value="Add aesthetic style descriptions as notes" data-filter-by="value" />
-    <div class="checklist-strikethrough"></div>
-    </div>
-    </div>
-    </div>
-    <!--end of form group-->
-    </div>
 
-    <div class="row">
-    <div class="form-group col">
-    <span class="checklist-reorder">
-    <i class="material-icons">reorder</i>
-    </span>
-    <div class="custom-control custom-checkbox col">
-    <input type="checkbox" class="custom-control-input" id="checklist-item-5">
-    <label class="custom-control-label" for="checklist-item-5"></label>
-    <div>
-    <input type="text" placeholder="Checklist item" value="Assemble boards using inspiration from Dribbble, Land Book, Nicely Done etc." data-filter-by="value" />
-    <div class="checklist-strikethrough"></div>
-    </div>
-    </div>
-    </div>
-    <!--end of form group-->
-    </div>
 
-    <div class="row">
-    <div class="form-group col">
-    <span class="checklist-reorder">
-    <i class="material-icons">reorder</i>
-    </span>
-    <div class="custom-control custom-checkbox col">
-    <input type="checkbox" class="custom-control-input" id="checklist-item-6">
-    <label class="custom-control-label" for="checklist-item-6"></label>
-    <div>
-    <input type="text" placeholder="Checklist item" value="Gather feedback from project team" data-filter-by="value" />
-    <div class="checklist-strikethrough"></div>
-    </div>
-    </div>
-    </div>
-    <!--end of form group-->
-    </div>
 
-    <div class="row">
-    <div class="form-group col">
-    <span class="checklist-reorder">
-    <i class="material-icons">reorder</i>
-    </span>
-    <div class="custom-control custom-checkbox col">
-    <input type="checkbox" class="custom-control-input" id="checklist-item-7">
-    <label class="custom-control-label" for="checklist-item-7"></label>
-    <div>
-    <input type="text" placeholder="Checklist item" value="Invite clients to board before next concept meeting" data-filter-by="value" />
-    <div class="checklist-strikethrough"></div>
-    </div>
-    </div>
-    </div>
-    <!--end of form group-->
-    </div>
 
-    </form>*@
+    @*
+
+
+        <form class="checklist">
+
+        <div class="row">
+        <div class="form-group col">
+        <span class="checklist-reorder">
+        <i class="material-icons">reorder</i>
+        </span>
+        <div class="custom-control custom-checkbox col">
+        <input type="checkbox" class="custom-control-input" id="checklist-item-1" checked>
+        <label class="custom-control-label" for="checklist-item-1"></label>
+        <div>
+        <input type="text" placeholder="Checklist item" value="Create boards in Matboard" data-filter-by="value" />
+        <div class="checklist-strikethrough"></div>
+        </div>
+        </div>
+        </div>
+        <!--end of form group-->
+        </div>
+
+        <div class="row">
+        <div class="form-group col">
+        <span class="checklist-reorder">
+        <i class="material-icons">reorder</i>
+        </span>
+        <div class="custom-control custom-checkbox col">
+        <input type="checkbox" class="custom-control-input" id="checklist-item-2" checked>
+        <label class="custom-control-label" for="checklist-item-2"></label>
+        <div>
+        <input type="text" placeholder="Checklist item" value="Invite team to boards" data-filter-by="value" />
+        <div class="checklist-strikethrough"></div>
+        </div>
+        </div>
+        </div>
+        <!--end of form group-->
+        </div>
+
+        <div class="row">
+        <div class="form-group col">
+        <span class="checklist-reorder">
+        <i class="material-icons">reorder</i>
+        </span>
+        <div class="custom-control custom-checkbox col">
+        <input type="checkbox" class="custom-control-input" id="checklist-item-3" checked>
+        <label class="custom-control-label" for="checklist-item-3"></label>
+        <div>
+        <input type="text" placeholder="Checklist item" value="Identify three distinct aesthetic styles for boards" data-filter-by="value" />
+        <div class="checklist-strikethrough"></div>
+        </div>
+        </div>
+        </div>
+        <!--end of form group-->
+        </div>
+
+        <div class="row">
+        <div class="form-group col">
+        <span class="checklist-reorder">
+        <i class="material-icons">reorder</i>
+        </span>
+        <div class="custom-control custom-checkbox col">
+        <input type="checkbox" class="custom-control-input" id="checklist-item-4">
+        <label class="custom-control-label" for="checklist-item-4"></label>
+        <div>
+        <input type="text" placeholder="Checklist item" value="Add aesthetic style descriptions as notes" data-filter-by="value" />
+        <div class="checklist-strikethrough"></div>
+        </div>
+        </div>
+        </div>
+        <!--end of form group-->
+        </div>
+
+        <div class="row">
+        <div class="form-group col">
+        <span class="checklist-reorder">
+        <i class="material-icons">reorder</i>
+        </span>
+        <div class="custom-control custom-checkbox col">
+        <input type="checkbox" class="custom-control-input" id="checklist-item-5">
+        <label class="custom-control-label" for="checklist-item-5"></label>
+        <div>
+        <input type="text" placeholder="Checklist item" value="Assemble boards using inspiration from Dribbble, Land Book, Nicely Done etc." data-filter-by="value" />
+        <div class="checklist-strikethrough"></div>
+        </div>
+        </div>
+        </div>
+        <!--end of form group-->
+        </div>
+
+        <div class="row">
+        <div class="form-group col">
+        <span class="checklist-reorder">
+        <i class="material-icons">reorder</i>
+        </span>
+        <div class="custom-control custom-checkbox col">
+        <input type="checkbox" class="custom-control-input" id="checklist-item-6">
+        <label class="custom-control-label" for="checklist-item-6"></label>
+        <div>
+        <input type="text" placeholder="Checklist item" value="Gather feedback from project team" data-filter-by="value" />
+        <div class="checklist-strikethrough"></div>
+        </div>
+        </div>
+        </div>
+        <!--end of form group-->
+        </div>
+
+        <div class="row">
+        <div class="form-group col">
+        <span class="checklist-reorder">
+        <i class="material-icons">reorder</i>
+        </span>
+        <div class="custom-control custom-checkbox col">
+        <input type="checkbox" class="custom-control-input" id="checklist-item-7">
+        <label class="custom-control-label" for="checklist-item-7"></label>
+        <div>
+        <input type="text" placeholder="Checklist item" value="Invite clients to board before next concept meeting" data-filter-by="value" />
+        <div class="checklist-strikethrough"></div>
+        </div>
+        </div>
+        </div>
+        <!--end of form group-->
+        </div>
+
+        </form>*@

@@ -136,9 +136,6 @@ namespace TaskManager.Controllers
         }
 
 
-        
-
-
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> AllTickets(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
@@ -472,8 +469,7 @@ namespace TaskManager.Controllers
         {
             if (!String.IsNullOrEmpty(projectId))
             {
-                var id = Guid.Parse(projectId);
-                var projectAssign = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
+                var projectAssign = await _unitOfWork.ProjectRepository.GetProject(Guid.Parse(projectId));
                 IEnumerable<Project> pl = new List<Project>() { projectAssign };
                 ViewData["Project"] = new SelectList(pl, "Id", "Description");
             }

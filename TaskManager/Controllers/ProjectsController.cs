@@ -94,6 +94,8 @@ namespace TaskManager.Controllers
             //return View(await projects.AsNoTracking().ToListAsync());
         }
 
+
+
         // GET: AllProjects
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> AllProjects(string sortOrder, string searchString, string currentFilter, int? pageNumber)
@@ -160,8 +162,9 @@ namespace TaskManager.Controllers
         }
 
 
+
         // GET: Projects/Details/{id}
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(Guid id, string? sortOrder, int? pageNumber)
         {
             if (id == Guid.Empty)
             {
@@ -174,12 +177,66 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["TicketTitleSortParam"] = sortOrder == "ticketTitle" ? "ticketTitle_desc" : "ticketTitle";
+            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
+            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
+            ViewData["PrioritySortParam"] = sortOrder == "priority" ? "priority_desc" : "priority";
+            ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
+            ViewData["ClosedAtSortParam"] = sortOrder == "closedAt" ? "closedAt_desc" : "closedAt";
+            //ViewData["CurrentFilter"] = searchString;
+
+            var tickets = from t in project.Tickets select t;
+            switch (sortOrder)
+            {
+
+                case "ticketTitle":
+                    tickets = tickets.OrderBy(t => t.Title);
+                    break;
+                case "ticketTitle_desc":
+                    tickets = tickets.OrderByDescending(t => t.Title);
+                    break;
+                case "goalDate":
+                    tickets = tickets.OrderBy(t => t.GoalDate);
+                    break;
+                case "goalDate_desc":
+                    tickets = tickets.OrderByDescending(t => t.GoalDate);
+                    break;
+                case "status":
+                    tickets = tickets.OrderBy(t => t.Status);
+                    break;
+                case "status_desc":
+                    tickets = tickets.OrderByDescending(t => t.Status);
+                    break;
+                case "priority":
+                    tickets = tickets.OrderBy(t => t.Priority);
+                    break;
+                case "priority_desc":
+                    tickets = tickets.OrderByDescending(t => t.Priority);
+                    break;
+                case "ticketType":
+                    tickets = tickets.OrderBy(t => t.TicketType);
+                    break;
+                case "ticketType_desc":
+                    tickets = tickets.OrderByDescending(t => t.TicketType);
+                    break;
+                case "closedAt":
+                    tickets = tickets.OrderBy(t => t.ClosedAt);
+                    break;
+                case "closedAt_desc":
+                    tickets = tickets.OrderByDescending(t => t.ClosedAt);
+                    break;
+                default:
+                    tickets = tickets.OrderBy(t => t.Status);
+                    break;
+            }
+
 
             var userTicketsForProj = new List<Ticket>();
             if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
             {
                 // Displays all tickets for the project
-                userTicketsForProj = project.Tickets.ToList();
+                userTicketsForProj = tickets.ToList();
             }
             else
             {
@@ -199,13 +256,21 @@ namespace TaskManager.Controllers
                     }
                 }
             }
-                
+
+            var pageSize = 8;
+
+            var openTickets = userTicketsForProj.Where(t => t.Status != Enums.Status.COMPLETED).ToList();
+            var closedTickets = userTicketsForProj.Where(t => t.Status == Enums.Status.COMPLETED).ToList();
+
+            var paginatedOpenTicketList = PaginatedList<Ticket>.Create(openTickets, pageNumber ?? 1, pageSize);
+            var paginatedClosedTicketList = PaginatedList<Ticket>.Create(closedTickets, pageNumber ?? 1, pageSize);
+
             var vm = new ProjectDetailsViewModel()
             {
                 Project = project,
                 Contributers = project.Contributers.ToList(),    
-                OpenTickets = userTicketsForProj.Where(t => t.Status != Enums.Status.COMPLETED).ToList(),
-                ClosedTickets = userTicketsForProj.Where(t => t.Status == Enums.Status.COMPLETED).ToList(),
+                ClosedTicketsPaginated = paginatedClosedTicketList,
+                OpenTicketsPaginated = paginatedOpenTicketList,
                 Notes = project.Notes
             };
 

@@ -1,0 +1,186 @@
+﻿@using TaskManager.Core
+@model PaginatedList<TaskManager.Models.Ticket>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="main-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12">
+                <div class="page-content">
+                    <div class="wrapper mb-2">
+                        <span class="header-text">All Tickets</span>
+                        <span class="center-vert">
+                            <button class="btn btn-primary">
+                                <a asp-action="Create" class="btn-cstm-link-text-light">Submit a ticket</a>
+                            </button>
+                        </span>
+                    </div>
+
+                    <form asp-action="AllTickets" method="get">
+                        <div class="form-actions no-color">
+                            <p>
+                                <span class="pr-3">Search by name or description:</span>
+                                <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                                <button type="submit" class="btn btn-link pb-1">Search</button>
+                                <a asp-action="AllTickets" class="btn-link">Clear</a>
+                            </p>
+                        </div>
+                    </form>
+
+
+                    <table class="table mt-4">
+                        <thead class="align-items-center">
+                            <tr>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="AllTickets"
+                                       asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Ticket
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="AllTickets"
+                                       asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Project
+                                    </a>
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="AllTickets"
+                                       asp-route-sortOrder="@ViewData["StatusSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Status
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="AllTickets"
+                                       asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Ticket Type
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="AllTickets"
+                                       asp-route-sortOrder="@ViewData["PrioritySortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Priority
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="AllTickets"
+                                       asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Goal Date
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Index"
+                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Created On
+                                    </a>
+                                </th>
+                                
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
+                                            <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">
+                                            @Html.DisplayFor(modelItem => item.Project.Name)
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @if (@item.Description.Length > 200)
+                                        {
+                                            <p>@item.Description.Substring(0, 199)...</p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TicketType)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Priority)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GoalDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                                    </td>
+                                    <td>
+                                        <div class="button-group ml-2">
+                                            <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="Ticket details">
+                                                <a asp-action="Details" asp-route-id="@item.TicketId">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </button>
+
+                                            <button class="btn btn-round pt-1 mr-1">
+                                                <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
+                                                    <i class="material-icons">create</i>
+                                                </a>
+                                            </button>
+
+                                            <button class="btn btn-round pt-1">
+                                                <a asp-action="Delete" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Delete ticket">
+                                                    <i class="material-icons">delete</i>
+                                                </a>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @{
+                        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                    }
+                    <a asp-action="AllClosed"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex-1)" ;
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default @prevDisabled">
+                        Previous
+                    </a>
+                    <a asp-action="AllClosed"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex+1)" ;
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default @nextDisabled">
+                        Next
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
