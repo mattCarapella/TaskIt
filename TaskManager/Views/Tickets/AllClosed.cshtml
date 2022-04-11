@@ -11,7 +11,7 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="page-content">
                     <div class="wrapper mb-2">
-                        <span class="header-text">All Tickets</span>
+                        <span class="header-text">All Closed Tickets</span>
                         <span class="center-vert">
                             <button class="btn btn-primary">
                                 <a asp-action="Create" class="btn-cstm-link-text-light">Submit a ticket</a>
@@ -19,7 +19,7 @@
                         </span>
                     </div>
 
-                    <form asp-action="AllTickets" method="get">
+                    <form asp-action="AllClosed" method="get">
                         <div class="form-actions no-color">
                             <p>
                                 <span class="pr-3">Search by name or description:</span>
@@ -36,7 +36,7 @@
                             <tr>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllTickets"
+                                       asp-action="AllClosed"
                                        asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Ticket
@@ -44,7 +44,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllTickets"
+                                       asp-action="AllClosed"
                                        asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Project
@@ -55,7 +55,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllTickets"
+                                       asp-action="AllClosed"
                                        asp-route-sortOrder="@ViewData["StatusSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Status
@@ -63,7 +63,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllTickets"
+                                       asp-action="AllClosed"
                                        asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Ticket Type
@@ -71,7 +71,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllTickets"
+                                       asp-action="AllClosed"
                                        asp-route-sortOrder="@ViewData["PrioritySortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Priority
@@ -79,7 +79,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllTickets"
+                                       asp-action="AllClosed"
                                        asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Goal Date
@@ -87,7 +87,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
+                                       asp-action="AllClosed"
                                        asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Created On

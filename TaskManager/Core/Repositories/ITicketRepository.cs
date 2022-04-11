@@ -14,6 +14,8 @@ public interface ITicketRepository
     //Task<ICollection<Ticket>> GetTicketWithProjectAndUserDetails(Guid ticketId);
     Task<ICollection<Ticket>> GetTickets();
     Task<List<Ticket>> GetTicketsWithProjects();
+    Task<List<Ticket>> GetClosedTicketsWithProjects();
+    Task<List<Ticket>> GetTicketsToAssign();
     Task<List<Ticket>> GetTicketsForReview();
     Task<List<Ticket>> GetTicketsAssignedToUser(string userId);
     Task AddTicket(Ticket ticket);

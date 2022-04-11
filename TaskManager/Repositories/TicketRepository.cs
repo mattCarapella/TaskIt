@@ -66,10 +66,29 @@ public class TicketRepository : ITicketRepository
     }
 
 
+    public async Task<List<Ticket>> GetTicketsToAssign()
+    {
+        return await _context.Tickets
+                        .AsNoTracking()
+                        .Where(t => t.Status == Core.Enums.Enums.Status.TODO)
+                        .Include(p => p.Project)
+                        .ToListAsync();
+    }
+
     public async Task<List<Ticket>> GetTicketsWithProjects()
     {
         return await _context.Tickets
                         .AsNoTracking()
+                        .Where(t => t.Status == Core.Enums.Enums.Status.INPROGRESS)
+                        .Include(p => p.Project)
+                        .ToListAsync();
+    }
+
+    public async Task<List<Ticket>> GetClosedTicketsWithProjects()
+    {
+        return await _context.Tickets
+                        .AsNoTracking()
+                        .Where(t => t.Status == Core.Enums.Enums.Status.COMPLETED)
                         .Include(p => p.Project)
                         .ToListAsync();
     }
