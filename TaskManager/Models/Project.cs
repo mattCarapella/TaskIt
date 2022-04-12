@@ -12,6 +12,8 @@ public class Project
     [Required, StringLength(1000)]
     public string Description { get; set; } = "";
 
+    [StringLength(1000)]
+    public string? DescriptionNoHtml { get; set; }
     public string? Tag { get; set; }
 
     [Display(Name= "Goal Date"), DataType(DataType.Date)]

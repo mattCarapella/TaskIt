@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" />
@@ -32,6 +33,112 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\ckeditor\adapters\jquery.js" />
+    <None Include="wwwroot\js\ckeditor\build-config.js" />
+    <None Include="wwwroot\js\ckeditor\CHANGES.md" />
+    <None Include="wwwroot\js\ckeditor\ckeditor.js" />
+    <None Include="wwwroot\js\ckeditor\config.js" />
+    <None Include="wwwroot\js\ckeditor\lang\af.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ar.js" />
+    <None Include="wwwroot\js\ckeditor\lang\az.js" />
+    <None Include="wwwroot\js\ckeditor\lang\bg.js" />
+    <None Include="wwwroot\js\ckeditor\lang\bn.js" />
+    <None Include="wwwroot\js\ckeditor\lang\bs.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ca.js" />
+    <None Include="wwwroot\js\ckeditor\lang\cs.js" />
+    <None Include="wwwroot\js\ckeditor\lang\cy.js" />
+    <None Include="wwwroot\js\ckeditor\lang\da.js" />
+    <None Include="wwwroot\js\ckeditor\lang\de-ch.js" />
+    <None Include="wwwroot\js\ckeditor\lang\de.js" />
+    <None Include="wwwroot\js\ckeditor\lang\el.js" />
+    <None Include="wwwroot\js\ckeditor\lang\en-au.js" />
+    <None Include="wwwroot\js\ckeditor\lang\en-ca.js" />
+    <None Include="wwwroot\js\ckeditor\lang\en-gb.js" />
+    <None Include="wwwroot\js\ckeditor\lang\en.js" />
+    <None Include="wwwroot\js\ckeditor\lang\eo.js" />
+    <None Include="wwwroot\js\ckeditor\lang\es-mx.js" />
+    <None Include="wwwroot\js\ckeditor\lang\es.js" />
+    <None Include="wwwroot\js\ckeditor\lang\et.js" />
+    <None Include="wwwroot\js\ckeditor\lang\eu.js" />
+    <None Include="wwwroot\js\ckeditor\lang\fa.js" />
+    <None Include="wwwroot\js\ckeditor\lang\fi.js" />
+    <None Include="wwwroot\js\ckeditor\lang\fo.js" />
+    <None Include="wwwroot\js\ckeditor\lang\fr-ca.js" />
+    <None Include="wwwroot\js\ckeditor\lang\fr.js" />
+    <None Include="wwwroot\js\ckeditor\lang\gl.js" />
+    <None Include="wwwroot\js\ckeditor\lang\gu.js" />
+    <None Include="wwwroot\js\ckeditor\lang\he.js" />
+    <None Include="wwwroot\js\ckeditor\lang\hi.js" />
+    <None Include="wwwroot\js\ckeditor\lang\hr.js" />
+    <None Include="wwwroot\js\ckeditor\lang\hu.js" />
+    <None Include="wwwroot\js\ckeditor\lang\id.js" />
+    <None Include="wwwroot\js\ckeditor\lang\is.js" />
+    <None Include="wwwroot\js\ckeditor\lang\it.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ja.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ka.js" />
+    <None Include="wwwroot\js\ckeditor\lang\km.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ko.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ku.js" />
+    <None Include="wwwroot\js\ckeditor\lang\lt.js" />
+    <None Include="wwwroot\js\ckeditor\lang\lv.js" />
+    <None Include="wwwroot\js\ckeditor\lang\mk.js" />
+    <None Include="wwwroot\js\ckeditor\lang\mn.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ms.js" />
+    <None Include="wwwroot\js\ckeditor\lang\nb.js" />
+    <None Include="wwwroot\js\ckeditor\lang\nl.js" />
+    <None Include="wwwroot\js\ckeditor\lang\no.js" />
+    <None Include="wwwroot\js\ckeditor\lang\oc.js" />
+    <None Include="wwwroot\js\ckeditor\lang\pl.js" />
+    <None Include="wwwroot\js\ckeditor\lang\pt-br.js" />
+    <None Include="wwwroot\js\ckeditor\lang\pt.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ro.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ru.js" />
+    <None Include="wwwroot\js\ckeditor\lang\si.js" />
+    <None Include="wwwroot\js\ckeditor\lang\sk.js" />
+    <None Include="wwwroot\js\ckeditor\lang\sl.js" />
+    <None Include="wwwroot\js\ckeditor\lang\sq.js" />
+    <None Include="wwwroot\js\ckeditor\lang\sr-latn.js" />
+    <None Include="wwwroot\js\ckeditor\lang\sr.js" />
+    <None Include="wwwroot\js\ckeditor\lang\sv.js" />
+    <None Include="wwwroot\js\ckeditor\lang\th.js" />
+    <None Include="wwwroot\js\ckeditor\lang\tr.js" />
+    <None Include="wwwroot\js\ckeditor\lang\tt.js" />
+    <None Include="wwwroot\js\ckeditor\lang\ug.js" />
+    <None Include="wwwroot\js\ckeditor\lang\uk.js" />
+    <None Include="wwwroot\js\ckeditor\lang\vi.js" />
+    <None Include="wwwroot\js\ckeditor\lang\zh-cn.js" />
+    <None Include="wwwroot\js\ckeditor\lang\zh.js" />
+    <None Include="wwwroot\js\ckeditor\LICENSE.md" />
+    <None Include="wwwroot\js\ckeditor\plugins\about\dialogs\about.js" />
+    <None Include="wwwroot\js\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <None Include="wwwroot\js\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <None Include="wwwroot\js\ckeditor\plugins\link\dialogs\anchor.js" />
+    <None Include="wwwroot\js\ckeditor\plugins\link\dialogs\link.js" />
+    <None Include="wwwroot\js\ckeditor\README.md" />
+    <None Include="wwwroot\js\ckeditor\samples\img\logo.svg" />
+    <None Include="wwwroot\js\ckeditor\samples\js\sample.js" />
+    <None Include="wwwroot\js\ckeditor\samples\js\sf.js" />
+    <None Include="wwwroot\js\ckeditor\samples\old\assets\posteddata.php" />
+    <None Include="wwwroot\js\ckeditor\samples\old\assets\uilanguages\languages.js" />
+    <None Include="wwwroot\js\ckeditor\samples\old\dialog\assets\my_dialog.js" />
+    <None Include="wwwroot\js\ckeditor\samples\old\sample.js" />
+    <None Include="wwwroot\js\ckeditor\samples\old\sample_posteddata.php" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\font\fontello.svg" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\js\abstracttoolbarmodifier.js" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\js\fulltoolbareditor.js" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\js\toolbarmodifier.js" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\js\toolbartextmodifier.js" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\lib\codemirror\codemirror.js" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\lib\codemirror\javascript.js" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\lib\codemirror\LICENSE" />
+    <None Include="wwwroot\js\ckeditor\samples\toolbarconfigurator\lib\codemirror\show-hint.js" />
+    <None Include="wwwroot\js\ckeditor\SECURITY.md" />
+    <None Include="wwwroot\js\ckeditor\skins\moono-lisa\readme.md" />
+    <None Include="wwwroot\js\ckeditor\styles.js" />
+    <None Include="wwwroot\js\ckeditor\vendor\promise.js" />
   </ItemGroup>
 
 </Project>

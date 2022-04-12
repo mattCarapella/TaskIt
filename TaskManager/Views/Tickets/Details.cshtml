@@ -69,7 +69,8 @@
                     @***** TICKET DESCRIPTION ***** *@
                     <dl class="row">
                         <dt class="col-lg-12">
-                            @Html.DisplayFor(model => model.Ticket.Description)
+                            @*@Html.DisplayFor(model => model.Ticket.Description)*@
+                            @Html.Raw(@Model.Ticket.Description)
                         </dt>
                     </dl>
                     <div class="row">

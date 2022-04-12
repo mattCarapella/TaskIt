@@ -16,6 +16,7 @@ using TaskManager.Core.ViewModels;
 using TaskManager.Core.ViewModels.Ticket;
 using TaskManager.Data;
 using TaskManager.Models;
+using HtmlAgilityPack;
 using Constants = TaskManager.Core.Constants;
 
 namespace TaskManager.Controllers
@@ -670,7 +671,7 @@ namespace TaskManager.Controllers
         [HttpPost]
         [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,Tag,TicketType,Status,Priority," +
+        public async Task<IActionResult> Create([Bind("Title,Description,DescriptionNoHtml,Tag,TicketType,Status,Priority," +
             "GoalDate,ProjectId,SubmittedBy")] Ticket ticket)
         {
             try
@@ -680,6 +681,10 @@ namespace TaskManager.Controllers
                     var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
                     ticket.TicketId = Guid.NewGuid();
                     ticket.SubmittedBy = currentUser;
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.OptionFixNestedTags = false;
+                    doc.LoadHtml(ticket.Description);
+                    ticket.DescriptionNoHtml = doc.DocumentNode.InnerText;
                     var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
                     project.Tickets.Add(ticket);
                     _context.Add(ticket);
@@ -731,15 +736,23 @@ namespace TaskManager.Controllers
             }
 
             var ticketToUpdate = await _unitOfWork.TicketRepository.GetTicket(id);
+            HtmlDocument doc = new HtmlDocument();
+            doc.OptionFixNestedTags = false;
+            doc.LoadHtml(ticketToUpdate.Description);
+            var noHtml = doc.DocumentNode.InnerText;
 
             if (await TryUpdateModelAsync<Ticket>(
                     ticketToUpdate,
                     "",
-                    t => t.Title, t => t.Description, t => t.TicketType, t => t.Status,
+                    t => t.Title, t => t.Description, t => t.DescriptionNoHtml, t => t.TicketType, t => t.Status,
                     t => t.Priority, t => t.Tag, t => t.GoalDate, t => t.ProjectId))
             {
                 try
                 {
+                    if (ticketToUpdate.Description != noHtml)
+                    {
+                        ticketToUpdate.DescriptionNoHtml = noHtml;
+                    }
                     ticketToUpdate.UpdatedAt = DateTime.UtcNow;
                     await _unitOfWork.SaveAsync();
                     return RedirectToAction("Details", new { id = ticketToUpdate.TicketId });

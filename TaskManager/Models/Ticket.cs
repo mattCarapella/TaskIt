@@ -14,6 +14,10 @@ public class Ticket
     [Required, StringLength(2000)]
     public string Description { get; set; } = "";
 
+
+    [StringLength(2000)]
+    public string? DescriptionNoHtml { get; set; }
+
     public string? Tag { get; set; }
 
     [Display(Name = "Ticket Type")]

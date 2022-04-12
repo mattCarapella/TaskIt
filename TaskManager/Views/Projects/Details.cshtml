@@ -204,14 +204,18 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    @if (@ticket.Description.Length > 275)
+                                                    @if (ticket.DescriptionNoHtml is not null)
                                                     {
-                                                        <p>@ticket.Description.Substring(0, 275)...</p>
+                                                        @if (@ticket.DescriptionNoHtml.Length > 275)
+                                                        {
+                                                            <p>@ticket.DescriptionNoHtml.Substring(0, 275)...</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DisplayFor(modelItem => ticket.DescriptionNoHtml)
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                                        @Html.DisplayFor(modelItem => ticket.Description)
-                                                    }
+                                                    
                                                 </td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.Status)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.TicketType)</td>
