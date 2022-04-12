@@ -111,13 +111,16 @@
                                         </a>
                                     </td>
                                     <td>
-                                        @if (@item.Description.Length > 200)
+                                        @if (@item.DescriptionNoHtml is not null)
                                         {
-                                            <p>@item.Description.Substring(0, 199)...</p>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.Description)
+                                            @if (@item.Description.Length > 200)
+                                            {
+                                                <p>@item.DescriptionNoHtml.Substring(0, 199)...</p>
+                                            }
+                                            else
+                                            {
+                                                @Html.DisplayFor(modelItem => item.DescriptionNoHtml)
+                                            }
                                         }
                                     </td>
                                     <td>

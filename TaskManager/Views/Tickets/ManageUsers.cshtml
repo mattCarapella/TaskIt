@@ -7,7 +7,9 @@
     ViewData["Title"] = "Assign Ticket";
 }
 
-<div><a href="javascript:history.go(-1)">Back</a></div>
+<div>
+    <a class="name-link" asp-controller="Tickets" asp-action="Details" asp-route-id="@Model.Ticket.TicketId">Back</a>
+</div>
 
 <div class="main-container">
     <div class="container pb-2">

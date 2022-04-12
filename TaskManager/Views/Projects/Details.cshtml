@@ -206,16 +206,16 @@
                                                 <td>
                                                     @if (ticket.DescriptionNoHtml is not null)
                                                     {
-                                                        @if (@ticket.DescriptionNoHtml.Length > 275)
+                                                        @if (ticket.Description.Length > 200)
                                                         {
-                                                            <p>@ticket.DescriptionNoHtml.Substring(0, 275)...</p>
+                                                            <p>@ticket.DescriptionNoHtml.Substring(0, 199)...</p>
                                                         }
                                                         else
                                                         {
                                                             @Html.DisplayFor(modelItem => ticket.DescriptionNoHtml)
                                                         }
                                                     }
-                                                    
+
                                                 </td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.Status)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.TicketType)</td>
@@ -243,34 +243,11 @@
                                         Next
                                     </a>
                                 </div>
-
-
-                                @*
-                                    <a asp-action="Index"
-                                    asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                    asp-route-pageNumber="@(Model.OpenTicketsPaginated.PageIndex-1)" ;
-                                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                                    class="btn btn-default @prevDisabled">
-                                    Previous
-                                    </a>
-                                    <a asp-action="Index"
-                                    asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                    asp-route-pageNumber="@(Model.OpenTicketsPaginated. PageIndex+1)" ;
-                                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                                    class="btn btn-default @nextDisabled">
-                                    Next
-                                    </a>*@
-
-
-                                @*<div class="drop-to-delete">
-                                    <div class="drag-to-delete-title">
-                                    <i class="material-icons">delete</i>
-                                    </div>
-                                    </div>*@
                             </div>
                             <!--end of content list body-->
                         </div>
                         <!--end of content list-->
+                        
                         @***** NOTES *****@
                         <div class="content-list" data-filter-list="content-list-body">
                             <div class="row content-list-head">
@@ -313,15 +290,18 @@
                                             </div>
                                             <div class="d-flex align-items-center">
                                                 <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
-                                                <div class="ml-1 dropdown card-options">
-                                                    <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Edit</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                                                {
+                                                    <div class="ml-1 dropdown card-options">
+                                                        <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                }
                                             </div>
                                         </div>
                                         <div class="card-body" data-filter-by="text">
@@ -776,13 +756,13 @@
                                                 Status
                                             </th>
                                             <th>
-                                               Type
+                                                Type
                                             </th>
                                             <th>
                                                 Closed At
                                             </th>
 
-                                           
+
                                         </tr>
                                         @foreach (var ticket in Model.ClosedTicketsPaginated)
                                         {
@@ -793,13 +773,16 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    @if (@ticket.Description.Length > 275)
+                                                    @if (ticket.DescriptionNoHtml is not null)
                                                     {
-                                                        <p>@ticket.Description.Substring(0, 274)...</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.DisplayFor(modelItem => ticket.Description)
+                                                        @if (ticket.Description.Length > 200)
+                                                        {
+                                                            <p>@ticket.DescriptionNoHtml.Substring(0, 199)...</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DisplayFor(modelItem => ticket.DescriptionNoHtml)
+                                                        }
                                                     }
                                                 <td>@Html.DisplayFor(modelItem => ticket.Status)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.TicketType)</td>

@@ -73,6 +73,7 @@
                             @Html.Raw(@Model.Ticket.Description)
                         </dt>
                     </dl>
+                    <hr/>
                     <div class="row">
                         @***** TICKET DETAILS *****@
                         <div class="col-xl-6 col-lg-6 mt-2">
@@ -152,7 +153,14 @@
 <div>
     <div class="d-flex justify-content-between text-small">
         <div class="d-flex align-items-center">
-            <span class="pt-1 mb-3">Assigned to @Model.AssignedTo.Count() people</span>
+            @if (@Model.AssignedTo.Count() == 1)
+            {
+                <span class="pt-1 mb-3">Assigned to 1 person</span>
+            }
+            else
+            {
+                <span class="pt-1 mb-3">Assigned to @Model.AssignedTo.Count() people</span>
+            }
         </div>
         <span class="pt-1"> @*Calculate days to goal date*@</span>
     </div>
