@@ -50,6 +50,8 @@ public class TicketRepository : ITicketRepository
                 .Include(s => s.SubmittedBy)
                 .Include(c => c.AssignedTo)
                     .ThenInclude(u => u.ApplicationUser)
+                .Include(n => n.TNotes)
+                    .ThenInclude(u => u.ApplicationUser)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);

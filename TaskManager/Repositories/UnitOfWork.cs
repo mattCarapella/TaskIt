@@ -22,6 +22,9 @@ public class UnitOfWork : IUnitOfWork
     public ITicketRepository TicketRepository => new TicketRepository(_context);
     public IProjectAssignmentRepository ProjectAssignmentRepository => new ProjectAssignmentRepository(_context);   
     public ITicketAssignmentRepository TicketAssignmentRepository => new TicketAssignmentRepository(_context);
+    public ITNoteRepository TNoteRepository => new TNoteRepository(_context);
+    public IPNoteRepository PNoteRepository => new PNoteRepository(_context);
+
     public async Task<bool> SaveAsync()
     {
         return await _context.SaveChangesAsync() > 0;

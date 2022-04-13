@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManager.Data;
 
@@ -11,9 +12,10 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    partial class TaskManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220412222106_AddNoteAndTNote")]
+    partial class AddNoteAndTNote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -438,47 +440,6 @@ namespace TaskManager.Migrations
                     b.ToTable("TicketAssignments");
                 });
 
-            modelBuilder.Entity("TaskManager.Models.TNote", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Link")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("TicketId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("TNote");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -533,7 +494,7 @@ namespace TaskManager.Migrations
             modelBuilder.Entity("TaskManager.Models.PNote", b =>
                 {
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
-                        .WithMany("PNotes")
+                        .WithMany("Notes")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -603,32 +564,11 @@ namespace TaskManager.Migrations
                     b.Navigation("Ticket");
                 });
 
-            modelBuilder.Entity("TaskManager.Models.TNote", b =>
-                {
-                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
-                        .WithMany("TNotes")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskManager.Models.Ticket", "Ticket")
-                        .WithMany("TNotes")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Ticket");
-                });
-
             modelBuilder.Entity("TaskManager.Areas.Identity.Data.ApplicationUser", b =>
                 {
-                    b.Navigation("PNotes");
+                    b.Navigation("Notes");
 
                     b.Navigation("Projects");
-
-                    b.Navigation("TNotes");
 
                     b.Navigation("Tickets");
                 });
@@ -645,8 +585,6 @@ namespace TaskManager.Migrations
             modelBuilder.Entity("TaskManager.Models.Ticket", b =>
                 {
                     b.Navigation("AssignedTo");
-
-                    b.Navigation("TNotes");
                 });
 #pragma warning restore 612, 618
         }

@@ -53,6 +53,8 @@ public class Ticket
 
     public ICollection<TicketAssignment> AssignedTo { get; set; } = new List<TicketAssignment>();
 
+    public ICollection<TNote> TNotes { get; set; } = new List<TNote>();
+
 
     public Project? Project { get; set; }
 

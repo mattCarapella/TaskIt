@@ -18,9 +18,8 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
     public DbSet<ProjectAssignment> ProjectAssignments { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
     public DbSet<TicketAssignment> TicketAssignments { get; set; }
-    //public DbSet<Note> Notes { get; set; }
     public DbSet<PNote> PNote { get; set; }
-
+    public DbSet<TNote> TNote { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -64,6 +63,11 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
         builder.Entity<PNote>()
             .HasOne(p => p.Project)
             .WithMany(n => n.Notes)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<TNote>()
+            .HasOne(p => p.Ticket)
+            .WithMany(n => n.TNotes)
             .OnDelete(DeleteBehavior.Cascade);
 
     }

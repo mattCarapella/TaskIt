@@ -10,47 +10,54 @@ using Microsoft.AspNet.Identity;
 using TaskManager.Core.ViewModels.Note;
 using TaskManager.Data;
 using TaskManager.Models;
-
+using Microsoft.AspNetCore.Authorization;
+using Constants = TaskManager.Core.Constants;
+using TaskManager.Core.Repositories;
 
 namespace TaskManager.Controllers
 {
+    
     public class PNotesController : Controller
     {
         private readonly TaskManagerContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PNotesController(TaskManagerContext context)
+        public PNotesController(TaskManagerContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
 
         // GET: PNotes
-        public async Task<IActionResult> Index()
-        {
-            var taskManagerContext = _context.PNote.Include(p => p.Project);
-            return View(await taskManagerContext.ToListAsync());
-        }
+        //[Authorize(Roles = $"{Constants.Roles.Administrator}")]
+        //public async Task<IActionResult> Index()
+        //{
+        //    var taskManagerContext = _context.PNote.Include(p => p.Project);
+        //    return View(await taskManagerContext.ToListAsync());
+        //}
 
 
-        // GET: PNotes/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: PNotes/Details/5
+        //[Authorize(Roles = $"{Constants.Roles.Administrator}")]
+        //public async Task<IActionResult> Details(Guid? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var pNote = await _context.PNote
-                .Include(p => p.Project)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pNote == null)
-            {
-                return NotFound();
-            }
+        //    var pNote = await _context.PNote
+        //        .Include(p => p.Project)
+        //        .AsNoTracking()
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (pNote == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(pNote);
-        }
+        //    return View(pNote);
+        //}
 
 
         // GET: PNotes/Create
@@ -67,19 +74,21 @@ namespace TaskManager.Controllers
         // POST: PNotes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Content,Link,ProjectId")] PNote note)
+        public async Task<IActionResult> Create([Bind("Title,Content,Link,ProjectId,ApplicationUser,ApplicationUserId")] PNote note)
         {
-            var n = note;
             if (ModelState.IsValid)
             {
                 note.Id = Guid.NewGuid();
-                var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == note.ProjectId);
+                //var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == note.ProjectId);
+                var project = await _unitOfWork.ProjectRepository.GetProject(note.ProjectId);
                 var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
                 project.Notes.Add(note);
                 note.ApplicationUser = currentUser;
-                _context.Add(note);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //_context.Add(note);
+                await _unitOfWork.PNoteRepository.AddNote(note);
+                //await _context.SaveChangesAsync();
+                await _unitOfWork.SaveAsync();
+                return RedirectToAction("Details", "Projects", new { id = project.Id });
             }
             PNoteCreateViewModel vm = new PNoteCreateViewModel
             {
@@ -90,69 +99,65 @@ namespace TaskManager.Controllers
 
 
         // GET: PNotes/Edit/{id}
-        public async Task<IActionResult> Edit(Guid? id)
+        [Authorize(Roles = $"{Constants.Roles.Administrator}")]
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var pNote = await _context.PNote.FindAsync(id);
+            var pNote = await _unitOfWork.PNoteRepository.GetNote(id);
             if (pNote == null)
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", pNote.ProjectId);
             return View(pNote);
         }
 
 
-        // POST: PNotes/Edit/{id}
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Title,Content,Link,CreatedAt,UpdatedAt,ProjectId")] PNote pNote)
+        public async Task<IActionResult> EditPost(Guid id)
         {
-            if (id != pNote.Id)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var noteToUpdate = await _unitOfWork.PNoteRepository.GetNote(id);
+
+            if (await TryUpdateModelAsync<PNote>(
+                    noteToUpdate,
+                    "",
+                    n => n.Title, n => n.Content, n => n.Link))
             {
                 try
                 {
-                    _context.Update(pNote);
-                    await _context.SaveChangesAsync();
+                    noteToUpdate.UpdatedAt = DateTime.UtcNow;
+                    await _unitOfWork.SaveAsync();
+                    return RedirectToAction("Details", "Projects", new { id = noteToUpdate.ProjectId });
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException)
                 {
-                    if (!PNoteExists(pNote.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "There was a problem updating this note. Please try again.");
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", pNote.ProjectId);
-            return View(pNote);
+            return View(noteToUpdate);
         }
 
-
-        // GET: PNotes/Delete/{id}
-        public async Task<IActionResult> Delete(Guid? id)
+        
+        [Authorize(Roles = $"{Constants.Roles.Administrator}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var pNote = await _context.PNote
-                .Include(p => p.Project)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var pNote = await _unitOfWork.PNoteRepository.GetNote(id);
             if (pNote == null)
             {
                 return NotFound();
@@ -161,22 +166,30 @@ namespace TaskManager.Controllers
             return View(pNote);
         }
 
-
-        // POST: PNotes/Delete/{id}
+        // POST: Projects/Delete/{id}
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = Constants.Policies.RequireAdmin)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var pNote = await _context.PNote.FindAsync(id);
-            _context.PNote.Remove(pNote);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var note = await _unitOfWork.PNoteRepository.GetNote(id);
+            if (note == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _unitOfWork.PNoteRepository.DeleteNote(note.Id);
+                await _unitOfWork.SaveAsync();
+                return RedirectToAction("Details", "Projects", new { id = note.ProjectId });
+            }
+            catch (DbUpdateException)
+            {
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
 
 
-        private bool PNoteExists(Guid id)
-        {
-            return _context.PNote.Any(e => e.Id == id);
-        }
     }
 }

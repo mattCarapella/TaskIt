@@ -3,7 +3,7 @@ using TaskManager.Areas.Identity.Data;
 
 namespace TaskManager.Models;
 
-public class PNote
+public class TNote //: Note
 {
     public Guid Id { get; set; }
 
@@ -19,10 +19,10 @@ public class PNote
 
     public DateTime? UpdatedAt { get; set; }
 
+
     public string? ApplicationUserId { get; set; }
     public ApplicationUser? ApplicationUser { get; set; }
-
-    public Guid ProjectId { get; set; }
-    public Project? Project { get; set; }
+    public Guid TicketId { get; set; }
+    public Ticket? Ticket { get; set; }
 
 }

@@ -1,9 +1,8 @@
-﻿@model TaskManager.Core.ViewModels.Note.PNoteCreateViewModel
+﻿@model TaskManager.Core.ViewModels.Note.TNoteCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
-
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/ckeditor/ckeditor.js"></script>
 <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -16,7 +15,7 @@
     <h1 class="mb-3">Add a note</h1>
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="@Model.Note.ProjectId" value="@Model.ProjectId" />
+        <input type="hidden" asp-for="@Model.Note.TicketId" value="@Model.TicketId" />
         <div class="form-group">
             <label asp-for="@Model.Note.Title" class="control-label"></label>
             <input asp-for="@Model.Note.Title" class="form-control" />
@@ -44,8 +43,9 @@
     });
 </script>
 
+
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }

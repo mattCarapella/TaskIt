@@ -297,15 +297,16 @@
                                                             <i class="material-icons">more_vert</i>
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                            <a class="dropdown-item text-primary" asp-controller="PNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+                                                            <a class="dropdown-item text-danger" asp-controller="PNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
                                                         </div>
                                                     </div>
                                                 }
                                             </div>
                                         </div>
                                         <div class="card-body" data-filter-by="text">
-                                            <p>@note.Content</p>
+                                            <p>@Html.Raw(note.Content)</p>
+                                            
                                             @if (@note.Link != null)
                                             {
                                                 <span class="mt-2">

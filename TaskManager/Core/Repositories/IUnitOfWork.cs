@@ -8,6 +8,8 @@ public interface IUnitOfWork
     ITicketRepository TicketRepository { get; }
     IProjectAssignmentRepository ProjectAssignmentRepository { get; }
     ITicketAssignmentRepository TicketAssignmentRepository { get; }
+    ITNoteRepository TNoteRepository { get; }
+    IPNoteRepository PNoteRepository { get; }
     Task<bool> SaveAsync();
 }
 

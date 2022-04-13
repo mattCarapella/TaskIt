@@ -13,4 +13,6 @@ public class TicketDetailsViewModel
 
     public ApplicationUser SubmittedBy { get; set; }
 
+    public ICollection<TNote> Notes { get; set; }
+
 }

@@ -616,34 +616,16 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var assignedTo = ticket.AssignedTo;
-
-            
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());        // ******** UserRepository: GetCurrentUser() ********  
-
-            var submit = ticket.SubmittedBy;
-            var submitId = ticket.SubmittedBy.Id;
-
             var vm = new TicketDetailsViewModel()
             {
                 Ticket = ticket,
                 AssignedTo = ticket.AssignedTo.ToList(),
                 Project = ticket.Project,
-                SubmittedBy = ticket.SubmittedBy
+                SubmittedBy = ticket.SubmittedBy,
+                Notes = ticket.TNotes
             };
 
-
-            //var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
-            //var userRoles = _unitOfWork.UserRepository.GetUserRoles(user.Id);
-
-
-            //if (ticket.AssignedTo.Any(u => u.ApplicationUserId == User.Identity.GetUserId()))
-            //{
             return View(vm);
-            //}
-
-            //return RedirectToAction(nameof(Index));
-
         }
 
 
