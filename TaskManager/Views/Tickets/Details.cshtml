@@ -76,7 +76,7 @@
                     <hr />
                     <div class="row">
                         @***** TICKET DETAILS *****@
-                        <div class="col-xl-6 col-lg-6 mt-2">
+                        <div class="col-xl-8 col-lg-8 mt-2">
                             <div class="container">
                                 <dl class="row">
                                     <dt class="col-sm-4">
@@ -89,7 +89,27 @@
                                         <strong>@Html.DisplayNameFor(model => model.Ticket.Status)</strong>
                                     </dt>
                                     <dd class="col-sm-8">
-                                        @Html.DisplayFor(model => model.Ticket.Status)
+                                        <span class="ticket-status">
+                                            @Html.DisplayFor(model => model.Ticket.Status)
+                                            @if (Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.SUBMITTED)
+                                            {
+                                                <form asp-controller="Tickets"
+                                                  asp-action="CancelSubmission"
+                                                  asp-route-ticketId="@Model.Ticket.TicketId"
+                                                  method="post"
+                                                  role="form">
+                                                    <input id="Submit" class="btn btn-link ticket-cancel-btn" type="submit" value="Cancel" />
+                                                </form>
+
+
+                                               @* <button class="btn btn-round pt-1">
+                                                    <a asp-action="Delete" asp-route-id="@Model.Ticket.TicketId" data-toggle="tooltip" data-title="Cancel submission">
+                                                        <i class="material-icons">cancel</i>
+                                                    </a>
+                                                </button>*@
+                                            }
+                                        </span>    
+                                            
                                     </dd>
                                     <dt class="col-sm-4">
                                         <strong>@Html.DisplayNameFor(model => model.Ticket.Priority)</strong>
@@ -212,51 +232,51 @@
 
             @***** NOTES *****@
             <div class="content-list-body">
-            @if (@Model.Notes.Any())
-            {
-                 @foreach (var note in @Model.Notes)
+                @if (@Model.Notes.Any())
                 {
-                    <div class="card card-note">
-                        <div class="card-header">
-                            <div class="media align-items-center">
-                                <img alt="@note.ApplicationUser.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
+                    @foreach (var note in @Model.Notes)
+                    {
+                        <div class="card card-note">
+                            <div class="card-header">
+                                <div class="media align-items-center">
+                                    <img alt="@note.ApplicationUser.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
                                  data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
-                                <div class="media-body">
-                                    <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
+                                    <div class="media-body">
+                                        <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                                    {
+                                        <div class="ml-1 dropdown card-options">
+                                            <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="material-icons">more_vert</i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item text-primary" asp-controller="TNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+                                                <a class="dropdown-item text-danger" asp-controller="TNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
-                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                            <div class="card-body" data-filter-by="text">
+                                <p>@Html.Raw(note.Content)</p>
+
+                                @if (@note.Link != null)
                                 {
-                                    <div class="ml-1 dropdown card-options">
-                                        <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="material-icons">more_vert</i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item text-primary" asp-controller="TNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
-                                            <a class="dropdown-item text-danger" asp-controller="TNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
-                                        </div>
-                                    </div>
+                                    <span class="mt-2">
+                                        <a href="@note.Link">@note.Link</a>
+                                    </span>
                                 }
                             </div>
-                        </div>
-                        <div class="card-body" data-filter-by="text">
-                            <p>@Html.Raw(note.Content)</p>
 
-                            @if (@note.Link != null)
-                            {
-                                <span class="mt-2">
-                                    <a href="@note.Link">@note.Link</a>
-                                </span>
-                            }
                         </div>
+                    }
 
-                    </div>
-                }   
-            
-            }
-                
+                }
+
 
             </div>
         </div>

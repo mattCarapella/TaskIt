@@ -913,6 +913,31 @@ namespace TaskManager.Controllers
 
 
         [HttpPost]
+        public async Task<IActionResult> CancelSubmission(Guid ticketId)
+        {
+            if (ticketId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var ticketToCancel = await _unitOfWork.TicketRepository.GetTicket(ticketId);
+
+            try
+            {
+                ticketToCancel.Status = Core.Enums.Enums.Status.INPROGRESS;
+                ticketToCancel.UpdatedAt = DateTime.Now;
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "There was a problem cancelling ticket submission. Please try again.");
+            }
+            return RedirectToAction("Details", new { id = ticketToCancel.TicketId });
+        }
+
+
+
+        [HttpPost]
         [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> MarkAsCompleted(Guid ticketId)
         {

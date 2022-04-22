@@ -140,6 +140,17 @@ body {
     text-decoration: underline;
 }
 
+.ticket-status {
+    display: flex;
+    align-items: center;
+}
+
+.ticket-cancel-btn {
+    margin-left: 25px;
+    padding: 0;
+
+}
+
 /***************************************************/
 /*   USERS                                         */
 /***************************************************/
