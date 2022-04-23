@@ -16,7 +16,7 @@
                         <div class="media">
                             <img alt="Image" src="~/images/user.jpg" class="profile-pic avatar avatar-lg mt-1" overflow="hidden" />
                             <div class="media-body ml-3">
-                                <h1 class="mb-0">@Model.Ticket.Title</h1>
+                                <h1 class="mb-2">@Model.Ticket.Title</h1>
                                 <p class="lead">
                                     <strong>Project: </strong>
                                     <a class="name-link" asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project.Id">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <span class="center-vert">
-                            <div class="button-group">
+                            <span class="button-group">
                                 @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.INPROGRESS)
                                 {
                                     <form asp-controller="Tickets"
@@ -55,12 +55,11 @@
 
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                 {
-
                                     <button class="btn btn-primary">
                                         <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Ticket.TicketId" class="btn-cstm-link-text-light">Edit Details</a>
                                     </button>
                                 }
-                            </div>
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -69,7 +68,6 @@
                     @***** TICKET DESCRIPTION ***** *@
                     <dl class="row">
                         <dt class="col-lg-12">
-                            @*@Html.DisplayFor(model => model.Ticket.Description)*@
                             @Html.Raw(@Model.Ticket.Description)
                         </dt>
                     </dl>
@@ -100,41 +98,57 @@
                                                   role="form">
                                                     <input id="Submit" class="btn btn-link ticket-cancel-btn" type="submit" value="Cancel" />
                                                 </form>
-
-
-                                               @* <button class="btn btn-round pt-1">
-                                                    <a asp-action="Delete" asp-route-id="@Model.Ticket.TicketId" data-toggle="tooltip" data-title="Cancel submission">
-                                                        <i class="material-icons">cancel</i>
-                                                    </a>
-                                                </button>*@
                                             }
-                                        </span>    
-                                            
+                                        </span>
                                     </dd>
-                                    <dt class="col-sm-4">
-                                        <strong>@Html.DisplayNameFor(model => model.Ticket.Priority)</strong>
-                                    </dt>
-                                    <dd class="col-sm-8">
-                                        @Html.DisplayFor(model => model.Ticket.Priority)
-                                    </dd>
-                                    <dt class="col-sm-4">
-                                        <strong>@Html.DisplayNameFor(model => model.Ticket.GoalDate)</strong>
-                                    </dt>
-                                    <dd class="col-sm-8">
-                                        @Html.DisplayFor(model => model.Ticket.GoalDate)
-                                    </dd>
-                                    <dt class="col-sm-4">
-                                        <strong>@Html.DisplayNameFor(model => model.Ticket.UpdatedAt)</strong>
-                                    </dt>
-                                    <dd class="col-sm-8">
-                                        @Html.DisplayFor(model => model.Ticket.UpdatedAt)
-                                    </dd>
+                                    @if (@Model.Ticket.Priority is not null)
+                                    {
+                                        <dt class="col-sm-4">
+                                            <strong>@Html.DisplayNameFor(model => model.Ticket.Priority)</strong>
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @*@Html.DisplayFor(model => model.Ticket.Priority)*@
+                                            @Html.DisplayFor(model => model.Ticket.Priority)
+                                        </dd>
+                                    }
+
+                                    @if (@Model.Ticket.GoalDate is not null)
+                                    {
+                                        <dt class="col-sm-4">
+                                            <strong>@Html.DisplayNameFor(model => model.Ticket.GoalDate)</strong>
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Ticket.GoalDate)
+                                        </dd>
+                                    }
+
+                                    @if (@Model.Ticket.UpdatedAt is not null)
+                                    {
+                                        <dt class="col-sm-4">
+                                            <strong>@Html.DisplayNameFor(model => model.Ticket.UpdatedAt)</strong>
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Ticket.UpdatedAt)
+                                        </dd>
+                                    }
+
+                                    @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.COMPLETED)
+                                    {
+                                        <dt class="col-sm-4">
+                                            <strong>@Html.DisplayNameFor(model => model.Ticket.ClosedAt)</strong>
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Ticket.ClosedAt)
+                                        </dd>
+                                    }
                                 </dl>
                                 <p class="mt-2 mb-4">
                                     Submitted by
                                     <a class="name-link" asp-controller="User" asp-action="Details" asp-route-id="@Model.Ticket.SubmittedBy.Id">
-                                        <strong>@Model.Ticket.SubmittedBy.FullName </strong>
-                                    </a> on  </strong>@Model.Ticket.CreatedAt</strong>
+                                        
+                                            <strong>@Model.Ticket.SubmittedBy!.FullName </strong>
+                                        
+                                    </a> on @Model.Ticket.CreatedAt
                                 </p>
                             </div>
                         </div>

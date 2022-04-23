@@ -18,28 +18,37 @@ public class Ticket
     [StringLength(2000)]
     public string? DescriptionNoHtml { get; set; }
 
+
     public string? Tag { get; set; }
+
 
     [Display(Name = "Ticket Type")]
     public TicketType? TicketType { get; set; }
 
+
     [Required(ErrorMessage = "Ticket status is required"), Display(Name = "Ticket Status")]
     public Status Status { get; set; } = 0;
 
+
+    public Priority? Priority { get; set; }
+
+
     public int Upvotes { get; set; } = 0;
 
-    [Range(1,5)]
-    public int? Priority { get; set; }
 
     [DataType(DataType.Date), Display(Name = "Goal Date")]
     public DateTime? GoalDate { get; set; }
 
+
     [DataType(DataType.Date), Display(Name = "Created On")]
+    [DisplayFormat(DataFormatString = "{0:g}")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-    [DataType(DataType.Date), Display(Name = "Updated At")]
+
+    [DataType(DataType.Date), Display(Name = "Last Updated At")]
     [DisplayFormat(DataFormatString ="{0:g}")]
     public DateTime? UpdatedAt { get; set; }
+
 
     [DataType(DataType.Date), Display(Name = "Closed At")]
     [DisplayFormat(DataFormatString = "{0:g}")]
@@ -58,7 +67,8 @@ public class Ticket
 
     public Project? Project { get; set; }
 
-    public Guid? ProjectId { get; set; }
+    [Required(ErrorMessage = "Project is required")]
+    public Guid ProjectId { get; set; }
 
 }
 

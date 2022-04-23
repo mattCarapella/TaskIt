@@ -34,8 +34,12 @@ namespace TaskManager.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        /*******************************************************************************************************************/
+        /*  USER INDEX PAGES */
+        /*******************************************************************************************************************/
 
         // GET: Tickets
+        /* Index of current user's assigned open tickets for all projects */
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
@@ -49,7 +53,7 @@ namespace TaskManager.Controllers
             ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
             ViewData["CurrentFilter"] = searchString;
 
-            if (searchString != null)
+            if (searchString is not null)
             {
                 pageNumber = 1;
             }
@@ -139,7 +143,112 @@ namespace TaskManager.Controllers
 
 
 
+        // GET: Tickets/Closed
+        /* Index of the current user's closed tickets for all projects */
+        public async Task<IActionResult> Closed(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["ProjectNameSortParam"] = sortOrder == "projectName" ? "projectName_desc" : "projectName";
+            ViewData["TicketTitleSortParam"] = sortOrder == "ticketTitle" ? "ticketTitle_desc" : "ticketTitle";
+            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
+            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
+            ViewData["PrioritySortParam"] = sortOrder == "priority" ? "priority_desc" : "priority";
+            ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
+            ViewData["ClosedAtSortParam"] = sortOrder == "closedAt" ? "closedAt_desc" : "closedAt";
+            ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
+            ViewData["CurrentFilter"] = searchString;
+
+            if (searchString is not null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            var ticketList = await _unitOfWork.TicketAssignmentRepository.GetClosedTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
+            var tickets = from t in ticketList select t.Ticket;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tickets = tickets.Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "projectName":
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+                case "projectName_desc":
+                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    break;
+                case "ticketTitle":
+                    tickets = tickets.OrderBy(t => t.Title);
+                    break;
+                case "ticketTitle_desc":
+                    tickets = tickets.OrderByDescending(t => t.Title);
+                    break;
+                case "goalDate":
+                    tickets = tickets.OrderBy(t => t.GoalDate);
+                    break;
+                case "goalDate_desc":
+                    tickets = tickets.OrderByDescending(t => t.GoalDate);
+                    break;
+                case "status":
+                    tickets = tickets.OrderBy(t => t.Status);
+                    break;
+                case "status_desc":
+                    tickets = tickets.OrderByDescending(t => t.Status);
+                    break;
+                case "priority":
+                    tickets = tickets.OrderBy(t => t.Priority);
+                    break;
+                case "priority_desc":
+                    tickets = tickets.OrderByDescending(t => t.Priority);
+                    break;
+                case "createdAt":
+                    tickets = tickets.OrderBy(t => t.CreatedAt);
+                    break;
+                case "createdAt_desc":
+                    tickets = tickets.OrderByDescending(t => t.CreatedAt);
+                    break;
+                case "closedAt":
+                    tickets = tickets.OrderBy(t => t.ClosedAt);
+                    break;
+                case "closedAt_desc":
+                    tickets = tickets.OrderByDescending(t => t.ClosedAt);
+                    break;
+                case "ticketType":
+                    tickets = tickets.OrderBy(t => t.TicketType);
+                    break;
+                case "ticketType_desc":
+                    tickets = tickets.OrderByDescending(t => t.TicketType);
+                    break;
+                default:
+                    tickets = tickets.OrderByDescending(t => t.ClosedAt);
+                    break;
+            }
+            var tList = tickets.ToList();
+            int pageSize = 9;
+
+            // Temporarily sets AsNoTracking() which is needed in return
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            var paginatedTicketList = PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize);
+            return View(paginatedTicketList);
+            //return View(await tickets.AsNoTracking().ToListAsync());
+        }
+
+
+
+        /*******************************************************************************************************************/
+        /* ADMIN & MANAGER INDEX PAGES */
+        /*******************************************************************************************************************/
+
         // GET: Tickets/AllTickets
+        /* Index of all open tickets for all projects */
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> AllTickets(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
@@ -154,7 +263,7 @@ namespace TaskManager.Controllers
             ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
             ViewData["CurrentFilter"] = searchString;
 
-            if (searchString != null)
+            if (searchString is not null)
             {
                 pageNumber = 1;
             }
@@ -240,7 +349,8 @@ namespace TaskManager.Controllers
 
 
 
-        // GET: Tickets/AllTickets
+        // GET: Tickets/ToAssign
+        /* Index of all recently created tickets that have not yet been assigned to a user */ 
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> ToAssign(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
@@ -253,7 +363,7 @@ namespace TaskManager.Controllers
             ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
             ViewData["CurrentFilter"] = searchString;
 
-            if (searchString != null)
+            if (searchString is not null)
             {
                 pageNumber = 1;
             }
@@ -325,6 +435,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/AllClosed
+        /* Index of all closed tickets */
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> AllClosed(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
@@ -338,7 +449,7 @@ namespace TaskManager.Controllers
             ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
             ViewData["CurrentFilter"] = searchString;
 
-            if (searchString != null)
+            if (searchString is not null)
             {
                 pageNumber = 1;
             }
@@ -416,6 +527,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/SubmittedForReview
+        /* Index of all open tickets submitted for review by a user */
         [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> SubmittedForReview(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
@@ -430,7 +542,7 @@ namespace TaskManager.Controllers
             ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
             ViewData["CurrentFilter"] = searchString;
 
-            if (searchString != null)
+            if (searchString is not null)
             {
                 pageNumber = 1;
             }
@@ -501,105 +613,9 @@ namespace TaskManager.Controllers
 
 
 
-        // GET: Tickets/Closed
-        public async Task<IActionResult> Closed(string sortOrder, string searchString, string currentFilter, int? pageNumber)
-        {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["ProjectNameSortParam"] = sortOrder == "projectName" ? "projectName_desc" : "projectName";
-            ViewData["TicketTitleSortParam"] = sortOrder == "ticketTitle" ? "ticketTitle_desc" : "ticketTitle";
-            ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
-            ViewData["StatusSortParam"] = sortOrder == "status" ? "status_desc" : "status";
-            ViewData["PrioritySortParam"] = sortOrder == "priority" ? "priority_desc" : "priority";
-            ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
-            ViewData["ClosedAtSortParam"] = sortOrder == "closedAt" ? "closedAt_desc" : "closedAt";
-            ViewData["TicketTypeSortParam"] = sortOrder == "ticketType" ? "ticketType_desc" : "ticketType";
-            ViewData["CurrentFilter"] = searchString;
-
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-            ViewData["CurrentFilter"] = searchString;
-
-            var ticketList = await _unitOfWork.TicketAssignmentRepository.GetClosedTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
-            var tickets = from t in ticketList select t.Ticket;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                tickets = tickets.Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "projectName":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
-                    break;
-                case "projectName_desc":
-                    tickets = tickets.OrderByDescending(t => t.Project.Name);
-                    break;
-                case "ticketTitle":
-                    tickets = tickets.OrderBy(t => t.Title);
-                    break;
-                case "ticketTitle_desc":
-                    tickets = tickets.OrderByDescending(t => t.Title);
-                    break;
-                case "goalDate":
-                    tickets = tickets.OrderBy(t => t.GoalDate);
-                    break;
-                case "goalDate_desc":
-                    tickets = tickets.OrderByDescending(t => t.GoalDate);
-                    break;
-                case "status":
-                    tickets = tickets.OrderBy(t => t.Status);
-                    break;
-                case "status_desc":
-                    tickets = tickets.OrderByDescending(t => t.Status);
-                    break;
-                case "priority":
-                    tickets = tickets.OrderBy(t => t.Priority);
-                    break;
-                case "priority_desc":
-                    tickets = tickets.OrderByDescending(t => t.Priority);
-                    break;
-                case "createdAt":
-                    tickets = tickets.OrderBy(t => t.CreatedAt);
-                    break;
-                case "createdAt_desc":
-                    tickets = tickets.OrderByDescending(t => t.CreatedAt);
-                    break;
-                case "closedAt":
-                    tickets = tickets.OrderBy(t => t.ClosedAt);
-                    break;
-                case "closedAt_desc":
-                    tickets = tickets.OrderByDescending(t => t.ClosedAt);
-                    break;
-                case "ticketType":
-                    tickets = tickets.OrderBy(t => t.TicketType);
-                    break;
-                case "ticketType_desc":
-                    tickets = tickets.OrderByDescending(t => t.TicketType);
-                    break;
-                default:
-                    tickets = tickets.OrderByDescending(t => t.ClosedAt);
-                    break;
-            }
-            var tList = tickets.ToList();
-            int pageSize = 9;
-
-            // Temporarily sets AsNoTracking() which is needed in return
-            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-            var paginatedTicketList = PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize);
-            return View(paginatedTicketList);
-            //return View(await tickets.AsNoTracking().ToListAsync());
-        }
-
-
-
+        /*******************************************************************************************************************/
+        /* TICKET CRUD */
+        /*******************************************************************************************************************/
 
         // GET: Tickets/Details/{Id}
         public async Task<IActionResult> Details(Guid id)
@@ -610,8 +626,7 @@ namespace TaskManager.Controllers
             }
 
             var ticket = await _unitOfWork.TicketRepository.GetTicketWithProjectAndUserDetails(id);
-
-            if (ticket == null)
+            if (ticket is null)
             {
                 return NotFound();
             }
@@ -638,16 +653,14 @@ namespace TaskManager.Controllers
             {
                 var projectAssign = await _unitOfWork.ProjectRepository.GetProject(Guid.Parse(projectId));
                 IEnumerable<Project> pl = new List<Project>() { projectAssign };
-                ViewData["Project"] = new SelectList(pl, "Id", "Description");
+                ViewData["Project"] = new SelectList(pl, "Id", "Name");
             }
             else
             {
-                ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description");
+                ViewData["Project"] = new SelectList(_context.Projects, "Id", "Name");
             }
             return View();
         }
-
-
 
         // POST: Tickets/Create
         [HttpPost]
@@ -673,7 +686,7 @@ namespace TaskManager.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Details", new { id = ticket.TicketId });
                 }
-                ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+                ViewData["Project"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
                 return View(ticket);
             }
             catch (DbUpdateException)
@@ -696,15 +709,13 @@ namespace TaskManager.Controllers
             }
 
             var ticket = await _unitOfWork.TicketRepository.GetTicket(id);
-            if (ticket == null)
+            if (ticket is null)
             {
                 return NotFound();
             }
-            ViewData["Project"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
+            ViewData["Project"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             return View(ticket);
         }
-
-
 
         // POST: Tickets/Edit/{Id}
         [HttpPost, ActionName("Edit")]
@@ -758,10 +769,9 @@ namespace TaskManager.Controllers
             {
                 return NotFound();
             }
-            
-            var ticket = await _unitOfWork.TicketRepository.GetTicket(id, false);
 
-            if (ticket == null)
+            var ticket = await _unitOfWork.TicketRepository.GetTicket(id, false);
+            if (ticket is null)
             {
                 return NotFound();
             }
@@ -773,8 +783,6 @@ namespace TaskManager.Controllers
 
             return View(ticket);
         }
-
-
 
         // POST: Tickets/Delete/{Id}
         [HttpPost, ActionName("Delete")]
@@ -802,6 +810,10 @@ namespace TaskManager.Controllers
 
 
 
+        /*******************************************************************************************************************/
+        /* USER ASSIGNMENT */
+        /*******************************************************************************************************************/
+
         // GET: ManageUsers/{Id}
         [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> ManageUsers(Guid id)
@@ -812,8 +824,7 @@ namespace TaskManager.Controllers
             }
 
             var ticket = await _unitOfWork.TicketRepository.GetTicketWithProjectAndUserDetails(id);
-
-            if (ticket == null)
+            if (ticket is null)
             {
                 return NotFound();
             }
@@ -831,7 +842,7 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> ManageUsers(Guid id, AssignUserTicketViewModel ticketViewModel)
         {
             var selectedUserId = ticketViewModel.UserId;
-            if (selectedUserId == null || id == Guid.Empty)
+            if (selectedUserId is null || id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -871,6 +882,7 @@ namespace TaskManager.Controllers
 
 
         // POST: RemoveUser
+        /* Unassigns ticket for a user */
         [HttpPost]
         [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> RemoveUser(Guid ticketId, Guid taId)
@@ -887,88 +899,10 @@ namespace TaskManager.Controllers
 
 
 
-        [HttpPost]
-        public async Task<IActionResult> SubmitForReview(Guid ticketId)
-        {
-            if (ticketId == Guid.Empty)
-            {
-                return NotFound();
-            }
-
-            var ticketToSubmit = await _unitOfWork.TicketRepository.GetTicket(ticketId);
-
-            try
-            {
-                ticketToSubmit.Status = Core.Enums.Enums.Status.SUBMITTED;
-                ticketToSubmit.UpdatedAt = DateTime.Now;
-                await _unitOfWork.SaveAsync();
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "There was a problem submitting this ticket. Please try again.");
-            }
-            return RedirectToAction("Details", new { id = ticketToSubmit.TicketId });
-        }
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> CancelSubmission(Guid ticketId)
-        {
-            if (ticketId == Guid.Empty)
-            {
-                return NotFound();
-            }
-
-            var ticketToCancel = await _unitOfWork.TicketRepository.GetTicket(ticketId);
-
-            try
-            {
-                ticketToCancel.Status = Core.Enums.Enums.Status.INPROGRESS;
-                ticketToCancel.UpdatedAt = DateTime.Now;
-                await _unitOfWork.SaveAsync();
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "There was a problem cancelling ticket submission. Please try again.");
-            }
-            return RedirectToAction("Details", new { id = ticketToCancel.TicketId });
-        }
-
-
-
-        [HttpPost]
-        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
-        public async Task<IActionResult> MarkAsCompleted(Guid ticketId)
-        {
-            if (ticketId == Guid.Empty)
-            {
-                return NotFound();
-            }
-
-            var ticketToSubmit = await _unitOfWork.TicketRepository.GetTicket(ticketId);
-
-            try
-            {
-                ticketToSubmit.Status = Core.Enums.Enums.Status.COMPLETED;
-                ticketToSubmit.ClosedAt = DateTime.Now;
-                ticketToSubmit.UpdatedAt = DateTime.Now;
-                await _unitOfWork.SaveAsync();
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "There was a problem closing this ticket. Please try again.");
-            }
-            return RedirectToAction("Details", new { id = ticketToSubmit.TicketId });
-        }
-
-
-
+        /* Creates a dropdown list of users to add to a ticket. Users who are already contributers
+              are removed from the dropdown here as well. */
         private AssignUserTicketViewModel GetViewModel(Ticket ticket)
         {
-            /* Creates a dropdown list of users to add to a ticket. Users who are already contributers
-              are removed from the dropdown here as well. */
-
             var inList = _context.TicketAssignments
                                 .Where(p => p.TicketId == ticket.TicketId)
                                 .AsNoTracking()
@@ -1001,6 +935,96 @@ namespace TaskManager.Controllers
             };
             return vm;
         }
+
+
+
+
+        /*******************************************************************************************************************/
+        /* TICKET SUBMISSION */
+        /*******************************************************************************************************************/
+
+
+        // POST: SubmitForReview
+        /* Puts ticket in admin's list of completed tickets to review */
+        [HttpPost]
+        public async Task<IActionResult> SubmitForReview(Guid ticketId)
+        {
+            if (ticketId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var ticketToSubmit = await _unitOfWork.TicketRepository.GetTicket(ticketId);
+
+            try
+            {
+                ticketToSubmit.Status = Core.Enums.Enums.Status.SUBMITTED;
+                ticketToSubmit.UpdatedAt = DateTime.Now;
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "There was a problem submitting this ticket. Please try again.");
+            }
+            return RedirectToAction("Details", new { id = ticketToSubmit.TicketId });
+        }
+
+
+
+        // POST: CancelSubmission
+        /* Change ticket status from COMPLETED back to INPROGRESS, removes it from admin's tickets to review, and puts it back in the list of open tickets */
+        [HttpPost]
+        public async Task<IActionResult> CancelSubmission(Guid ticketId)
+        {
+            if (ticketId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var ticketToCancel = await _unitOfWork.TicketRepository.GetTicket(ticketId);
+
+            try
+            {
+                ticketToCancel.Status = Core.Enums.Enums.Status.INPROGRESS;
+                ticketToCancel.UpdatedAt = DateTime.Now;
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "There was a problem cancelling ticket submission. Please try again.");
+            }
+            return RedirectToAction("Details", new { id = ticketToCancel.TicketId });
+        }
+
+
+
+        // POST: MarkAsCompleted
+        // Change Ticket status to Completed and add it to closed ticket
+        [HttpPost]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        public async Task<IActionResult> MarkAsCompleted(Guid ticketId)
+        {
+            if (ticketId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var ticketToSubmit = await _unitOfWork.TicketRepository.GetTicket(ticketId);
+
+            try
+            {
+                ticketToSubmit.Status = Core.Enums.Enums.Status.COMPLETED;
+                ticketToSubmit.ClosedAt = DateTime.Now;
+                ticketToSubmit.UpdatedAt = DateTime.Now;
+                await _unitOfWork.SaveAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "There was a problem closing this ticket. Please try again.");
+            }
+            return RedirectToAction("Details", new { id = ticketToSubmit.TicketId });
+        }
+
 
 
         private bool TicketExists(Guid id)
