@@ -15,7 +15,10 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="page-content">
                     <div class="wrapper mb-2">
-                        <span class="header-text">Your Projects</span>
+                        <div class="media">
+                            <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden" />
+                            <span class="header-text pl-4 pt-2">Your Projects</span>
+                        </div>
                         <span class="center-vert">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                             {
@@ -33,9 +36,7 @@
                                 <span class="pr-3">Search by name or description:</span>
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
                                 <button type="submit" class="btn btn-link pb-1">Search</button>
-                                @*<button type="submit" class="btn btn-link">*@
                                 <a asp-action="Index" class="btn-link">Clear</a>
-                                @*</button>*@
                             </p>
                         </div>
                     </form>

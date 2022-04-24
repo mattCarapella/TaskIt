@@ -13,7 +13,10 @@
             <div class="col-xl-10 col-lg-11">
                 <div class="page-header">
                     <div class="wrapper">
-                        <span class="header-text">@Html.DisplayFor(modelItem => @Model.Project.Name)</span>
+                        <div class="media">
+                            <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden" />
+                            <span class="header-text pl-4 pt-2">@Html.DisplayFor(modelItem => @Model.Project.Name)</span>
+                        </div>
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                         {
                             <span class="center-vert">
@@ -247,7 +250,6 @@
                             <!--end of content list body-->
                         </div>
                         <!--end of content list-->
-                        
                         @***** NOTES *****@
                         <div class="content-list" data-filter-list="content-list-body">
                             <div class="row content-list-head">
@@ -306,7 +308,7 @@
                                         </div>
                                         <div class="card-body" data-filter-by="text">
                                             <p>@Html.Raw(note.Content)</p>
-                                            
+
                                             @if (@note.Link != null)
                                             {
                                                 <span class="mt-2">

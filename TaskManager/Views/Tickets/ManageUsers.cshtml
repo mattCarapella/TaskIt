@@ -16,7 +16,7 @@
                 <div class="page-header mb-2">
                     <div class="wrapper">
                         <div class="media">
-                            <img alt="Image" src="~/images/user.jpg" class="profile-pic avatar avatar-lg mt-1" overflow="hidden" />
+                            <img alt="Image" src="~/images/ticketA75.png" overflow="hidden" />
                             <div class="media-body ml-3">
                                 <h1 class="mb-0">@Model.Ticket.Title</h1>
                                 <p class="lead">
@@ -120,7 +120,11 @@
             @foreach (var item in @Model.Ticket.AssignedTo)
             {
                 <tr>
-                    <td><strong>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</strong></td>
+                    <td>
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">
+                            <strong>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</strong>
+                        </a>
+                    </td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>

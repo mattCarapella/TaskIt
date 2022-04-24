@@ -1,13 +1,13 @@
-﻿@* Projects => ManageUsers *@
-
-@using TaskManager.Core.ViewModels
+﻿@using TaskManager.Core.ViewModels
 @model AddUserProjectViewModel
 
 @{
     ViewData["Title"] = "Manage Users";
 }
 
-<div><a href="javascript:history.go(-1)">Back</a></div>
+<div>
+    <a class="name-link" asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project!.Id">Back</a>
+</div>
 
 <div class="main-container">
     <div class="container pb-2">
@@ -16,24 +16,18 @@
                 <div class="page-header mb-2">
                     <div class="wrapper">
                         <div class="media">
-                            <img alt="Image" src="~/images/user.jpg" class="profile-pic avatar avatar-lg mt-1" overflow="hidden" />
+                            @*<img alt="Image" src="~/images/user.jpg" class="profile-pic avatar avatar-lg mt-1" overflow="hidden" />*@
+                            <img alt="Image" src="~/images/projectA75.png" class="" overflow="hidden" />
                             <div class="media-body ml-3">
-                                <h1 class="mb-0">@Model.Project.Name</h1>
-                                <p class="lead">
-                                    <strong> </strong>
-                                    @*<a class="name-link" asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project.Id">
-                                        @Model.Project.Name
-                                    </a>*@
-                                </p>
+                                <h1 class="pt-2">@Model.Project.Name</h1>
                             </div>
                         </div>
-                        @*[edit button in details]*@
                     </div>
                     <div>
                         @***** PROJECT DESCRIPTION ***** *@
                         <dl class="row">
                             <dt class="col-lg-12">
-                                @Html.DisplayFor(model => model.Project.Description)
+                                @Html.DisplayFor(model => model.Project!.Description)
                             </dt>
                         </dl>
                     </div>
@@ -42,34 +36,37 @@
                         <div class="col-xl-6 col-lg-6 mt-2">
                             <div class="container">
                                 <dl class="row">
-                                    <dt class="col-sm-4">
-                                        <strong>@Html.DisplayNameFor(model => model.Project.GoalDate)</strong>
-                                    </dt>
-                                    <dd class="col-sm-8">
-                                        @Html.DisplayFor(model => model.Project.GoalDate)
-                                    </dd>
-                                    <dt class="col-sm-4">
-                                        <strong>@Html.DisplayNameFor(model => model.Project.CreatedAt)</strong>
-                                    </dt>
-                                    <dd class="col-sm-8">
-                                        @Html.DisplayFor(model => model.Project.CreatedAt)
-                                    </dd>
-                                    @if (@Model.Project.UpdatedAt != null)
+                                    @if (@Model.Project!.GoalDate is not null)
                                     {
                                         <dt class="col-sm-4">
-                                            <strong>@Html.DisplayNameFor(model => model.Project.UpdatedAt)</strong>
+                                            <strong>@Html.DisplayNameFor(model => model.Project!.GoalDate)</strong>
                                         </dt>
                                         <dd class="col-sm-8">
-                                            @Html.DisplayFor(model => model.Project.UpdatedAt)
+                                            @Html.DisplayFor(model => model.Project!.GoalDate)
                                         </dd>
                                     }
-                                    @if (@Model.Project.Tag != null)
+                                    <dt class="col-sm-4">
+                                        <strong>@Html.DisplayNameFor(model => model.Project!.CreatedAt)</strong>
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Project!.CreatedAt)
+                                    </dd>
+                                    @if (@Model.Project.UpdatedAt is not null)
                                     {
                                         <dt class="col-sm-4">
-                                            <strong>@Html.DisplayNameFor(model => model.Project.Tag)</strong>
+                                            <strong>@Html.DisplayNameFor(model => model.Project!.UpdatedAt)</strong>
                                         </dt>
                                         <dd class="col-sm-8">
-                                            @Html.DisplayFor(model => model.Project.Tag)
+                                            @Html.DisplayFor(model => model.Project!.UpdatedAt)
+                                        </dd>
+                                    }
+                                    @if (@Model.Project.Tag is not null)
+                                    {
+                                        <dt class="col-sm-4">
+                                            <strong>@Html.DisplayNameFor(model => model.Project!.Tag)</strong>
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Project!.Tag)
                                         </dd>
                                     }
                                 </dl>
@@ -94,8 +91,7 @@
         </div>
     </div>
 </div>
-<hr class="mt-0 mb-3"/>
-
+<hr class="mt-0 mb-3" />
 @* ***** CONTRIBUTERS TABLE ***** *@
 <div class="row">
     <div class="col-md-2">
@@ -114,34 +110,39 @@
                 <th></th>
                 <th></th>
             </tr>
-            @foreach (var item in @Model.Project.Contributers)
+            @if (@Model.Project.Contributers is not null)
             {
-                <tr>
-                    <td><strong>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</strong></td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
-                    <td>
-                         <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="View @item.ApplicationUser.FirstName's Profile">
-                            <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">
-                                <i class="material-icons account-button">account_circle</i>
+                @foreach (var item in @Model.Project.Contributers)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser!.Id">
+                                <strong>@Html.DisplayFor(modelItem => item.ApplicationUser!.FullName)</strong>
                             </a>
-                        </button>
-                    </td>
-                    <td>
-                        <form 
-                            asp-controller="Projects" 
-                            asp-action="RemoveUser" 
-                            asp-route-projectId="@item.ProjectId"
-                            asp-route-paId="@item.ProjectAssignmentId"
-                            method="post" 
-                            role="form"
-                        >
-                            <input id="Submit" class="btn btn-link" type="submit" value="Remove" />
-                        </form>
-                    </td>
-                </tr>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.EmployeeID)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.UserName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.JobTitle)</td>
+                        <td>
+                            <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="View @item.ApplicationUser!.FirstName's Profile">
+                                <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">
+                                    <i class="material-icons account-button">account_circle</i>
+                                </a>
+                            </button>
+                        </td>
+                        <td>
+                            <form asp-controller="Projects"
+                          asp-action="RemoveUser"
+                          asp-route-projectId="@item.ProjectId"
+                          asp-route-paId="@item.ProjectAssignmentId"
+                          method="post"
+                          role="form">
+                                <input id="Submit" class="btn btn-link" type="submit" value="Remove" />
+                            </form>
+                        </td>
+                    </tr>
+                }
             }
         </table>
     </div>

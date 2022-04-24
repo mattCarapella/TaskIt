@@ -11,7 +11,10 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="page-content">
                     <div class="wrapper mb-2">
-                        <span class="header-text">Your Closed Tickets</span>
+                        <div class="media">
+                            <img alt="Image" src="~/images/ticketA100.png" class="" overflow="hidden" />
+                            <span class="header-text pl-4 pt-2">Your Closed Tickets</span>
+                        </div>
                         <span class="center-vert">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                             {

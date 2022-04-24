@@ -39,7 +39,7 @@ namespace TaskManager.Controllers
             ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
             ViewData["OpenTicketSortParam"] = sortOrder == "openTickets" ? "openTickets_desc" : "openTickets";
 
-            if (searchString != null)
+            if (searchString is not null)
             {
                 pageNumber = 1;
             }
@@ -49,8 +49,6 @@ namespace TaskManager.Controllers
             }
 
             ViewData["CurrentFilter"] = searchString;
-
-            //var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
 
             var projectList = await _unitOfWork.ProjectAssignmentRepository.GetProjectAssignmentsWithTicketsForUser(User.Identity.GetUserId());
             var projects = from p in projectList select p.Project;
@@ -107,7 +105,7 @@ namespace TaskManager.Controllers
             ViewData["GoalDateSortParam"] = sortOrder == "goalDate" ? "goalDate_desc" : "goalDate";
             ViewData["OpenTicketSortParam"] = sortOrder == "openTickets" ? "openTickets_desc" : "openTickets";
 
-            if (searchString != null)
+            if (searchString is not null)
             {
                 pageNumber = 1;
             }
@@ -172,7 +170,7 @@ namespace TaskManager.Controllers
             }
 
             var project = await _unitOfWork.ProjectRepository.GetProjectWithTicketsNotesUsers(id);
-            if (project == null)
+            if (project is null)
             {
                 return NotFound();
             }
@@ -189,7 +187,6 @@ namespace TaskManager.Controllers
             var tickets = from t in project.Tickets select t;
             switch (sortOrder)
             {
-
                 case "ticketTitle":
                     tickets = tickets.OrderBy(t => t.Title);
                     break;
@@ -286,6 +283,7 @@ namespace TaskManager.Controllers
         }
 
 
+
         // POST: Projects/Create
         [HttpPost]
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
@@ -334,7 +332,7 @@ namespace TaskManager.Controllers
 
             var project = await _unitOfWork.ProjectRepository.GetProject(id);
 
-            if (project == null)
+            if (project is null)
             {
                 return NotFound();
             }
@@ -383,8 +381,7 @@ namespace TaskManager.Controllers
             }
 
             var project = await _unitOfWork.ProjectRepository.GetProject(id, false);
-
-            if (project == null)
+            if (project is null)
             {
                 return NotFound();
             }
@@ -395,7 +392,6 @@ namespace TaskManager.Controllers
             }
 
             return View(project);
-
         }
 
 
@@ -406,7 +402,7 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var project = await _unitOfWork.ProjectRepository.GetProject(id);
-            if (project == null)
+            if (project is null)
             {
                 return NotFound();
             }
@@ -434,8 +430,7 @@ namespace TaskManager.Controllers
             }
 
             var project = await _unitOfWork.ProjectRepository.GetProjectWithUsers(id);
-
-            if (project == null)
+            if (project is null)
             {
                 return NotFound();
             }
@@ -452,7 +447,7 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> ManageUsers(Guid id, AddUserProjectViewModel projectViewModel)
         {
             var selectedUserId = projectViewModel.UserId;
-            if (selectedUserId == null || id == Guid.Empty)
+            if (selectedUserId is null || id == Guid.Empty)
             {
                 return NotFound();
             }
@@ -506,7 +501,6 @@ namespace TaskManager.Controllers
         {
             /* Creates a dropdown list of users to add to a project. Users who are already contributers
                are removed from the dropdown here as well. */
-
             var inList = _context.ProjectAssignments
                                 .Where(p => p.ProjectId == project.Id)
                                 .AsNoTracking()
@@ -545,7 +539,7 @@ namespace TaskManager.Controllers
         {
             return _context.Projects.Any(e => e.Id == id);
         }
-
+    
     }
 }
 
