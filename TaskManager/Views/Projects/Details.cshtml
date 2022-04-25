@@ -1,94 +1,127 @@
-﻿@*@model TaskManager.Models.Project*@
-@model TaskManager.Core.ViewModels.Project.ProjectDetailsViewModel
-
-@{
-    ViewData["Title"] = "Project Details";
-}
+﻿@model TaskManager.Core.ViewModels.Project.ProjectDetailsViewModel
+@{ ViewData["Title"] = "Project Details"; }
 
 <div><a href="javascript:history.go(-1)">Back</a></div>
 
 <div class="main-container">
-    <div class="container">
+    <div class="container pb-2">
         <div class="row justify-content-center">
-            <div class="col-xl-10 col-lg-11">
-                <div class="page-header">
-                    <div class="wrapper">
+            <div class="col-xl-11 col-lg-11">
+                
+                @***** HEADER *****@
+                <div class="page-header mb-2">
+                    <div class="wrapper pb-0">
                         <div class="media">
-                            <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden" />
-                            <span class="header-text pl-4 pt-2">@Html.DisplayFor(modelItem => @Model.Project.Name)</span>
-                        </div>
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                        {
-                            <span class="center-vert">
-                                <button class="btn btn-primary btn-cstm-link">
-                                    <a asp-action="Edit" asp-route-id="@Model?.Project.Id" class="btn-cstm-link-text-light">Edit</a>
-                                </button>
-                            </span>
-                        }
-                    </div>
-
-                    @***** PROJECT DETAILS *****@
-                    <p class="lead">@Html.DisplayFor(modelItem => @Model.Project.Description)</p>
-                    <div>
-                        <dl class="row">
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Project.Tag)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Project.Tag)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Project.CreatedAt)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Project.CreatedAt)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Project.GoalDate)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Project.GoalDate)
-                            </dd>
-                        </dl>
-                    </div>
-
-                    @***** PROJECT CONTRIBUTERS *****@
-                    <div class="d-flex align-items-center">
-                        <ul class="avatars">
-                            @foreach (var item in @Model.Contributers)
-                            {
-                                <li>
-                                    <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                                   data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
-                                        <img alt="@item.ApplicationUser.UserName" class="avatar profile-pic details-avatar"
-                                         src="~/images/@item.ApplicationUser.ProfilePicture" />
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                        {
-                            <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage project members">
-                                <a asp-controller="Projects" asp-action="ManageUsers" asp-route-id="@Model?.Project.Id">
-                                    <i class="material-icons plus-button">add</i>
-                                </a>
-                            </button>
-                        }
-                    </div>
-                    <div>
-                        <div class="d-flex justify-content-between text-small">
-                            <div class="d-flex align-items-center">
-                                <h5 class="pt-1">@Model.Contributers.Count() contributers</h5>
+                            <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden"/>
+                            <div class="media-body ml-3">
+                                <h1 class="mb-2 pt-3">@Model.Project.Name</h1>
                             </div>
-                            <span class="pt-1"> @*Calculate days to goal date*@</span>
                         </div>
+                    </div>
+                </div>
+
+                @***** BUTTONS *****@
+                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                {
+                    <span class="center-vert pt-3 ml-1">
+                        <span class="button-group">
+                            <button class="btn btn-outline-primary btn-header mr-2">
+                                <a asp-action="Edit" asp-route-id="@Model?.Project.Id" class="btn-header-text">Edit</a>
+                            </button>
+                        </span>
+                    </span>
+                }
+                <hr/>
+                
+                @***** PROJECT DETAILS *****@
+                <p class="description-text">@Html.DisplayFor(modelItem => @Model!.Project.Description)</p>
+                <hr/>
+                <dl class="row pb-2">
+                    @if (@Model!.Project.Tag is not null)
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Project.Tag)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Project.Tag)
+                        </dd>
+                    }
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Project.CreatedAt)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Project.CreatedAt)
+                    </dd>
+                    @if (@Model.Project.GoalDate is not null)
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Project.GoalDate)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Project.GoalDate)
+                        </dd>
+                    }
+                    @if (@Model.Project.UpdatedAt is not null)
+                    {
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Project.UpdatedAt)
+                        </dt>
+                        <dt class="col-sm-6">
+                            @Html.DisplayFor(model => model.Project.UpdatedAt)
+                        </dt>
+                    }
+                </dl>
+
+                @***** PROJECT CONTRIBUTERS *****@
+                <div class="d-flex align-items-center mt-3">
+                    <ul class="avatars">
+                        @foreach (var item in @Model.Contributers)
+                        {
+                            <li>
+                                @if (item.ApplicationUser!.ProfilePicture is not null)
+                                {
+                                    <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
+                                       data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                                        <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
+                                             src="~/images/@item.ApplicationUser.ProfilePicture" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
+                                       data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                                        <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
+                                             src="~/images/user.jpg" />
+                                    </a>
+                                }
+                            </li>
+                        }
+                    </ul>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                    {
+                        <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage project members">
+                            <a asp-controller="Projects" asp-action="ManageUsers" asp-route-id="@Model?.Project.Id">
+                                <i class="material-icons plus-button">add</i>
+                            </a>
+                        </button>
+                    }
+                </div>
+                <div class="d-flex justify-content-between text-small">
+                    <div class="d-flex align-items-center">
+                        @if (@Model!.Contributers.Count == 1)
+                        {
+                            <span class="pt-2 mb-3"><em><strong>1</strong> contributer.</em></span>
+                        }
+                        else
+                        {
+                            <span class="pt-2 mb-3"><em><strong>@Model!.Contributers.Count()</strong> contributers.</em></span>
+                        }
                     </div>
                 </div>
 
                 @***** TAB SELECTION *****@
                 <ul class="nav nav-tabs nav-fill" role="tablist">
                     <li class="nav-item">
-
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                         {
                             <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
@@ -100,12 +133,8 @@
                             <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
                                 Your Tickets
                             </a>
-
                         }
-
-                        </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
                     </li>
@@ -115,11 +144,11 @@
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#closed" role="tab" aria-controls="closed" aria-selected="false">Closed Tickets</a>
                     </li>
-
                 </ul>
 
-                <div class="tab-content">
-                    @***** TAB: OPEN TICKETS & NOTES *****@
+                @***** TAB CONTENT *****@
+                <div class="tab-content pt-1 pb-1">
+                    @***** OPEN TICKETS & NOTES *****@
                     <div class="tab-pane fade show active" id="task" role="tabpanel">
 
                         <div class="content-list" data-filter-list="checklist">
@@ -218,7 +247,6 @@
                                                             @Html.DisplayFor(modelItem => ticket.DescriptionNoHtml)
                                                         }
                                                     }
-
                                                 </td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.Status)</td>
                                                 <td>@Html.DisplayFor(modelItem => ticket.TicketType)</td>
@@ -324,9 +352,7 @@
                         </div>
                     </div>
 
-
-
-                    @***** TAB: FILES *****@
+                    @***** FILES *****@
                     <div class="tab-pane fade" id="files" role="tabpanel" data-filter-list="dropzone-previews">
                         <div class="content-list">
                             <div class="row content-list-head">
@@ -566,7 +592,7 @@
                         <!--end of content list-->
                     </div>
 
-                    @***** TAB: ACTIVITY *****@
+                    @***** ACTIVITY *****@
                     <div class="tab-pane fade" id="activity" role="tabpanel" data-filter-list="list-group-activity">
                         <div class="content-list">
                             <div class="row content-list-head">
@@ -726,7 +752,7 @@
                         <!--end of content list-->
                     </div>
 
-                    @***** TAB: CLOSED TICKETS *****@
+                    @***** CLOSED TICKETS *****@
                     <div class="tab-pane fade" id="closed" role="tabpanel">
                         <div class="content-list">
                             <div class="row content-list-head">
@@ -817,190 +843,9 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-
-
-
-
-
                 </div>
+
             </div>
         </div>
-
-
     </div>
-
-
-
-
-
-
-
-
-    @*
-
-        <div class="row">
-        <div class="col-md-2">
-        <h4>Tickets</h4>
-        </div>
-        <div class="col-md-2">
-        <button type="button" class="btn btn-secondary mb-3">
-        <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Id" class="btn-text">
-        Submit a Ticket
-        </a>
-        </button>
-        </div>
-        </div>
-
-        <hr />
-        <div class="row">
-        <div class="col-md-2">
-        <h4>Contributers</h4>
-        </div>
-        <div class="col-md-2">
-        <button type="button" class="btn btn-secondary mb-3">
-        <a asp-controller="Projects" asp-action="AddUser" asp-route-id="@Model.Id" class="btn-text">Add a User</a>
-        </button>
-        </div>
-        </div>
-
-
-
-        <hr /
-        >*@
-
-
-
-
-
-
-
-    @*
-
-
-        <form class="checklist">
-
-        <div class="row">
-        <div class="form-group col">
-        <span class="checklist-reorder">
-        <i class="material-icons">reorder</i>
-        </span>
-        <div class="custom-control custom-checkbox col">
-        <input type="checkbox" class="custom-control-input" id="checklist-item-1" checked>
-        <label class="custom-control-label" for="checklist-item-1"></label>
-        <div>
-        <input type="text" placeholder="Checklist item" value="Create boards in Matboard" data-filter-by="value" />
-        <div class="checklist-strikethrough"></div>
-        </div>
-        </div>
-        </div>
-        <!--end of form group-->
-        </div>
-
-        <div class="row">
-        <div class="form-group col">
-        <span class="checklist-reorder">
-        <i class="material-icons">reorder</i>
-        </span>
-        <div class="custom-control custom-checkbox col">
-        <input type="checkbox" class="custom-control-input" id="checklist-item-2" checked>
-        <label class="custom-control-label" for="checklist-item-2"></label>
-        <div>
-        <input type="text" placeholder="Checklist item" value="Invite team to boards" data-filter-by="value" />
-        <div class="checklist-strikethrough"></div>
-        </div>
-        </div>
-        </div>
-        <!--end of form group-->
-        </div>
-
-        <div class="row">
-        <div class="form-group col">
-        <span class="checklist-reorder">
-        <i class="material-icons">reorder</i>
-        </span>
-        <div class="custom-control custom-checkbox col">
-        <input type="checkbox" class="custom-control-input" id="checklist-item-3" checked>
-        <label class="custom-control-label" for="checklist-item-3"></label>
-        <div>
-        <input type="text" placeholder="Checklist item" value="Identify three distinct aesthetic styles for boards" data-filter-by="value" />
-        <div class="checklist-strikethrough"></div>
-        </div>
-        </div>
-        </div>
-        <!--end of form group-->
-        </div>
-
-        <div class="row">
-        <div class="form-group col">
-        <span class="checklist-reorder">
-        <i class="material-icons">reorder</i>
-        </span>
-        <div class="custom-control custom-checkbox col">
-        <input type="checkbox" class="custom-control-input" id="checklist-item-4">
-        <label class="custom-control-label" for="checklist-item-4"></label>
-        <div>
-        <input type="text" placeholder="Checklist item" value="Add aesthetic style descriptions as notes" data-filter-by="value" />
-        <div class="checklist-strikethrough"></div>
-        </div>
-        </div>
-        </div>
-        <!--end of form group-->
-        </div>
-
-        <div class="row">
-        <div class="form-group col">
-        <span class="checklist-reorder">
-        <i class="material-icons">reorder</i>
-        </span>
-        <div class="custom-control custom-checkbox col">
-        <input type="checkbox" class="custom-control-input" id="checklist-item-5">
-        <label class="custom-control-label" for="checklist-item-5"></label>
-        <div>
-        <input type="text" placeholder="Checklist item" value="Assemble boards using inspiration from Dribbble, Land Book, Nicely Done etc." data-filter-by="value" />
-        <div class="checklist-strikethrough"></div>
-        </div>
-        </div>
-        </div>
-        <!--end of form group-->
-        </div>
-
-        <div class="row">
-        <div class="form-group col">
-        <span class="checklist-reorder">
-        <i class="material-icons">reorder</i>
-        </span>
-        <div class="custom-control custom-checkbox col">
-        <input type="checkbox" class="custom-control-input" id="checklist-item-6">
-        <label class="custom-control-label" for="checklist-item-6"></label>
-        <div>
-        <input type="text" placeholder="Checklist item" value="Gather feedback from project team" data-filter-by="value" />
-        <div class="checklist-strikethrough"></div>
-        </div>
-        </div>
-        </div>
-        <!--end of form group-->
-        </div>
-
-        <div class="row">
-        <div class="form-group col">
-        <span class="checklist-reorder">
-        <i class="material-icons">reorder</i>
-        </span>
-        <div class="custom-control custom-checkbox col">
-        <input type="checkbox" class="custom-control-input" id="checklist-item-7">
-        <label class="custom-control-label" for="checklist-item-7"></label>
-        <div>
-        <input type="text" placeholder="Checklist item" value="Invite clients to board before next concept meeting" data-filter-by="value" />
-        <div class="checklist-strikethrough"></div>
-        </div>
-        </div>
-        </div>
-        <!--end of form group-->
-        </div>
-
-        </form>*@
+</div>

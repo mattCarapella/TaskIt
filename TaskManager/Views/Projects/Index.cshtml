@@ -1,8 +1,6 @@
 ﻿@using TaskManager.Core
 @using TaskManager.Core.Enums
 @using static TaskManager.Core.Enums.Enums
-
-@*@model IEnumerable<TaskManager.Models.Project>*@
 @model PaginatedList<TaskManager.Models.Project>
 
 @{
@@ -26,10 +24,8 @@
                                     <a asp-action="Create" class="btn-cstm-link-text-light">Add a Project</a>
                                 </button>
                             }
-
                         </span>
                     </div>
-
                     <form asp-action="Index" method="get">
                         <div class="form-actions no-color">
                             <p>
@@ -40,7 +36,6 @@
                             </p>
                         </div>
                     </form>
-
                     <table class="table mt-4">
                         <thead>
                             <tr>
@@ -49,7 +44,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["NameSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Name @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Name
                                     </a>
                                 </th>
                                 <th>Description</th>
@@ -58,7 +53,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["OpenTicketSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Open Tickets @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Open Tickets
                                     </a>
                                 </th>
                                 <th>
@@ -66,7 +61,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Created On @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Created On
                                     </a>
                                 </th>
                                 <th>
@@ -74,7 +69,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Goal Date @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Goal Date
                                     </a>
                                 </th>
                                 <th>Last Updated</th>
@@ -146,12 +141,10 @@
                             }
                         </tbody>
                     </table>
-
                     @{
                         var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
                         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
                     }
-
                     <a asp-action="Index"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex-1)" ;
@@ -159,7 +152,6 @@
                        class="btn btn-default @prevDisabled">
                         Previous
                     </a>
-
                     <a asp-action="Index"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex+1)" ;
@@ -167,7 +159,6 @@
                        class="btn btn-default @nextDisabled">
                         Next
                     </a>
-
                 </div>
             </div>
         </div>

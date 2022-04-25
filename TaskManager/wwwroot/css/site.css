@@ -14,7 +14,6 @@ html {
 }
 
 body {
-    
     margin-bottom: 60px;
 }
 
@@ -41,10 +40,13 @@ body {
     padding-right: 3px;
 }
 
-
+.description-text {
+    font-size: 1.15rem;
+    font-weight: 400;
+}
 
 /***************************************************/
-/*   PROJECTS                                       */
+/*   PROJECTS                                      */
 /***************************************************/
 
 .projects--index {
@@ -74,14 +76,11 @@ body {
 }
 
 
-
-
 /***************************************************/
 /*   TICKETS                                       */
 /***************************************************/
 
 .card-details {
-    /*background: #feffea;*/
     padding: 2em;
     border-radius: 12px;
     color: #474747;
@@ -160,22 +159,29 @@ body {
 }
 
 
-
-
 /***************************************************/
 /*   BUTTONS / LINKS                               */
 /***************************************************/
 
-
 .button-group {
     display: flex;
+}
+
+.btn-header {
+    width: 180px;
+}
+    .btn-header:hover {
+        color: #007bff;
+        background: #c5e1ff;
+    }
+.btn-header-text {
+    color: #007bff;
 }
 
 .account-button {
     font-size: 2rem !important;
     padding-top: 4px;
 }
-
     .account-button:hover {
         color: #585858 !important;
         font-size: 2rem !important;
@@ -186,11 +192,8 @@ body {
     font-size: 1.3rem !important;
     padding-top: 7px;
 }
-
     .plus-button:hover {
         color: #525151 !important;
-        /*font-size: 1.3rem !important;*/
-        /*padding-top: 7px;*/
     }
 
 .name-link {
@@ -209,22 +212,24 @@ body {
     color: white;
     text-decoration: none;
 }
-
     .btn-cstm-link-text-light:hover {
         color: white;
         text-decoration: none;
     }
 
-.btn-text:hover {
+.btn-text {
     color: white;
     text-decoration: none;
 }
+    .btn-text:hover {
+        color: white;
+        text-decoration: none;
+    }
 
 .btn-text-dark {
     color: black;
     text-decoration: none;
 }
-
     .btn-text-dark:hover {
         color: black;
         text-decoration: none;
@@ -233,7 +238,6 @@ body {
 .btn-outline-primary-text {
     text-decoration: none;
 }
-
     .btn-outline-primary-text:hover {
         color: white;
         text-decoration: none;
@@ -243,7 +247,6 @@ body {
     color: black;
     text-decoration: none;
 }
-
     .btn-outline-dark-text:hover {
         color: white;
         text-decoration: none;
@@ -262,11 +265,6 @@ body {
     padding-top: 5px;
 }
 
-.btn-text {
-    color: white;
-    text-decoration: none;
-}
-
 .btn-cstm-link {
     width: 70px;
     border-radius: 5px;
@@ -276,6 +274,7 @@ body {
 /***************************************************/
 /*   AVATARS                                       */
 /***************************************************/
+
 .navbar-avatar {
     object-fit: cover;
     width: 48px;
@@ -285,25 +284,13 @@ body {
 }
 
 .profile-pic {
-    /*    height: 100%;
-    width: 100%;*/
+    width: 100%;
     object-fit: cover;
 }
 
 .details-avatar {
-    /*height: 55px;
-    width: 55px;*/
+    width: 55px;
     height: 3.3rem !important;
     width: 3.3rem !important;
     object-fit: cover;
 }
-
-
-
-
-
-
-
-
-
-

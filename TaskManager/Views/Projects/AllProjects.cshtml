@@ -1,8 +1,6 @@
 ﻿@using TaskManager.Core
 @using TaskManager.Core.Enums
 @using static TaskManager.Core.Enums.Enums
-
-@*@model IEnumerable<TaskManager.Models.Project>*@
 @model PaginatedList<TaskManager.Models.Project>
 
 @{
@@ -25,20 +23,16 @@
                             </button>
                         </span>
                     </div>
-
                     <form asp-action="Index" method="get">
                         <div class="form-actions no-color">
                             <p>
                                 <span class="pr-3">Search by name or description:</span>
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
                                 <button type="submit" class="btn btn-link">Search</button>
-                                @*<button type="submit" class="btn btn-link">*@
                                 <a asp-action="Index" class="btn-link">Clear</a>
-                                @*</button>*@
                             </p>
                         </div>
                     </form>
-
                     <table class="table mt-4">
                         <thead>
                             <tr>
@@ -47,7 +41,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["NameSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Name @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Name
                                     </a>
                                 </th>
                                 <th>Description</th>
@@ -56,7 +50,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["OpenTicketSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Open Tickets @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Open Tickets
                                     </a>
                                 </th>
                                 <th>
@@ -64,7 +58,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Created On @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Created On
                                     </a>
                                 </th>
                                 <th>
@@ -72,7 +66,7 @@
                                        asp-action="Index"
                                        asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Goal Date @*<i class="material-icons">arrow_drop_down_sharp</i>*@
+                                        Goal Date
                                     </a>
                                 </th>
                                 <th>Last Updated</th>
@@ -140,12 +134,10 @@
                             }
                         </tbody>
                     </table>
-
                     @{
                         var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
                         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
                     }
-
                     <a asp-action="AllProjects"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex-1)" ;
@@ -153,7 +145,6 @@
                        class="btn btn-default @prevDisabled">
                         Previous
                     </a>
-
                     <a asp-action="AllProjects"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex+1)" ;
@@ -161,7 +152,6 @@
                        class="btn btn-default @nextDisabled">
                         Next
                     </a>
-
                 </div>
             </div>
         </div>
