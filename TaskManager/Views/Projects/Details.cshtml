@@ -21,16 +21,18 @@
                 </div>
 
                 @***** BUTTONS *****@
-                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                {
-                    <span class="center-vert pt-3 ml-1">
-                        <span class="button-group">
-                            <button class="btn btn-outline-primary btn-header mr-2">
-                                <a asp-action="Edit" asp-route-id="@Model?.Project.Id" class="btn-header-text">Edit</a>
-                            </button>
-                        </span>
+                <span class="center-vert pt-2 ml-1">
+                    <span class="button-group">
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                        {
+                            <button class="btn btn-round-med mr-2">
+                                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model!.Project.Id" data-toggle="tooltip" data-title="Edit project">
+                                     <i class="material-icons details-btn-icon">create</i>
+                                </a>
+                             </button>
+                        }
                     </span>
-                }
+                </span>
                 <hr/>
                 
                 @***** PROJECT DETAILS *****@
@@ -107,14 +109,14 @@
                     }
                 </div>
                 <div class="d-flex justify-content-between text-small">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center assignment-text">
                         @if (@Model!.Contributers.Count == 1)
                         {
-                            <span class="pt-2 mb-3"><em><strong>1</strong> contributer.</em></span>
+                            <span class="pt-2 mb-3"><em><strong>1</strong> contributer</em></span>
                         }
                         else
                         {
-                            <span class="pt-2 mb-3"><em><strong>@Model!.Contributers.Count()</strong> contributers.</em></span>
+                            <span class="pt-2 mb-3"><em><strong>@Model!.Contributers.Count()</strong> contributers</em></span>
                         }
                     </div>
                 </div>

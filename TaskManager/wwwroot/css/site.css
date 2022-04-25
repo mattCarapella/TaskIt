@@ -45,10 +45,21 @@ body {
     font-weight: 400;
 }
 
+.assignment-text {
+    color: black;
+}
+
+.icon-button {
+    display: inline-block;
+    position: relative;
+}
+
+
+
+
 /***************************************************/
 /*   PROJECTS                                      */
 /***************************************************/
-
 .projects--index {
     padding-top: 3%;
     padding-bottom: 5%;
@@ -167,6 +178,29 @@ body {
     display: flex;
 }
 
+.btn-round-med {
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    border-radius: 50%;
+    padding: 0;
+    background: #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    .btn-round-med:hover {
+        background: #d0d2d5;
+    }
+
+.details-btn-icon {
+        color: #6c757d;
+        vertical-align: middle;
+    }
+    .details-btn-icon:hover {
+        color: #545a5f;
+    }
+
 .btn-header {
     width: 180px;
 }
@@ -174,6 +208,7 @@ body {
         color: #007bff;
         background: #c5e1ff;
     }
+
 .btn-header-text {
     color: #007bff;
 }
