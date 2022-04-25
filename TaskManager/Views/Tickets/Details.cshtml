@@ -27,7 +27,7 @@
                 </div>
 
                 @***** BUTTONS *****@
-                <span class="center-vert pt-4 ml-1">
+                <span class="center-vert pt-3 ml-1">
                     <span class="button-group">
                         @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.INPROGRESS)
                         {
@@ -41,7 +41,7 @@
                                 data-title="Submit for review"
                             >
                                     <button class="btn btn-round-med mr-2" id="submit">
-                                        <i class="material-icons details-btn-icon">add_task</i>
+                                        <i class="material-icons btn-icon">flag</i>
                                     </button>        
                             </form>
                         }
@@ -59,7 +59,7 @@
                                     data-title="Mark as completed"
                                 >
                                     <button class="btn btn-round-med mr-2" id="submit">
-                                        <i class="material-icons details-btn-icon">check_circle_outline</i>
+                                        <i class="material-icons btn-icon">add_task</i>
                                     </button>
                                 </form>
                             }
@@ -68,7 +68,7 @@
                         {
                             <button class="btn btn-round-med mr-2">
                                 <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Ticket.TicketId" data-toggle="tooltip" data-title="Edit ticket">
-                                     <i class="material-icons details-btn-icon">create</i>
+                                     <i class="material-icons btn-icon">create</i>
                                 </a>
                              </button>
                         }
@@ -175,9 +175,9 @@
                     </ul>
                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                     {
-                        <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage ticket assignments">
+                        <button class="btn btn-round flex-shrink-0" data-toggle="tooltip" data-title="Manage ticket assignments">
                             <a asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model.Ticket.TicketId">
-                                <i class="material-icons">add</i>
+                                <i class="material-icons btn-icon">add</i>
                             </a>
                         </button>
                     }
@@ -217,9 +217,9 @@
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Notes</h3>
-                                    <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
+                                    <button class="btn btn-round" data-toggle="tooltip" data-title="Add a note">
                                         <a asp-controller="TNotes" asp-action="Create" asp-route-ticketid="@Model.Ticket.TicketId">
-                                            <i class="material-icons">add</i>
+                                            <i class="material-icons btn-icon">add</i>
                                         </a>
                                     </button>
                                 </div>

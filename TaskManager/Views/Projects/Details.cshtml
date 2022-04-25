@@ -27,7 +27,7 @@
                         {
                             <button class="btn btn-round-med mr-2">
                                 <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model!.Project.Id" data-toggle="tooltip" data-title="Edit project">
-                                     <i class="material-icons details-btn-icon">create</i>
+                                     <i class="material-icons btn-icon">create</i>
                                 </a>
                              </button>
                         }
@@ -101,9 +101,9 @@
                     </ul>
                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                     {
-                        <button class="btn btn-round btn-icon-offset flex-shrink-0" data-toggle="tooltip" data-title="Manage project members">
+                        <button class="btn btn-round flex-shrink-0" data-toggle="tooltip" data-title="Manage project members">
                             <a asp-controller="Projects" asp-action="ManageUsers" asp-route-id="@Model?.Project.Id">
-                                <i class="material-icons plus-button">add</i>
+                                <i class="material-icons btn-icon">add</i>
                             </a>
                         </button>
                     }
@@ -159,9 +159,9 @@
                                     <h3>Open Tickets</h3>
                                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                     {
-                                        <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Submit a ticket">
+                                        <button class="btn btn-round" data-toggle="tooltip" data-title="Submit a ticket">
                                             <a asp-controller="Tickets" asp-action="Create" asp-route-projectid="@Model.Project.Id">
-                                                <i class="material-icons plus-button">add</i>
+                                                <i class="material-icons btn-icon">add</i>
                                             </a>
                                         </button>
                                     }
@@ -280,6 +280,7 @@
                             <!--end of content list body-->
                         </div>
                         <!--end of content list-->
+                        
                         @***** NOTES *****@
                         <div class="content-list" data-filter-list="content-list-body">
                             <div class="row content-list-head">
@@ -287,9 +288,9 @@
                                     <h3>Notes</h3>
                                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                     {
-                                        <button class="btn btn-round btn-icon-offset" data-toggle="tooltip" data-title="Add a note">
+                                        <button class="btn btn-round" data-toggle="tooltip" data-title="Add a note">
                                             <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
-                                                <i class="material-icons">add</i>
+                                                <i class="material-icons btn-icon">add</i>
                                             </a>
                                         </button>
                                     }
@@ -314,7 +315,7 @@
                                     <div class="card card-note">
                                         <div class="card-header">
                                             <div class="media align-items-center">
-                                                <img alt="@note.ApplicationUser.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
+                                                <img alt="@note.ApplicationUser!.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
                                                  data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
                                                 <div class="media-body">
                                                     <h6 class="mb-0" data-filter-by="text">@note.Title</h6>

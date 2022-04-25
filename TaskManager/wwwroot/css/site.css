@@ -55,8 +55,6 @@ body {
 }
 
 
-
-
 /***************************************************/
 /*   PROJECTS                                      */
 /***************************************************/
@@ -193,11 +191,11 @@ body {
         background: #d0d2d5;
     }
 
-.details-btn-icon {
+.btn-icon {
         color: #6c757d;
         vertical-align: middle;
     }
-    .details-btn-icon:hover {
+    .btn-icon:hover {
         color: #545a5f;
     }
 
@@ -221,14 +219,6 @@ body {
         color: #585858 !important;
         font-size: 2rem !important;
         padding-top: 4px;
-    }
-
-.plus-button {
-    font-size: 1.3rem !important;
-    padding-top: 7px;
-}
-    .plus-button:hover {
-        color: #525151 !important;
     }
 
 .name-link {
@@ -292,9 +282,9 @@ body {
     text-decoration: underline;
 }
 
-.btn-icon-offset {
+/*.btn-icon-offset {
     padding-top: 4px;
-}
+}*/
 
 .btn-link-offset {
     padding-top: 5px;
