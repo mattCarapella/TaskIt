@@ -116,17 +116,17 @@
                                         <div class="button-group ml-2">
                                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                             {
-                                                <button class="btn btn-round mr-1">
+                                                <button class="btn btn-round-sm mr-1">
                                                     <a asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-title="Edit project">
-                                                        <i class="material-icons btn-icon">create</i>
+                                                        <i class="material-icons btn-icon btn-icon-sm">create</i>
                                                     </a>
                                                 </button>
                                             }
                                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                                             {
-                                                <button class="btn btn-round">
+                                                <button class="btn btn-round-sm">
                                                     <a asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-title="Delete project">
-                                                        <i class="material-icons btn-icon">delete</i>
+                                                        <i class="material-icons btn-icon btn-icon-sm">delete</i>
                                                     </a>
                                                 </button>
                                             }

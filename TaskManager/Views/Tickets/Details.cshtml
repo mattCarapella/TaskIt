@@ -1,8 +1,7 @@
 ﻿@model TaskManager.Core.ViewModels.Ticket.TicketDetailsViewModel;
 @{ ViewData["Title"] = "Ticket Details"; }
 
-<div><a href="javascript:history.go(-1)">Back</a></div>
-
+<div class="back-btn"><a href="javascript:history.go(-1)">Back</a></div>
 <div class="main-container">
     <div class="container pb-2">
         <div class="row justify-content-center">
@@ -12,7 +11,7 @@
                 <div class="page-header mb-2">
                     <div class="wrapper pb-0">
                         <div class="media">
-                            <img alt="Image" src="~/images/ticketA100.png" class="" overflow="hidden" />
+                            <img class="header-img" alt="Image" src="~/images/ticketA100.png" overflow="hidden" />
                             <div class="media-body ml-3">
                                 <h1 class="mb-2">@Model.Ticket.Title</h1>
                                 <p class="lead">
@@ -27,7 +26,7 @@
                 </div>
                 
                 @***** BUTTONS *****@
-                <span class="center-vert pt-3 ml-1">
+                <span class="center-vert pt-2 ml-1">
                     <span class="button-group">
                         @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.INPROGRESS)
                         {
@@ -175,9 +174,9 @@
                     </ul>
                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                     {
-                        <button class="btn btn-round flex-shrink-0" data-toggle="tooltip" data-title="Manage ticket assignments">
+                        <button class="btn btn-round-sm flex-shrink-0" data-toggle="tooltip" data-title="Manage ticket assignments">
                             <a asp-controller="Tickets" asp-action="ManageUsers" asp-route-id="@Model.Ticket.TicketId">
-                                <i class="material-icons btn-icon">add</i>
+                                <i class="material-icons btn-icon btn-icon-sm">add</i>
                             </a>
                         </button>
                     }
@@ -186,11 +185,11 @@
                     <div class="d-flex align-items-center assignment-text">
                         @if (@Model!.AssignedTo.Count() == 1)
                         {
-                            <span class="pt-2 mb-3"><em>Assigned to </em><strong>1</strong><em> person. </em></span>
+                            <span class="pt-2 mb-3">Assigned to <strong>1</strong> person</span>
                         }
                         else
                         {
-                            <span class="pt-2 mb-3"><em>Assigned to </em><strong>@Model.AssignedTo.Count()</strong><em> people.</em></span>
+                            <span class="pt-2 mb-3">Assigned to <strong>@Model.AssignedTo.Count()</strong> people</span>
                         }
                     </div>
                 </div>
@@ -217,9 +216,9 @@
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Notes</h3>
-                                    <button class="btn btn-round" data-toggle="tooltip" data-title="Add a note">
+                                    <button class="btn btn-round-sm ml-3" data-toggle="tooltip" data-title="Add a note">
                                         <a asp-controller="TNotes" asp-action="Create" asp-route-ticketid="@Model.Ticket.TicketId">
-                                            <i class="material-icons btn-icon">add</i>
+                                            <i class="material-icons btn-icon btn-icon-sm">add</i>
                                         </a>
                                     </button>
                                 </div>
@@ -245,7 +244,7 @@
                                                     }
                                                     <div class="media-body">
                                                         <h4 class="mb-0" data-filter-by="text">@note.Title</h4>
-                                                        <p class="">by @note.ApplicationUser.FullName</p>
+                                                        <p class="note-author-text">by @note.ApplicationUser.FullName</p>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-center">
