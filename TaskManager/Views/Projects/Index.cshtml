@@ -114,11 +114,6 @@
                                     </td>
                                     <td>
                                         <div class="button-group ml-2">
-                                            <button class="btn btn-round mr-1" data-toggle="tooltip" data-title="Project details">
-                                                <a asp-action="Details" asp-route-id="@item.Id">
-                                                    <i class="material-icons btn-icon">add</i>
-                                                </a>
-                                            </button>
                                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                             {
                                                 <button class="btn btn-round mr-1">

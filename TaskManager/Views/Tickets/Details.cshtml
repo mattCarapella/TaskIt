@@ -25,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 @***** BUTTONS *****@
                 <span class="center-vert pt-3 ml-1">
                     <span class="button-group">
@@ -212,7 +212,7 @@
                 <div class="tab-content pt-1 pb-1">
 
                     @***** TAB: NOTES *****@
-                    <div class="tab-pane fade show active" id="task" role="tabpanel">
+                    <div class="tab-pane fade show active" id="notes" role="tabpanel">
                         <div class="content-list" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
@@ -244,8 +244,8 @@
                                                             data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
                                                     }
                                                     <div class="media-body">
-                                                        <h5 class="mb-0" data-filter-by="text">@note.Title</h5>
-                                                        <p class=""><em>by @note.ApplicationUser.FullName</em></p>
+                                                        <h4 class="mb-0" data-filter-by="text">@note.Title</h4>
+                                                        <p class="">by @note.ApplicationUser.FullName</p>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-center">

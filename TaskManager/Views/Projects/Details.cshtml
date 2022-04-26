@@ -26,7 +26,11 @@
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                         {
                             <button class="btn btn-round-med mr-2">
-                                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model!.Project.Id" data-toggle="tooltip" data-title="Edit project">
+                                <a asp-controller="Projects" 
+                                   asp-action="Edit" 
+                                   asp-route-id="@Model!.Project.Id" 
+                                   data-toggle="tooltip" 
+                                   data-title="Edit project" >
                                      <i class="material-icons btn-icon">create</i>
                                 </a>
                              </button>
@@ -126,13 +130,13 @@
                     <li class="nav-item">
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                         {
-                            <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
+                            <a class="nav-link active" data-toggle="tab" href="#open" role="tab" aria-controls="open" aria-selected="true">
                                 Open Tickets
                             </a>
                         }
                         else
                         {
-                            <a class="nav-link active" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">
+                            <a class="nav-link active" data-toggle="tab" href="#open" role="tab" aria-controls="open" aria-selected="true">
                                 Your Tickets
                             </a>
                         }
@@ -150,9 +154,9 @@
 
                 @***** TAB CONTENT *****@
                 <div class="tab-content pt-1 pb-1">
+                    
                     @***** OPEN TICKETS & NOTES *****@
-                    <div class="tab-pane fade show active" id="task" role="tabpanel">
-
+                    <div class="tab-pane fade show active" id="open" role="tabpanel">
                         <div class="content-list" data-filter-list="checklist">
                             <div class="row content-list-head">
                                 <div class="col-auto">
@@ -177,7 +181,6 @@
                                     </div>
                                 </form>
                             </div>
-                            <!--end of content list head-->
                             <div class="content-list-body">
                                 <div class="col">
                                     <table class="table">
@@ -266,20 +269,18 @@
                                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                                        asp-route-pageNumber="@(Model.OpenTicketsPaginated.PageIndex-1)" ;
                                        class="btn btn-default @prevDisabled">
-                                        Previous
+                                            Previous
                                     </a>
                                     <a asp-action="Details"
                                        asp-route-id="@Model.Project.Id"
                                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                                        asp-route-pageNumber="@(Model.OpenTicketsPaginated. PageIndex+1)" ;
                                        class="btn btn-default @nextDisabled">
-                                        Next
+                                            Next
                                     </a>
                                 </div>
                             </div>
-                            <!--end of content list body-->
                         </div>
-                        <!--end of content list-->
                         
                         @***** NOTES *****@
                         <div class="content-list" data-filter-list="content-list-body">
@@ -309,7 +310,6 @@
 
                             @***** NOTES *****@
                             <div class="content-list-body">
-
                                 @foreach (var note in @Model.Notes)
                                 {
                                     <div class="card card-note">
@@ -339,7 +339,6 @@
                                         </div>
                                         <div class="card-body" data-filter-by="text">
                                             <p>@Html.Raw(note.Content)</p>
-
                                             @if (@note.Link != null)
                                             {
                                                 <span class="mt-2">
@@ -350,7 +349,6 @@
 
                                     </div>
                                 }
-
                             </div>
                         </div>
                     </div>
@@ -644,94 +642,6 @@
                                             <ul class="avatars">
                                                 <li>
                                                     <div class="avatar bg-primary">
-                                                        <i class="material-icons">edit</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="David" src="assets/img/avatar-male-4.jpg" class="avatar" data-filter-by="alt" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body">
-                                                <div>
-                                                    <span class="h6" data-filter-by="text">David</span>
-                                                    <span data-filter-by="text">added the note</span><a href="#" data-filter-by="text">Aesthetic note</a>
-                                                </div>
-                                                <span class="text-small" data-filter-by="text">Yesterday</span>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">person_add</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Marcus" src="assets/img/avatar-male-1.jpg" class="avatar" data-filter-by="alt" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body">
-                                                <div>
-                                                    <span class="h6" data-filter-by="text">Marcus</span>
-                                                    <span data-filter-by="text">was assigned to the task</span>
-                                                </div>
-                                                <span class="text-small" data-filter-by="text">4 days ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">person_add</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Ravi" src="assets/img/avatar-male-3.jpg" class="avatar" data-filter-by="alt" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body">
-                                                <div>
-                                                    <span class="h6" data-filter-by="text">Ravi</span>
-                                                    <span data-filter-by="text">was assigned to the task</span>
-                                                </div>
-                                                <span class="text-small" data-filter-by="text">5 days ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">playlist_add</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Claire" src="assets/img/avatar-female-1.jpg" class="avatar" data-filter-by="alt" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body">
-                                                <div>
-                                                    <span class="h6" data-filter-by="text">Claire</span>
-                                                    <span data-filter-by="text">added to the task checklist</span>
-                                                </div>
-                                                <span class="text-small" data-filter-by="text">5 days ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
                                                         <i class="material-icons">add</i>
                                                     </div>
                                                 </li>
@@ -772,7 +682,6 @@
                                         <input type="search" class="form-control filter-list-input" placeholder="Filter Tickets" aria-label="Filter Tickets">
                                     </div>
                                 </form>
-                                <!--end of content list head-->
                             </div>
                             <div class="content-list-body">
                                 <div class="col">
@@ -793,8 +702,6 @@
                                             <th>
                                                 Closed At
                                             </th>
-
-
                                         </tr>
                                         @foreach (var ticket in Model.ClosedTicketsPaginated)
                                         {
@@ -832,7 +739,7 @@
                                        asp-route-pageNumber="@(Model.ClosedTicketsPaginated.PageIndex-1)"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                                        class="btn btn-default @prevDisabledCl">
-                                        Previous
+                                            Previous
                                     </a>
                                     <a asp-action="Details"
                                        asp-route-id="@Model.Project.Id"
@@ -840,7 +747,7 @@
                                        asp-route-pageNumber="@(Model.ClosedTicketsPaginated. PageIndex+1)"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                                        class="btn btn-default @nextDisabledCl">
-                                        Next
+                                            Next
                                     </a>
                                 </div>
                             </div>

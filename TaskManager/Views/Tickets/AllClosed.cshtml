@@ -115,8 +115,8 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">
-                                            @Html.DisplayFor(modelItem => item.Project.Name)
+                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project!.Id">
+                                            @Html.DisplayFor(modelItem => item.Project!.Name)
                                         </a>
                                     </td>
                                     <td>
@@ -152,18 +152,11 @@
                                     </td>
                                     <td>
                                         <div class="button-group ml-2">
-                                            <button class="btn btn-round mr-1" data-toggle="tooltip" data-title="Ticket details">
-                                                <a asp-action="Details" asp-route-id="@item.TicketId">
-                                                    <i class="material-icons btn-icon">add</i>
-                                                </a>
-                                            </button>
-
                                             <button class="btn btn-round mr-1">
                                                 <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
                                                     <i class="material-icons btn-icon">create</i>
                                                 </a>
                                             </button>
-
                                             <button class="btn btn-round">
                                                 <a asp-action="Delete" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Delete ticket">
                                                     <i class="material-icons btn-icon">delete</i>
