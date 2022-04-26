@@ -14,30 +14,26 @@
                         <div class="media">
                             <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden"/>
                             <div class="media-body ml-3">
-                                <h1 class="mb-2 pt-3">@Model.Project.Name</h1>
+                                <h1 class="mb-2 pr-2 pt-3">@Model.Project.Name</h1>
                             </div>
                         </div>
+                        <span class="mt-2">
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                            {
+                                <button class="btn btn-round-med">
+                                    <a asp-controller="Projects" 
+                                       asp-action="Edit"
+                                       asp-route-id="@Model!.Project.Id" 
+                                       data-toggle="tooltip" 
+                                       data-title="Edit project"
+                                    >
+                                        <i class="material-icons btn-icon btn-icon-lg">create</i>
+                                    </a>
+                                </button>
+                            }
+                        </span>
                     </div>
                 </div>
-
-                @***** BUTTONS *****@
-                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                {
-                    <span class="center-vert pt-2 ml-1">
-                        <span class="button-group">
-
-                            <button class="btn btn-round-med mr-2">
-                                <a asp-controller="Projects" 
-                                   asp-action="Edit" 
-                                   asp-route-id="@Model!.Project.Id" 
-                                   data-toggle="tooltip" 
-                                   data-title="Edit project" >
-                                    <i class="material-icons btn-icon">create</i>
-                                </a>
-                            </button>
-                        </span>
-                    </span>
-                }
                 <hr/>
                 
                 @***** PROJECT DETAILS *****@
@@ -46,14 +42,14 @@
                 <dl class="row pb-2">
                     @if (@Model!.Project.Tag is not null)
                     {
-                        <dt class="col-sm-4">
+                        <dt class="col-sm-4 details-type">
                             @Html.DisplayNameFor(model => model.Project.Tag)
                         </dt>
                         <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Project.Tag)
                         </dd>
                     }
-                    <dt class="col-sm-4">
+                    <dt class="col-sm-4 details-type">
                         @Html.DisplayNameFor(model => model.Project.CreatedAt)
                     </dt>
                     <dd class="col-sm-6">
@@ -61,7 +57,7 @@
                     </dd>
                     @if (@Model.Project.GoalDate is not null)
                     {
-                        <dt class="col-sm-4">
+                        <dt class="col-sm-4 details-type">
                             @Html.DisplayNameFor(model => model.Project.GoalDate)
                         </dt>
                         <dd class="col-sm-6">
@@ -70,12 +66,12 @@
                     }
                     @if (@Model.Project.UpdatedAt is not null)
                     {
-                        <dt class="col-sm-4">
+                        <dt class="col-sm-4 details-type" >
                             @Html.DisplayNameFor(model => model.Project.UpdatedAt)
                         </dt>
-                        <dt class="col-sm-6">
+                        <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Project.UpdatedAt)
-                        </dt>
+                        </dd>
                     }
                 </dl>
 
@@ -184,7 +180,7 @@
                             </div>
                             <div class="content-list-body">
                                 <div class="col">
-                                    <table class="table">
+                                    <table class="table table-bordered table-responsive">
                                         <tr>
                                             <th>
                                                 <a class="index--sort-link"
@@ -288,8 +284,7 @@
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Notes</h3>
-                                    @*@if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                                    { }*@
+                                    
                                     <button class="btn btn-round-sm ml-3" data-toggle="tooltip" data-title="Add a note">
                                             <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
                                                 <i class="material-icons btn-icon btn-icon-sm">add</i>
@@ -686,7 +681,7 @@
                             </div>
                             <div class="content-list-body">
                                 <div class="col">
-                                    <table class="table">
+                                    <table class="table table-bordered table-responsive">
                                         <tr>
                                             <th>
                                                 Ticket

@@ -13,13 +13,15 @@
                     <div class="wrapper mb-2">
                         <div class="media">
                             <img alt="Image" src="~/images/ticketA100.png" class="" overflow="hidden" />
-                            <span class="header-text pl-4 pt-2">Your Closed Tickets</span>
+                            <span class="header-text pl-4 pr-2 pt-2">Your Closed Tickets</span>
                         </div>
-                        <span class="center-vert">
+                        <span class="mt-2">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                             {
-                                <button class="btn btn-primary">
-                                    <a asp-action="Create" class="btn-cstm-link-text-light">Submit a ticket</a>
+                                <button class="btn btn-round-med" data-toggle="tooltip" data-title="Submit a Ticket">
+                                    <a asp-controller="Tickets" asp-action="Create">
+                                        <i class="material-icons btn-icon btn-icon-lg">add</i>
+                                    </a>
                                 </button>
                             }
                         </span>
@@ -37,7 +39,7 @@
                     </form>
 
 
-                    <table class="table mt-4">
+                    <table class="table table-bordered table-responsive  mt-4">
                         <thead class="align-items-center">
                             <tr>
                                 <th>
@@ -120,16 +122,16 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project.Id">
-                                            @Html.DisplayFor(modelItem => item.Project.Name)
+                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project!.Id">
+                                            @Html.DisplayFor(modelItem => item.Project!.Name)
                                         </a>
                                     </td>
                                     <td>
                                         @if (@item.DescriptionNoHtml is not null)
                                         {
-                                            @if (@item.Description.Length > 200)
+                                            @if (@item.DescriptionNoHtml.Length > 150)
                                             {
-                                                <p>@item.DescriptionNoHtml.Substring(0, 199)...</p>
+                                                <p>@item.DescriptionNoHtml.Substring(0, 150)...</p>
                                             }
                                             else
                                             {
@@ -156,13 +158,13 @@
                                         @Html.DisplayFor(modelItem => item.ClosedAt)
                                     </td>
                                     <td>
-                                        <div class="button-group ml-2">
+                                        <div class="button-group">
                                             
                                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                             {
                                                 <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
                                                     <a asp-action="Details" asp-route-id="@item.TicketId">
-                                                        <i class="material-icons btn-icon btn-icon-sm">add</i>
+                                                        <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
                                                     </a>
                                                 </button>
                                                 <button class="btn btn-round-sm mr-1">

@@ -17,10 +17,15 @@
                             <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden" />
                             <span class="header-text pl-4 pt-2">All Projects</span>
                         </div>
-                        <span class="center-vert">
-                            <button class="btn btn-primary">
-                                <a asp-action="Create" class="btn-cstm-link-text-light">Add a Project</a>
-                            </button>
+                        <span class="mt-2">
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                            {
+                                <button class="btn btn-round-med" data-toggle="tooltip" data-title="Add a Project">
+                                    <a asp-controller="Projects" asp-action="Create">
+                                        <i class="material-icons btn-icon btn-icon-lg">add</i>
+                                    </a>
+                                </button>
+                            }
                         </span>
                     </div>
                     <form asp-action="Index" method="get">
@@ -33,8 +38,8 @@
                             </p>
                         </div>
                     </form>
-                    <table class="table mt-4">
-                        <thead>
+                    <table class="table table-bordered table-responsive mt-4">
+                        <thead class="align-items-center">
                             <tr>
                                 <th>
                                     <a class="index--sort-link"
@@ -87,7 +92,7 @@
                                     <td>
                                         @if (@item.Description.Length > 200)
                                         {
-                                            <p>@item.Description.Substring(0, 199)...</p>
+                                            <p>@item.Description.Substring(0, 200)...</p>
                                         }
                                         else
                                         {
@@ -110,7 +115,15 @@
                                         @Html.DisplayFor(modelItem => item.Tag)
                                     </td>
                                     <td>
-                                        <div class="button-group ml-2">
+                                        <div class="button-group pt-1">
+                                            @* @if ((await AuthorizationService.AuthorizeAsync(User, "EmployeeOnly")).Succeeded)
+                                            {*@
+                                                <button class="btn btn-round-sm mr-1">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" data-toggle="tooltip" data-title="Project details">
+                                                        <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
+                                                    </a>
+                                                </button>
+                                            @*}*@
                                             <button class="btn btn-round-sm mr-1">
                                                 <a asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-title="Edit project">
                                                     <i class="material-icons btn-icon btn-icon-sm">create</i>
