@@ -10,7 +10,7 @@ public interface IUserRepository
     Task<ApplicationUser> GetUserWithProjectsAndTickets(string id);
     ApplicationUser UpdateUser(ApplicationUser user);
     Task<IList<string>> GetUserRoles(string id);
-
+    Task<ApplicationUser> GetCurrentUser();
     Task<ICollection<ProjectAssignment>> GetProjectsForUser(string userId);
 
 }

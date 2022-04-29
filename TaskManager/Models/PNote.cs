@@ -19,7 +19,7 @@ public class PNote
 
     public DateTime? UpdatedAt { get; set; }
 
-    public string? ApplicationUserId { get; set; }
+    public string ApplicationUserId { get; set; }
     public ApplicationUser? ApplicationUser { get; set; }
 
     public Guid ProjectId { get; set; }

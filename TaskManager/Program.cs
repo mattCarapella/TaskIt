@@ -13,21 +13,20 @@ var connectionString = builder.Configuration.GetConnectionString("TaskManagerCon
 
 builder.Services.AddDbContext<TaskManagerContext>(options =>
     options
-        //.UseLazyLoadingProxies()
         .UseSqlServer(
             connectionString,
             // Enable split queries with .AsSingleQuery().ToList()
-            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))); 
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<TaskManagerContext>();
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<TaskManagerContext>();
 
 builder.Services.AddControllersWithViews();
 
 #region Authorization
 
-AddAuthorizationPolicies(builder.Services);
+    AddAuthorizationPolicies(builder.Services);
 
 #endregion
 
@@ -41,14 +40,19 @@ using (var scope = app.Services.CreateScope())
     //SeedData.Initialize(services);
 }
 
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
 
-    // Configure the HTTP request pipeline.
-    if (!app.Environment.IsDevelopment())
-    {
-        app.UseExceptionHandler("/Home/Error");
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();
-    }
+app.UseStatusCodePagesWithRedirects("/Error/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -68,8 +72,8 @@ void AddAuthorizationPolicies(IServiceCollection services)
     builder.Services.AddAuthorization(options =>
     {
         options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
+            .RequireAuthenticatedUser()
+            .Build();
 
         options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
     });
@@ -92,5 +96,4 @@ void AddScoped()
     builder.Services.AddScoped<ITicketAssignmentRepository, TicketAssignmentRepository>();
     builder.Services.AddScoped<ITNoteRepository, TNoteRepository>();
     builder.Services.AddScoped<IPNoteRepository, PNoteRepository>();
-
 }

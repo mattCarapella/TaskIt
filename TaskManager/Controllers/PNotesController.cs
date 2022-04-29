@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,55 +18,34 @@ namespace TaskManager.Controllers
     
     public class PNotesController : Controller
     {
-        private readonly TaskManagerContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
         public PNotesController(TaskManagerContext context, IUnitOfWork unitOfWork)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
         }
-
-
-        // GET: PNotes
-        //[Authorize(Roles = $"{Constants.Roles.Administrator}")]
-        //public async Task<IActionResult> Index()
-        //{
-        //    var taskManagerContext = _context.PNote.Include(p => p.Project);
-        //    return View(await taskManagerContext.ToListAsync());
-        //}
-
-
-        //// GET: PNotes/Details/5
-        //[Authorize(Roles = $"{Constants.Roles.Administrator}")]
-        //public async Task<IActionResult> Details(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var pNote = await _context.PNote
-        //        .Include(p => p.Project)
-        //        .AsNoTracking()
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (pNote == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(pNote);
-        //}
-
 
         // GET: PNotes/Create
         public async Task<IActionResult> Create(Guid projectid)
         {
-            PNoteCreateViewModel vm = new PNoteCreateViewModel
+            var project = await _unitOfWork.ProjectRepository.GetProjectWithUsers(projectid);
+            var currentUser = await _unitOfWork.UserRepository.GetCurrentUser();
+            if (project is null)
             {
-                ProjectId = projectid
-            };
-            return View(vm);
+                return NotFound();
+            }
+
+            if (project.Contributers!.Any(u => u.ApplicationUserId == currentUser!.Id))
+            {
+                PNoteCreateViewModel vm = new PNoteCreateViewModel
+                {
+                    ProjectId = projectid
+                };
+                return View(vm);
+            }
+
+            return RedirectToAction("Details", "Projects", new { id = projectid });
+
         }
 
 
@@ -79,14 +57,11 @@ namespace TaskManager.Controllers
             if (ModelState.IsValid)
             {
                 note.Id = Guid.NewGuid();
-                //var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == note.ProjectId);
                 var project = await _unitOfWork.ProjectRepository.GetProject(note.ProjectId);
-                var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+                var currentUser = await _unitOfWork.UserRepository.GetCurrentUser();
                 project.Notes.Add(note);
                 note.ApplicationUser = currentUser;
-                //_context.Add(note);
                 await _unitOfWork.PNoteRepository.AddNote(note);
-                //await _context.SaveChangesAsync();
                 await _unitOfWork.SaveAsync();
                 return RedirectToAction("Details", "Projects", new { id = project.Id });
             }
@@ -108,7 +83,7 @@ namespace TaskManager.Controllers
             }
 
             var pNote = await _unitOfWork.PNoteRepository.GetNote(id);
-            if (pNote == null)
+            if (pNote is null)
             {
                 return NotFound();
             }
@@ -127,7 +102,6 @@ namespace TaskManager.Controllers
             }
 
             var noteToUpdate = await _unitOfWork.PNoteRepository.GetNote(id);
-
             if (await TryUpdateModelAsync<PNote>(
                     noteToUpdate,
                     "",
@@ -158,7 +132,7 @@ namespace TaskManager.Controllers
             }
 
             var pNote = await _unitOfWork.PNoteRepository.GetNote(id);
-            if (pNote == null)
+            if (pNote is null)
             {
                 return NotFound();
             }
@@ -173,7 +147,7 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var note = await _unitOfWork.PNoteRepository.GetNote(id);
-            if (note == null)
+            if (note is null)
             {
                 return NotFound();
             }
@@ -193,3 +167,38 @@ namespace TaskManager.Controllers
 
     }
 }
+
+
+
+
+
+
+// GET: PNotes
+//[Authorize(Roles = $"{Constants.Roles.Administrator}")]
+//public async Task<IActionResult> Index()
+//{
+//    var taskManagerContext = _context.PNote.Include(p => p.Project);
+//    return View(await taskManagerContext.ToListAsync());
+//}
+
+
+//// GET: PNotes/Details/5
+//[Authorize(Roles = $"{Constants.Roles.Administrator}")]
+//public async Task<IActionResult> Details(Guid? id)
+//{
+//    if (id == null)
+//    {
+//        return NotFound();
+//    }
+
+//    var pNote = await _context.PNote
+//        .Include(p => p.Project)
+//        .AsNoTracking()
+//        .FirstOrDefaultAsync(m => m.Id == id);
+//    if (pNote == null)
+//    {
+//        return NotFound();
+//    }
+
+//    return View(pNote);
+//}

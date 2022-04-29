@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -93,7 +92,6 @@ namespace TaskManager.Controllers
         }
 
 
-
         // GET: AllProjects
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         public async Task<IActionResult> AllProjects(string sortOrder, string searchString, string currentFilter, int? pageNumber)
@@ -158,7 +156,6 @@ namespace TaskManager.Controllers
             return View(PaginatedList<Project>.Create(pList, pageNumber ?? 1, pageSize));       //   pList should have .AsNoTracking()... find out if it can work with async calls
             //return View(await projects.AsNoTracking().ToListAsync());
         }
-
 
 
         // GET: Projects/Details/{id}
@@ -242,12 +239,12 @@ namespace TaskManager.Controllers
                     .AsNoTracking()
                     .Where(t => t.ApplicationUserId == User.Identity.GetUserId())
                     .Include(t => t.Ticket)
-                        .ThenInclude(t => t.Project)
+                        .ThenInclude(t => t!.Project)
                     .ToListAsync();
                 
                 foreach (var t in userTickets)
                 {
-                    if (t.Ticket.Project.Id == id)
+                    if (t.Ticket?.Project!.Id == id)
                     {
                         userTicketsForProj.Add(t.Ticket);
                     }
@@ -265,7 +262,7 @@ namespace TaskManager.Controllers
             var vm = new ProjectDetailsViewModel()
             {
                 Project = project,
-                Contributers = project.Contributers.ToList(),    
+                Contributers = project.Contributers!.ToList(),    
                 ClosedTicketsPaginated = paginatedClosedTicketList,
                 OpenTicketsPaginated = paginatedOpenTicketList,
                 Notes = project.Notes
@@ -283,7 +280,6 @@ namespace TaskManager.Controllers
         }
 
 
-
         // POST: Projects/Create
         [HttpPost]
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
@@ -294,7 +290,7 @@ namespace TaskManager.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
+                    var currentUser = await _unitOfWork.UserRepository.GetCurrentUser();
                     var contributer = new ProjectAssignment
                     {
                         ProjectAssignmentId = Guid.NewGuid(),
@@ -305,7 +301,7 @@ namespace TaskManager.Controllers
                     };
 
                     project.Id = Guid.NewGuid();
-                    project.Contributers.Add(contributer);
+                    project.Contributers!.Add(contributer);
                     project.CreatedByUserId = currentUser.Id;
                     await _unitOfWork.ProjectRepository.AddProject(project);
                     await _unitOfWork.SaveAsync();
@@ -331,7 +327,6 @@ namespace TaskManager.Controllers
             }
 
             var project = await _unitOfWork.ProjectRepository.GetProject(id);
-
             if (project is null)
             {
                 return NotFound();

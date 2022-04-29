@@ -15,7 +15,7 @@ public class HomeController : Controller
     }
 
     [AllowAnonymous]
-    public IActionResult Index()
+    public IActionResult Index(int? id=null)
     {
         return View();
     }

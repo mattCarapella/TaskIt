@@ -9,14 +9,18 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly TaskManagerContext _context;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IHttpContextAccessor _accessor;
 
-    public UnitOfWork(TaskManagerContext context, SignInManager<ApplicationUser> signInManager)
+    public UnitOfWork(TaskManagerContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IHttpContextAccessor accessor)
     {
         _context = context;
         _signInManager = signInManager;
+        _userManager = userManager;
+        _accessor = accessor;
     }
 
-    public IUserRepository UserRepository => new UserRepository(_context, _signInManager);
+    public IUserRepository UserRepository => new UserRepository(_context, _signInManager, _userManager, _accessor);
     public IRoleRepository RoleRepository => new RoleRepository(_context, _signInManager);
     public IProjectRepository ProjectRepository => new ProjectRepository(_context);
     public ITicketRepository TicketRepository => new TicketRepository(_context);

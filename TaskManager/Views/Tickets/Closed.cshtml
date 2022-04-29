@@ -1,9 +1,6 @@
 ﻿@using TaskManager.Core
 @model PaginatedList<TaskManager.Models.Ticket>
-
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Closed Tickets"; }
 
 <div class="main-container">
     <div class="container">
@@ -12,7 +9,7 @@
                 <div class="page-content">
                     <div class="wrapper mb-2">
                         <div class="media">
-                            <img alt="Image" src="~/images/ticketA100.png" class="" overflow="hidden" />
+                            <img class="header-img" alt="Image" src="~/images/ticketA100.png" overflow="hidden" />
                             <span class="header-text pl-4 pr-2 pt-2">Your Closed Tickets</span>
                         </div>
                         <span class="mt-2">
@@ -26,7 +23,6 @@
                             }
                         </span>
                     </div>
-
                     <form asp-action="Closed" method="get">
                         <div class="form-actions no-color">
                             <p>
@@ -37,8 +33,6 @@
                             </p>
                         </div>
                     </form>
-
-
                     <table class="table table-bordered table-responsive  mt-4">
                         <thead class="align-items-center">
                             <tr>
@@ -93,14 +87,14 @@
                                         Created On
                                     </a>
                                 </th>
-                                <th>
+                                @*<th>
                                     <a class="index--sort-link"
                                        asp-action="Closed"
                                        asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Goal Date
                                     </a>
-                                </th>
+                                </th>*@
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="Closed"
@@ -151,9 +145,9 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.CreatedAt)
                                     </td>
-                                    <td>
+                                    @*<td>
                                         @Html.DisplayFor(modelItem => item.GoalDate)
-                                    </td>
+                                    </td>*@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ClosedAt)
                                     </td>

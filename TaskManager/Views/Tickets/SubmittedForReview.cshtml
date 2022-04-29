@@ -1,9 +1,6 @@
 ﻿@using TaskManager.Core
 @model PaginatedList<TaskManager.Models.Ticket>
-
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Submitted for Review"; }
 
 <div class="main-container">
     <div class="container">
@@ -12,7 +9,7 @@
                 <div class="page-content">
                     <div class="wrapper mb-2">
                         <div class="media">
-                            <img alt="Image" src="~/images/ticketA100.png" class="" overflow="hidden" />
+                            <img class="header-img" alt="Image" src="~/images/ticketA100.png" overflow="hidden" />
                             <span class="header-text pl-4 pr-2 pt-2">Tickets for Review</span>
                         </div>
                         <span class="mt-2">
@@ -26,7 +23,6 @@
                             }
                         </span>
                     </div>
-
                     <form asp-action="SubmittedForReview" method="get">
                         <div class="form-actions no-color">
                             <p>
@@ -37,7 +33,6 @@
                             </p>
                         </div>
                     </form>
-                    
                     <table class="table table-bordered table-responsive  mt-4">
                         <thead class="align-items-center">
                             <tr>

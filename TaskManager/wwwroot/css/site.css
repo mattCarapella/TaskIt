@@ -24,6 +24,7 @@ a {
 
 .container-body {
     margin-top: 45px;
+    /*height: 100vh;*/
     margin-bottom: 175px;
 }
 
@@ -208,6 +209,26 @@ th {
 /***************************************************/
 .button-group {
     display: flex;
+}
+
+.btn-main {
+    background: #4a6b96;
+    color: white !important;
+    font-weight: 200;
+    width: 110px;
+    border: none;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.2);
+    text-align: center;
+}
+    .btn-main:hover {
+        background: #01224d;
+    }
+    .btn-main a {
+        color: white !important;
+    }
+
+.btn-container {
+    text-align: center;
 }
 
 .btn-round-med {

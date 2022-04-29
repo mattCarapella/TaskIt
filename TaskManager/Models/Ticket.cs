@@ -8,8 +8,10 @@ public class Ticket
 {
     public Guid TicketId { get; set; }
 
+
     [Required, StringLength(50)]
     public string Title { get; set; } = "";
+
 
     [Required, StringLength(2000)]
     public string Description { get; set; } = "";
@@ -56,7 +58,7 @@ public class Ticket
 
 
     [Display(Name = "Submitted by")]
-    public ApplicationUser? SubmittedBy { get; set; }
+    public ApplicationUser SubmittedBy { get; set; }
 
 
 
@@ -67,7 +69,7 @@ public class Ticket
 
     public Project? Project { get; set; }
 
-    [Required(ErrorMessage = "Project is required")]
+    [Required]
     public Guid ProjectId { get; set; }
 
 }

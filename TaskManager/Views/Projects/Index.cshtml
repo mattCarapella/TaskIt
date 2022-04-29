@@ -2,10 +2,7 @@
 @using TaskManager.Core.Enums
 @using static TaskManager.Core.Enums.Enums
 @model PaginatedList<TaskManager.Models.Project>
-
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Your Projects"; }
 
 <div class="main-container">
     <div class="container">
@@ -14,7 +11,7 @@
                 <div class="page-content">
                     <div class="wrapper mb-2">
                         <div class="media">
-                            <img alt="Image" src="~/images/projectA100.png" overflow="hidden" />
+                            <img class="header-img" alt="Image" src="~/images/projectA100.png" overflow="hidden" />
                             <span class="header-text pl-4 pt-2">Your Projects</span>
                         </div>
                         <span class="mt-2">

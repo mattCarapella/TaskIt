@@ -1,0 +1,12 @@
+﻿@{ ViewData["Title"] = "500 Error | TaskIt"; }
+
+<div class="container">
+    <img class="error-image" src="~/images/error-500.svg" alt="500error" />
+    <h1 class="text-center mt-4">Something went wrong.</h1>
+    <p class="text-center mt-3">We're working to fix it, but please try again and contact an administrator if the problem persists.</p>
+    <div class="btn-container">
+        <button class="btn btn-main mt-4">
+             <a asp-controller="Home" asp-action="Index">Home</a>
+        </button>
+    </div>
+</div>

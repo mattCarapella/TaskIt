@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using TaskManager.Areas.Identity.Data;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
 using TaskManager.Data;
-using TaskManager.Models;
 
 namespace TaskManager.Controllers;
 
@@ -16,15 +13,13 @@ public class UserController : Controller
     private readonly IUnitOfWork _unitOfWork;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly TaskManagerContext _context;
 
     public UserController(IUnitOfWork unitOfWork, SignInManager<ApplicationUser> signInManager,
-        IWebHostEnvironment webHostEnvironment, TaskManagerContext context)
+        IWebHostEnvironment webHostEnvironment)
     {
         _unitOfWork = unitOfWork;
         _signInManager = signInManager;
         _webHostEnvironment = webHostEnvironment;
-        _context = context;
     }
 
     public IActionResult Index()
@@ -36,21 +31,18 @@ public class UserController : Controller
 
     public async Task<IActionResult> Details(string id)
     {
-        if (id == null)
+        if (id is null)
         {
             return NotFound();
         }
 
-        var user =  await _unitOfWork.UserRepository.GetUserWithProjectsAndTickets(id);
-        if (user == null)
+        var user = await _unitOfWork.UserRepository.GetUserWithProjectsAndTickets(id);
+        if (user is null)
         {
             return NotFound();
         }
 
-        //var pa = await _unitOfWork.UserRepository.GetProjectsForUser(id);
-
-
-        var open = user.Tickets.Where(x => x.Ticket.Status != Core.Enums.Enums.Status.COMPLETED);
+        var open = user.Tickets.Where(x => x.Ticket!.Status != Core.Enums.Enums.Status.COMPLETED);
 
         var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
         var vm = new UserViewModel
@@ -67,21 +59,17 @@ public class UserController : Controller
 
     public async Task<IActionResult> Edit(string id )
     {
+        if (id is null)
+        {
+            return NotFound();
+        }
+
         var user = await _unitOfWork.UserRepository.GetUserAsync(id);
         var roles = _unitOfWork.RoleRepository.GetRoles();
-
         var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
-
         var roleItems = new List<SelectListItem>();
 
-        //foreach (var role in roles)
-        //{
-        //    var hasRole = selectedUserRoles.Any(r => r.Contains(role.Name));
-        //    roleItems.Add(new SelectListItem(role.Name, role.Id, hasRole));
-        //}
-
         var roleItemsSelect = roles.Select(role =>
-            // SelectListItem(Text, Value, Selected)
             new SelectListItem(
                 role.Name, 
                 role.Id, 
@@ -90,7 +78,6 @@ public class UserController : Controller
         var vm = new EditUserViewModel
         {
             User = user,
-            //Roles = roleItems
             Roles = roleItemsSelect
         };
 
@@ -102,20 +89,17 @@ public class UserController : Controller
     public async Task<IActionResult> OnPostAsync(EditUserViewModel data)
     {
         var user = await _unitOfWork.UserRepository.GetUserAsync(data.User.Id);
-        if (user == null)
+        if (user is null)
         {
             return NotFound();
         }
         var userRolesInDb = await _signInManager.UserManager.GetRolesAsync(user);
-
         var rolesToAdd = new List<string>();
         var rolesToDelete = new List<string>();
 
         foreach (var role in data.Roles)
         {
-            // Check if role is assigned to user in db
             var assignedInDb = userRolesInDb.FirstOrDefault(r => r == role.Text);
-
             if (role.Selected)
             {
                 if (assignedInDb == null)
@@ -131,7 +115,6 @@ public class UserController : Controller
                 }
             }
         }
-
         if (rolesToAdd.Any())
         {
             await _signInManager.UserManager.AddToRolesAsync(user, rolesToAdd);
@@ -140,9 +123,7 @@ public class UserController : Controller
         {
             await _signInManager.UserManager.RemoveFromRolesAsync(user, rolesToDelete);
         }
-
-        string uploadedFileName = UploadFile(data) ?? user.ProfilePicture;
-
+        string uploadedFileName = UploadFile(data) ?? user.ProfilePicture!;
         user.FirstName = data.User.FirstName;
         user.LastName = data.User.LastName;
         user.UserName = data.User.UserName;
@@ -151,19 +132,15 @@ public class UserController : Controller
         user.EmployeeID = data.User.EmployeeID;
         user.Email = data.User.Email;
         user.ProfilePicture = uploadedFileName;
-
         _unitOfWork.UserRepository.UpdateUser(user);
         await _unitOfWork.SaveAsync();
-
         return RedirectToAction("Details", new { id = user.Id });
-
     }
-
 
     private string UploadFile(EditUserViewModel data)
     {
-        string fileName = null;
-        if (data.ProfilePicture != null)
+        string fileName = "";
+        if (data.ProfilePicture is not null)
         {
             string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
             fileName = Guid.NewGuid().ToString() + "_" + data.ProfilePicture.FileName;

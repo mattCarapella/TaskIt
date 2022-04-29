@@ -14,11 +14,16 @@ public class UserRepository : IUserRepository
 {
     private readonly TaskManagerContext _context;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IHttpContextAccessor _accessor;
 
-    public UserRepository(TaskManagerContext context, SignInManager<ApplicationUser> signInManager)
+    public UserRepository(TaskManagerContext context, SignInManager<ApplicationUser> signInManager, 
+        UserManager<ApplicationUser> userManager, IHttpContextAccessor accessor)
     {
         _context = context;
         _signInManager = signInManager;
+        _userManager = userManager;
+        _accessor = accessor;
     }
 
     public ICollection<ApplicationUser> GetUsers()
@@ -55,6 +60,12 @@ public class UserRepository : IUserRepository
     {
         var user = await _context.Users.FindAsync(id);
         return await _signInManager.UserManager.GetRolesAsync(user);
+    }
+
+    public async Task<ApplicationUser> GetCurrentUser()
+    {
+        var currentUser = await _userManager.GetUserAsync(_accessor?.HttpContext.User);
+        return currentUser;
     }
 
     public async Task<ICollection<ProjectAssignment>> GetProjectsForUser(string userId)
