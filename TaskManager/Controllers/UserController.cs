@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TaskManager.Areas.Identity.Data;
+using TaskManager.Core;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
 using TaskManager.Data;
@@ -22,11 +23,14 @@ public class UserController : Controller
         _webHostEnvironment = webHostEnvironment;
     }
 
-    public IActionResult Index()
+
+    public IActionResult Index(string sortOrder, int? pageNumber)
     {
-        var users = _unitOfWork.UserRepository.GetUsers();
-        return View(users);
+        var users = _unitOfWork.UserRepository.GetUsers().ToList();
+        int pageSize = 10;
+        return View(PaginatedList<ApplicationUser>.Create(users, pageNumber ?? 1, pageSize));
     }
+
 
 
     public async Task<IActionResult> Details(string id)

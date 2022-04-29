@@ -20,16 +20,23 @@
                                 <p class="lead">@Model.User.JobTitle</p>
                             </div>
                         </div>
-                        <span class="center-vert">
-                            <button class="btn btn-primary">
-                                <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.User.Id" class="btn-cstm-link-text-light">Edit Details</a>
-                            </button>
+                        <span class="mt-2 pl-2">
+                                <button class="btn btn-round-med">
+                                    <a asp-controller="User" 
+                                       asp-action="Edit"
+                                       asp-route-id="@Model!.User.Id" 
+                                       data-toggle="tooltip" 
+                                       data-title="Edit profile"
+                                    >
+                                        <i class="material-icons btn-icon btn-icon-lg">create</i>
+                                    </a>
+                                </button>
                         </span>
                     </div>
                 </div>
                 <div>
                     @***** USER DETAILS *****@
-                    <hr />
+                    <hr class="mt-0" />
                     <dl class="row">
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => model.User.UserName)
