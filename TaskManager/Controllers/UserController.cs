@@ -5,7 +5,6 @@ using TaskManager.Areas.Identity.Data;
 using TaskManager.Core;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.ViewModels;
-using TaskManager.Data;
 
 namespace TaskManager.Controllers;
 
@@ -26,9 +25,39 @@ public class UserController : Controller
 
     public IActionResult Index(string sortOrder, int? pageNumber)
     {
-        var users = _unitOfWork.UserRepository.GetUsers().ToList();
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["CreatedAtSortParam"] = sortOrder == "createdAt" ? "createdAt_desc" : "createdAt";
+        ViewData["LastNameSortParam"] = sortOrder == "lastName" ? "lastName_desc" : "lastName";
+        ViewData["JobTitleSortParam"] = sortOrder == "jobTitle" ? "jobTitle_desc" : "jobTitle";
+
+        var userList = _unitOfWork.UserRepository.GetUsers().ToList();
+        var users = from u in userList select u;
+
+        switch (sortOrder)
+        {
+            case "lastName_desc":
+                users = users.OrderByDescending(p => p.LastName);
+                break;
+            case "createdAt":
+                users = users.OrderBy(u => u.CreatedAt);
+                break;
+            case "createdAt_desc":
+                users = users.OrderByDescending(u => u.CreatedAt);
+                break;
+            case "jobTitle":
+                users = users.OrderBy(u => u.JobTitle);
+                break;
+            case "jobTitle_desc":
+                users = users.OrderBy(u => u.JobTitle);
+                break;
+            default:
+                users = users.OrderBy(p => p.LastName);
+                break;
+        }
+
+        var uList = users.ToList();
         int pageSize = 10;
-        return View(PaginatedList<ApplicationUser>.Create(users, pageNumber ?? 1, pageSize));
+        return View(PaginatedList<ApplicationUser>.Create(uList, pageNumber ?? 1, pageSize));
     }
 
 
@@ -47,7 +76,6 @@ public class UserController : Controller
         }
 
         var open = user.Tickets.Where(x => x.Ticket!.Status != Core.Enums.Enums.Status.COMPLETED);
-
         var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
         var vm = new UserViewModel
         {
@@ -106,14 +134,14 @@ public class UserController : Controller
             var assignedInDb = userRolesInDb.FirstOrDefault(r => r == role.Text);
             if (role.Selected)
             {
-                if (assignedInDb == null)
+                if (assignedInDb is null)
                 {
                     rolesToAdd.Add(role.Text);
                 }
             }
             else
             {
-                if (assignedInDb != null)
+                if (assignedInDb is not null)
                 {
                     rolesToDelete.Add(role.Text);
                 }
@@ -136,6 +164,7 @@ public class UserController : Controller
         user.EmployeeID = data.User.EmployeeID;
         user.Email = data.User.Email;
         user.ProfilePicture = uploadedFileName;
+
         _unitOfWork.UserRepository.UpdateUser(user);
         await _unitOfWork.SaveAsync();
         return RedirectToAction("Details", new { id = user.Id });
