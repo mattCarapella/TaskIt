@@ -34,7 +34,7 @@ public class TicketIsSubmitterAuthorizationHandler :
             return Task.CompletedTask;
         }
 
-        if (resource.SubmittedBy.Id == _userManager.GetUserId(context.User))
+        if (resource.SubmittedById == _userManager.GetUserId(context.User))
         {
             context.Succeed(requirement);
         }

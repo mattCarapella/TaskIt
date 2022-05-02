@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TaskManager.Utilities;
 
 namespace TaskManager.Models;
 
@@ -17,6 +18,7 @@ public class Project
     public string? Tag { get; set; }
 
     [Display(Name= "Goal Date"), DataType(DataType.Date)]
+    [ValidFutureDate(ErrorMessage = "Date must be in the future.")]
     public DateTime? GoalDate { get; set; }
 
     [Display(Name = "Created On"), DataType(DataType.Date)]

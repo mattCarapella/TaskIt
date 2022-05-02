@@ -15,6 +15,10 @@ body {
     line-height: 1.3;
 }
 
+.footer {
+    line-height: 27px !important;
+}
+
 a {
     color: #4a6b96;
 }
@@ -32,6 +36,10 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.dropdown-menu {
+    background: #fffee4 !important;
 }
 
 .header-text {

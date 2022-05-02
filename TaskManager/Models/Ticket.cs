@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TaskManager.Areas.Identity.Data;
+using TaskManager.Utilities;
 using static TaskManager.Core.Enums.Enums;
 
 namespace TaskManager.Models;
@@ -39,6 +40,7 @@ public class Ticket
 
 
     [DataType(DataType.Date), Display(Name = "Goal Date")]
+    [ValidFutureDate(ErrorMessage = "Date must be in the future.")]
     public DateTime? GoalDate { get; set; }
 
 
@@ -59,7 +61,7 @@ public class Ticket
 
     [Display(Name = "Submitted by")]
     public ApplicationUser SubmittedBy { get; set; }
-
+    public string SubmittedById { get; set;  }
 
 
     public ICollection<TicketAssignment> AssignedTo { get; set; } = new List<TicketAssignment>();

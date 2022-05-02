@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Areas.Identity.Data;
+using TaskManager.Authorization;
 using TaskManager.Core.Repositories;
 using TaskManager.Data;
 using TaskManager.Models;
@@ -75,13 +76,16 @@ void AddAuthorizationPolicies(IServiceCollection services)
             .RequireAuthenticatedUser()
             .Build();
 
-        options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
+        
     });
 
     builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Administrator"));
         options.AddPolicy("RequireManager", policy => policy.RequireRole("Manager"));
+        options.AddPolicy("ElevatedRights", policy => policy.RequireRole("Administrator", "Manager"));
+        options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("Email"));
+        options.AddPolicy("DevelopersOnly", policy => policy.RequireClaim("JobTitle", "Developer"));
     });
 }
 
@@ -96,4 +100,6 @@ void AddScoped()
     builder.Services.AddScoped<ITicketAssignmentRepository, TicketAssignmentRepository>();
     builder.Services.AddScoped<ITNoteRepository, TNoteRepository>();
     builder.Services.AddScoped<IPNoteRepository, PNoteRepository>();
+
+    builder.Services.AddScoped<IAuthorizationHandler, TicketIsSubmitterAuthorizationHandler>();
 }

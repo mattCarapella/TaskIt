@@ -2,7 +2,7 @@
 
 namespace TaskManager.Authorization;
 
-public class TaskManagerOperations
+public class TaskOperations
 {
     public static OperationAuthorizationRequirement Create =
       new OperationAuthorizationRequirement { Name = Constants.CreateOperationName };
@@ -26,6 +26,6 @@ public class Constants
     public static readonly string DeleteOperationName = "Delete";
     public static readonly string ApproveOperationName = "Approve";
     public static readonly string RejectOperationName = "Reject";
-    public static readonly string ContactAdministratorsRole = "ContactAdministrators";
-    public static readonly string ContactManagersRole = "ContactManagers";
+    public static readonly string TaskAdministratorsRole = "ContactAdministrators";
+    public static readonly string TaskManagersRole = "ContactManagers";
 }

@@ -528,7 +528,8 @@ namespace TaskManager.Controllers
 
         // GET: Tickets/SubmittedForReview
         /* Index of all open tickets submitted for review by a user */
-        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        //[Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        [Authorize(Policy = Constants.Policies.ElevatedRights)]
         public async Task<IActionResult> SubmittedForReview(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
