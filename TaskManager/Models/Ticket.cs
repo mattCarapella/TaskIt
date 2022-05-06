@@ -60,8 +60,8 @@ public class Ticket
 
 
     [Display(Name = "Submitted by")]
-    public ApplicationUser SubmittedBy { get; set; }
-    public string SubmittedById { get; set;  }
+    public ApplicationUser? SubmittedBy { get; set; }
+    public string? SubmittedById { get; set;  }
 
 
     public ICollection<TicketAssignment> AssignedTo { get; set; } = new List<TicketAssignment>();

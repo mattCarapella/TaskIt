@@ -6,35 +6,34 @@ using TaskManager.Models;
 
 namespace TaskManager.Authorization;
 
-public class TicketIsSubmitterAuthorizationHandler :
-    AuthorizationHandler<OperationAuthorizationRequirement, Ticket>
+public class PNoteIsSubmitterAuthorizationHandler :
+    AuthorizationHandler<OperationAuthorizationRequirement, PNote>
 {
     UserManager<ApplicationUser> _userManager;
 
-    public TicketIsSubmitterAuthorizationHandler(UserManager<ApplicationUser> userManager)
+    public PNoteIsSubmitterAuthorizationHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
 
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                     OperationAuthorizationRequirement requirement,
-                                                    Ticket resource)
+                                                    PNote resource)
     {
         if (context.User is null || resource is null)
         {
             return Task.CompletedTask;
         }
 
-        // If not asking for CRUD permission, return
+        // User can create, read, and update their own notes
         if (requirement.Name != AuthConstants.CreateOperationName &&
             requirement.Name != AuthConstants.ReadOperationName &&
-            requirement.Name != AuthConstants.UpdateOperationName &&
-            requirement.Name != AuthConstants.DeleteOperationName )
+            requirement.Name != AuthConstants.UpdateOperationName )
         {
             return Task.CompletedTask;
         }
 
-        if (resource.SubmittedById == _userManager.GetUserId(context.User))
+        if (resource.ApplicationUserId == _userManager.GetUserId(context.User))
         {
             context.Succeed(requirement);
         }

@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +17,7 @@ using TaskManager.Data;
 using TaskManager.Models;
 using HtmlAgilityPack;
 using Constants = TaskManager.Core.Constants;
+using TaskManager.Authorization;
 
 namespace TaskManager.Controllers
 {
@@ -26,12 +26,15 @@ namespace TaskManager.Controllers
         private readonly TaskManagerContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthorizationService _authorizationService;
 
-        public TicketsController(TaskManagerContext context, SignInManager<ApplicationUser> signInManager, IUnitOfWork unitOfWork)
+        public TicketsController(TaskManagerContext context, SignInManager<ApplicationUser> signInManager, 
+            IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
         {
             _context = context;
             _signInManager = signInManager;
             _unitOfWork = unitOfWork;
+            _authorizationService = authorizationService;
         }
 
         /*******************************************************************************************************************/
@@ -682,7 +685,7 @@ namespace TaskManager.Controllers
                     doc.LoadHtml(ticket.Description);
                     ticket.DescriptionNoHtml = doc.DocumentNode.InnerText;
                     var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
-                    project.Tickets.Add(ticket);
+                    project!.Tickets.Add(ticket);
                     _context.Add(ticket);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Details", new { id = ticket.TicketId });
@@ -701,7 +704,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/Edit/{Id}
-        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        //[Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == Guid.Empty)
@@ -714,6 +717,13 @@ namespace TaskManager.Controllers
             {
                 return NotFound();
             }
+
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, ticket, TaskOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             ViewData["Project"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             return View(ticket);
         }

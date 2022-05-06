@@ -159,6 +159,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Details/{id}
+        //[Authorize(Policy = "DevelopersOnly")]
         public async Task<IActionResult> Details(Guid id, string? sortOrder, int? pageNumber)
         {
             if (id == Guid.Empty)

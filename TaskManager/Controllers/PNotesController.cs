@@ -12,6 +12,7 @@ using TaskManager.Models;
 using Microsoft.AspNetCore.Authorization;
 using Constants = TaskManager.Core.Constants;
 using TaskManager.Core.Repositories;
+using TaskManager.Authorization;
 
 namespace TaskManager.Controllers
 {
@@ -19,10 +20,12 @@ namespace TaskManager.Controllers
     public class PNotesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthorizationService _authorizationService;
 
-        public PNotesController(TaskManagerContext context, IUnitOfWork unitOfWork)
+        public PNotesController(IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
         {
             _unitOfWork = unitOfWork;
+            _authorizationService = authorizationService;
         }
 
         // GET: PNotes/Create
@@ -52,12 +55,16 @@ namespace TaskManager.Controllers
         // POST: PNotes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Content,Link,ProjectId,ApplicationUser,ApplicationUserId")] PNote note)
+        public async Task<IActionResult> Create([Bind("Title,Content,Link,ApplicationUserId,ProjectId")] PNote note)
         {
             if (ModelState.IsValid)
             {
                 note.Id = Guid.NewGuid();
                 var project = await _unitOfWork.ProjectRepository.GetProject(note.ProjectId);
+                if (project is null)
+                {
+                    return NotFound();
+                }
                 var currentUser = await _unitOfWork.UserRepository.GetCurrentUser();
                 project.Notes.Add(note);
                 note.ApplicationUser = currentUser;
@@ -74,7 +81,8 @@ namespace TaskManager.Controllers
 
 
         // GET: PNotes/Edit/{id}
-        [Authorize(Roles = $"{Constants.Roles.Administrator}")]
+        //[Authorize(Policy = "EditPolicy")]
+        //[Authorize(Roles = $"{Constants.Roles.Administrator}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == Guid.Empty)
@@ -87,12 +95,19 @@ namespace TaskManager.Controllers
             {
                 return NotFound();
             }
+
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, pNote, TaskOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             return View(pNote);
         }
 
 
         [HttpPost, ActionName("Edit")]
-        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        //[Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(Guid id)
         {
@@ -102,6 +117,17 @@ namespace TaskManager.Controllers
             }
 
             var noteToUpdate = await _unitOfWork.PNoteRepository.GetNote(id);
+            if (noteToUpdate is null)
+            {
+                return NotFound();
+            }
+
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, noteToUpdate, TaskOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (await TryUpdateModelAsync<PNote>(
                     noteToUpdate,
                     "",

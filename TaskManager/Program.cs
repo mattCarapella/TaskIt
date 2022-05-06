@@ -84,7 +84,7 @@ void AddAuthorizationPolicies(IServiceCollection services)
         options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Administrator"));
         options.AddPolicy("RequireManager", policy => policy.RequireRole("Manager"));
         options.AddPolicy("ElevatedRights", policy => policy.RequireRole("Administrator", "Manager"));
-        options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("Email"));
+        options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeID"));
         options.AddPolicy("DevelopersOnly", policy => policy.RequireClaim("JobTitle", "Developer"));
     });
 }
@@ -102,4 +102,8 @@ void AddScoped()
     builder.Services.AddScoped<IPNoteRepository, PNoteRepository>();
 
     builder.Services.AddScoped<IAuthorizationHandler, TicketIsSubmitterAuthorizationHandler>();
+
+    builder.Services.AddScoped<IAuthorizationHandler, PNoteIsSubmitterAuthorizationHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, PNoteManagerAuthorizationHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, PNoteAdminAuthorizationHandler>();
 }

@@ -18,6 +18,9 @@ public class ApplicationUser : IdentityUser
 
     public string? ProfilePicture { get; set; }
 
+    //[Display(Name = "Profile Picture")]
+    //public byte[]? Image { get; set; }
+
     [Display(Name = "Employee ID")]
     public string? EmployeeID { get; set; }
 

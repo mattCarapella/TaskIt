@@ -1,8 +1,7 @@
 ﻿@model TaskManager.Core.ViewModels.Project.ProjectDetailsViewModel
 @{ ViewData["Title"] = "Project Details"; }
 
-<div><a href="javascript:history.go(-1)">Back</a></div>
-
+<div><a asp-controller="Projects" asp-action="Index">Your Projects</a></div>
 <div class="main-container">
     <div class="container pb-2">
         <div class="row justify-content-center">
@@ -319,7 +318,7 @@
                                             </div>
                                             <div class="d-flex align-items-center">
                                                 <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
-                                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                                                @*@if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                                                 {
                                                     <div class="ml-1 dropdown card-options">
                                                         <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -328,6 +327,21 @@
                                                         <div class="dropdown-menu dropdown-menu-right">
                                                             <a class="dropdown-item text-primary" asp-controller="PNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
                                                             <a class="dropdown-item text-danger" asp-controller="PNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                }*@
+
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, @note, TaskOperations.Update)).Succeeded){
+                                                     <div class="ml-1 dropdown card-options">
+                                                        <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item text-primary" asp-controller="PNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+                                                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                                                            {
+                                                                <a class="dropdown-item text-danger" asp-controller="PNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
+                                                            }
                                                         </div>
                                                     </div>
                                                 }
