@@ -80,12 +80,12 @@
                         @foreach (var item in @Model.Contributers)
                         {
                             <li>
-                                @if (item.ApplicationUser!.ProfilePicture is not null)
+                                @if (item.ApplicationUser!.UserImage is not null)
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
                                        data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
                                         <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                             src="~/images/@item.ApplicationUser.ProfilePicture" />
+                                             src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))"/>
                                     </a>
                                 }
                                 else
@@ -310,27 +310,18 @@
                                     <div class="card card-note">
                                         <div class="card-header">
                                             <div class="media align-items-center">
-                                                <img alt="@note.ApplicationUser!.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
-                                                 data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                @*<img alt="@note.ApplicationUser!.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
+                                                    data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />*@
+                            
+                                                <img alt="@note.ApplicationUser!.FullName" src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))" 
+                                                    class="avatar" data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                    
                                                 <div class="media-body">
                                                     <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center">
                                                 <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
-                                                @*@if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
-                                                {
-                                                    <div class="ml-1 dropdown card-options">
-                                                        <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="material-icons">more_vert</i>
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item text-primary" asp-controller="PNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
-                                                            <a class="dropdown-item text-danger" asp-controller="PNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
-                                                        </div>
-                                                    </div>
-                                                }*@
-
                                                 @if ((await AuthorizationService.AuthorizeAsync(User, @note, TaskOperations.Update)).Succeeded){
                                                      <div class="ml-1 dropdown card-options">
                                                         <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -366,72 +357,20 @@
                     @***** FILES *****@
                     <div class="tab-pane fade" id="files" role="tabpanel" data-filter-list="dropzone-previews">
                         <div class="content-list">
+                            
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Files</h3>
                                 </div>
-                                <form class="col-md-auto">
-                                    <div class="input-group input-group-round">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="material-icons">filter_list</i>
-                                            </span>
-                                        </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter files" aria-label="Filter Tasks">
-                                    </div>
-                                </form>
                             </div>
-                            <!--end of content list head-->
+                            
                             <div class="content-list-body">
-                                <ul class="d-none dz-template">
-                                    <li class="list-group-item dz-preview dz-file-preview">
-                                        <div class="media align-items-center dz-details">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary dz-file-representation">
-                                                        <i class="material-icons">attach_file</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="David Whittaker" src="~/assets/img/avatar-male-4.jpg" class="avatar" data-title="David Whittaker" data-toggle="tooltip" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div class="dz-file-details">
-                                                    <a href="#" class="dz-filename">
-                                                        <span data-dz-name></span>
-                                                    </a>
-                                                    <br>
-                                                    <span class="text-small dz-size" data-dz-size></span>
-                                                </div>
-                                                <img alt="Loader" src="~/assets/img/loader.svg" class="dz-loading" />
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#" data-dz-remove>Delete</a>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-danger btn-sm dz-remove" data-dz-remove>
-                                                    Cancel
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="progress dz-progress">
-                                            <div class="progress-bar dz-upload" data-dz-uploadprogress></div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                
                                 <form class="dropzone" action="https://mediumra.re/dropzone/upload.php">
                                     <span class="dz-message">Drop files here or click here to upload</span>
                                 </form>
 
-                                <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
-
+                                <ul class="list-group list-group-activity dropzone-previews">
                                     <li class="list-group-item">
                                         <div class="media align-items-center">
                                             <ul class="avatars">
@@ -464,7 +403,6 @@
                                             </div>
                                         </div>
                                     </li>
-
                                     <li class="list-group-item">
                                         <div class="media align-items-center">
                                             <ul class="avatars">
@@ -497,107 +435,8 @@
                                             </div>
                                         </div>
                                     </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">image</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Ravi Singh" src="assets/img/avatar-male-3.jpg" class="avatar" data-title="Ravi Singh" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">possible-hero-image</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">1.2mb JPEG image</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">insert_drive_file</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Claire Connors" src="assets/img/avatar-female-1.jpg" class="avatar" data-title="Claire Connors" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">LandingPrototypes</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">415kb Sketch Doc</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">insert_drive_file</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="David Whittaker" src="assets/img/avatar-male-4.jpg" class="avatar" data-title="David Whittaker" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">Branding-Proforma</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">15kb Text Document</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
                                 </ul>
+
                             </div>
                         </div>
                         <!--end of content list-->

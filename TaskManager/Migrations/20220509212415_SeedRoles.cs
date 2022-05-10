@@ -42,11 +42,11 @@ namespace TaskManager.Migrations
 [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount],
 [ProfilePicture], [EmployeeId], [JobTitle], [CreatedAt], [LastLoggedInAt]) 
 VALUES 
-(N'{User1Id}', N'Joe', N'Blow', N'JoeBlow', N'JOEBLOW', 
-N'joe@test.com', N'JOE@TEST.COM', 0, 
+(N'{User1Id}', N'Test', N'Admin', N'TestAdmin1', N'TESTADMIN1', 
+N'admin@test.com', N'ADMIN@TEST.COM', 0, 
 N'AQAAAAEAACcQAAAAEEdbMTTpvlGGIHC1yCPem2y1KClVlmYwsZ8NazGiHCniuYY+okEL9A12jXYY/78OMw==', 
 N'KBLZILOSEDV6FGP7KJKXC3WQCXQR6XWI', N'd8236396-195b-4bd3-81ad-dd154e6aad3b', NULL, 0, 0, NULL, 1, 0,
-N'', N'743116800', N'Developer II', NULL, NULL)");
+N'', N'743116800', N'Administrator', NULL, NULL)");
 
             migrationBuilder.Sql(
                 @$"INSERT [dbo].[AspNetUsers] ([Id], [FirstName], [LastName], [UserName], [NormalizedUserName], 
@@ -54,11 +54,11 @@ N'', N'743116800', N'Developer II', NULL, NULL)");
 [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount],
 [ProfilePicture], [EmployeeId], [JobTitle], [CreatedAt], [LastLoggedInAt])
 VALUES 
-(N'{User2Id}', N'Rico', N'Suave', N'Rico69', N'RICO69', 
-N'rico@test.com', N'RICO@TEST.COM', 0, 
+(N'{User2Id}', N'Test', N'Manager', N'TestManager1', N'TESTMANAGER1', 
+N'manager@test.com', N'MANAGER@TEST.COM', 0, 
 N'AQAAAAEAACcQAAAAEEdbMTTpvlGGIHC1yCPem2y1KClVlmYwsZ8NazGiHCniuYY+okEL9A12jXYY/78OMw==', 
 N'KBLZILOSEDV6FGP7KJKXC3WQCXQR6XWI', N'd8236396-195b-4bd3-81ad-dd154e6aad3b', NULL, 0, 0, NULL, 1, 0,
-N'', N'A3440', N'Team Lead', NULL, NULL)");
+N'', N'A3440', N'Manager', NULL, NULL)");
         }
 
 
@@ -74,14 +74,14 @@ N'', N'A3440', N'Team Lead', NULL, NULL)");
            ([UserId]
            ,[RoleId])
         VALUES
-           ('{User1Id}', '{UserRoleId}');");
+           ('{User1Id}', '{AdminRoleId}');");
 
             migrationBuilder.Sql(@$"
         INSERT INTO [dbo].[AspNetUserRoles]
            ([UserId]
            ,[RoleId])
         VALUES
-           ('{User2Id}', '{AdminRoleId}');
+           ('{User2Id}', '{UserRoleId}');
         INSERT INTO [dbo].[AspNetUserRoles]
            ([UserId]
            ,[RoleId])

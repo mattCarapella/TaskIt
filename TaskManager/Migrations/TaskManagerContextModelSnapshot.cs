@@ -232,6 +232,9 @@ namespace TaskManager.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<byte[]>("UserImage")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -256,7 +259,6 @@ namespace TaskManager.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -376,13 +378,16 @@ namespace TaskManager.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<bool>("Flagged")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("GoalDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -445,7 +450,6 @@ namespace TaskManager.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -534,9 +538,7 @@ namespace TaskManager.Migrations
                 {
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
                         .WithMany("PNotes")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Notes")
@@ -573,7 +575,8 @@ namespace TaskManager.Migrations
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Tickets")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "SubmittedBy")
                         .WithMany()
@@ -607,9 +610,7 @@ namespace TaskManager.Migrations
                 {
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
                         .WithMany("TNotes")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("TaskManager.Models.Ticket", "Ticket")
                         .WithMany("TNotes")

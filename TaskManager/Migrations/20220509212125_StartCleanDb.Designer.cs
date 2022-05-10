@@ -12,8 +12,8 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    [Migration("20220402042008_AddPNoteEntityAndRelationships")]
-    partial class AddPNoteEntityAndRelationships
+    [Migration("20220509212125_StartCleanDb")]
+    partial class StartCleanDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -251,44 +251,6 @@ namespace TaskManager.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("TaskManager.Models.Note", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Link")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("Notes");
-                });
-
             modelBuilder.Entity("TaskManager.Models.PNote", b =>
                 {
                     b.Property<Guid>("Id")
@@ -296,12 +258,12 @@ namespace TaskManager.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -314,7 +276,8 @@ namespace TaskManager.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -337,8 +300,16 @@ namespace TaskManager.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("DescriptionNoHtml")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -402,13 +373,20 @@ namespace TaskManager.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<string>("DescriptionNoHtml")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("Flagged")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("GoalDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -464,6 +442,46 @@ namespace TaskManager.Migrations
                     b.ToTable("TicketAssignments");
                 });
 
+            modelBuilder.Entity("TaskManager.Models.TNote", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TicketId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TNote");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -515,28 +533,11 @@ namespace TaskManager.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TaskManager.Models.Note", b =>
-                {
-                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
-                        .WithMany("Notes")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("TaskManager.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("TaskManager.Models.PNote", b =>
                 {
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("PNotes")
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Notes")
@@ -573,7 +574,8 @@ namespace TaskManager.Migrations
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Tickets")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "SubmittedBy")
                         .WithMany()
@@ -603,11 +605,30 @@ namespace TaskManager.Migrations
                     b.Navigation("Ticket");
                 });
 
+            modelBuilder.Entity("TaskManager.Models.TNote", b =>
+                {
+                    b.HasOne("TaskManager.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany("TNotes")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("TaskManager.Models.Ticket", "Ticket")
+                        .WithMany("TNotes")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Ticket");
+                });
+
             modelBuilder.Entity("TaskManager.Areas.Identity.Data.ApplicationUser", b =>
                 {
-                    b.Navigation("Notes");
+                    b.Navigation("PNotes");
 
                     b.Navigation("Projects");
+
+                    b.Navigation("TNotes");
 
                     b.Navigation("Tickets");
                 });
@@ -624,6 +645,8 @@ namespace TaskManager.Migrations
             modelBuilder.Entity("TaskManager.Models.Ticket", b =>
                 {
                     b.Navigation("AssignedTo");
+
+                    b.Navigation("TNotes");
                 });
 #pragma warning restore 612, 618
         }

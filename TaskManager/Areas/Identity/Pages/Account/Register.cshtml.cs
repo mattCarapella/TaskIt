@@ -129,6 +129,7 @@ namespace TaskManager.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 user.CreatedAt = DateTime.UtcNow;
                 user.ProfilePicture = "user.jpg";
+                //user.UserImage = "user.jpg";
 
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

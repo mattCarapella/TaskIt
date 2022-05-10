@@ -59,13 +59,15 @@
                 </ul>
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    var currentUser = @UserManager.Users.FirstOrDefault(u => u.UserName == @UserManager.GetUserName(User));
+                    @*var currentUser = @UserManager.Users.FirstOrDefault(u => u.UserName == @UserManager.GetUserName(User));*@
                     <div class="d-none d-lg-block">
                         <div class="dropdown">
                             <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @if (currentUser != null && currentUser.ProfilePicture != "")
+                                @*@if (currentUser is not null && currentUser.UserImage is not null)*@
+                                
+                                @if (UserManager.GetUserAsync(User).Result is not null && UserManager.GetUserAsync(User).Result.UserImage is not null)
                                 {
-                                    <img alt="Image " class="rounded-circle navbar-avatar" src="~/images/@currentUser.ProfilePicture" />
+                                    <img alt="Image" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.UserImage))" class="rounded-circle navbar-avatar"/>
                                 }
                                 else
                                 {
@@ -73,8 +75,8 @@
                                 }
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item text-dark" asp-controller="User" asp-action="Details" asp-route-id="@currentUser!.Id">Profile</a>
-                                <a class="dropdown-item text-dark" asp-controller="User" asp-action="Edit" asp-route-id="@currentUser!.Id">Account Settings</a>
+                                <a class="dropdown-item text-dark" asp-controller="User" asp-action="Details" asp-route-id="@UserManager.GetUserAsync(User).Result!.Id">Profile</a>
+                                <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">Account Settings</a>
                                 <form id="logoutForm" class="dropdown-item text-dark pl-0 pt-0" asp-area="Identity" asp-page="/Account/Logout"
                                   asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                     <button id="logout" type="submit" class="dropdown-item text-dark">Logout</button>

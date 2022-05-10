@@ -153,12 +153,12 @@
                         @foreach (var item in @Model.AssignedTo)
                         {
                             <li>
-                                @if (item.ApplicationUser!.ProfilePicture is not null)
+                                @if (item.ApplicationUser!.UserImage is not null)
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                                            data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                                       data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
                                         <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                            src="~/images/@item.ApplicationUser.ProfilePicture" />
+                                             src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))"/>
                                     </a>
                                 }
                                 else

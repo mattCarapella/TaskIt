@@ -35,6 +35,7 @@ public class Ticket
 
     public Priority? Priority { get; set; }
 
+    public bool Flagged { get; set; } = false;
 
     public int Upvotes { get; set; } = 0;
 
