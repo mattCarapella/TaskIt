@@ -96,18 +96,18 @@ a {
     width: 1.8rem;
     height: 1.8rem;
     line-height: 1.2;
-    border-radius: 50%;
+    border-radius: 1rem !important;
     padding: 0;
-    background: #dee2e6;
+    background: #dee2e6 !important;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
     box-shadow: 0px 5px 5px rgba(0,0,0,0.2);
 }
 
     .btn-round-sm:hover {
         box-shadow: 0px 6px 6px rgba(0,0,0,0.27);
-        background: #D1D1D1;
+        background: #D1D1D1 !important;
     }
 
 .btn-round-med {
@@ -244,11 +244,34 @@ a {
 
 
 .btn-dark-custom {
-    background: #4A6B96 !important; 
-    color: #FFFFFF;
+    width: 150px !important;
+    /*background: #4A6B96 !important;*/
+    background: #007BFF !important;
+    color: #FFFFFF !important;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.2);
     transition: all 0.4s ease-in-out;
 }
     .btn-dark-custom:hover {
-        background: #082951 !important;
+        /*background: #082951 !important;*/
+        background: #4A6B96 !important;
         color: #FFFFFF;
+        box-shadow: 0px 6px 6px rgba(0,0,0,0.25);
     }
+
+
+.btn-cancel {
+    width: 150px !important;
+    background: #B3002E !important;
+    color: #FFFFFF !important;
+    border-radius: 0.3rem !important;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.2);
+    transition: all 0.25s ease-in-out;
+}
+.btn-cancel a {
+    color: #FFFFFF !important;
+}
+.btn-cancel:hover {
+    background: #580017 !important;
+    color: #FFFFFF;
+    box-shadow: 0px 6px 6px rgba(0,0,0,0.25);
+}

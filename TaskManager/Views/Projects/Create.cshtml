@@ -11,29 +11,29 @@
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="project-create--form">
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+            <div class="form-group pb-3">
+                <label asp-for="Name" class="control-label form-label-text"></label>
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description">Description</label>
+            <div class="form-group pb-3">
+                <label asp-for="Description" class="control-label form-label-text">Description</label>
                 <textarea asp-for="Description" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tag" class="control-label"></label>
+            <div class="form-group pb-3">
+                <label asp-for="Tag" class="control-label form-label-text">Tags</label>
                 <input asp-for="Tag" class="form-control" />
                 <span asp-validation-for="Tag" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="GoalDate" class="control-label"></label>
+            <div class="form-group pb-3">
+                <label asp-for="GoalDate" class="control-label form-label-text"></label>
                 <input asp-for="GoalDate" class="form-control" />
                 <span asp-validation-for="GoalDate" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary mb-3" />
+            <input type="submit" value="Create" class="btn btn-dark-custom mt-3"/>
         </div>
     </form>
 </div>

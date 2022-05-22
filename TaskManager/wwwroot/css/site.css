@@ -19,6 +19,9 @@ body {
     line-height: 27px !important;
 }
 
+/*.bg-dark {
+    background-color: none !important;
+}*/
 
 
 .container-body {
@@ -77,6 +80,11 @@ body {
     color: black;
 }
 
+.nav-dark {
+    background-color: #273340 !important;
+    --bs-bg-opacity: 1;
+}
+
 
 .note-author-text {
     font-size: .92rem;
@@ -89,4 +97,12 @@ body {
 
 th {
     vertical-align: top !important;
+}
+
+/****** FORMS ******/
+.form-label-text {
+    font-size: 1.05rem !important;
+    font-weight: 200 !important;
+    color: #3B3B3B !important;
+    letter-spacing: 1.6px;
 }

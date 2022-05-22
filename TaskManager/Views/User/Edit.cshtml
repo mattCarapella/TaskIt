@@ -10,38 +10,38 @@
     {
         @Html.HiddenFor(h => @Model.User.Id)
         <div class="row g-3">
-            <div class="col-sm-6 pt-2">
-                <label asp-for="@Model.User.FirstName" class="form-label"></label>
+            <div class="col-sm-6 pb-4">
+                <label asp-for="@Model.User.FirstName" class="control-label form-label-text"></label>
                 <input asp-for="@Model.User.FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
                 <span asp-validation-for="@Model.User.FirstName" class="text-danger"></span>
             </div>
-            <div class="col-sm-6 pt-2">
-                <label asp-for="@Model.User.LastName" class="form-label"></label>
+            <div class="col-sm-6 pb-4">
+                <label asp-for="@Model.User.LastName" class="control-label form-label-text"></label>
                 <input asp-for="@Model.User.LastName" class="form-control" autocomplete="lastname" aria-required="true" />
                 <span asp-validation-for="@Model.User.LastName" class="text-danger"></span>
             </div>
-            <div class="col-sm-12 pt-2">
-                <label asp-for="@Model.User.UserName" class="form-label"></label>
+            <div class="col-sm-12 pb-4">
+                <label asp-for="@Model.User.UserName" class="control-label form-label-text"></label>
                 <input asp-for="@Model.User.UserName" class="form-control" autocomplete="username" aria-required="true" />
                 <span asp-validation-for="@Model.User.UserName" class="text-danger"></span>
             </div>
-            <div class="col-sm-12 pt-2 ">
-                <label asp-for="@Model.User.JobTitle" class="form-label"></label>
+            <div class="col-sm-12 pb-4">
+                <label asp-for="@Model.User.JobTitle" class="control-label form-label-text"></label>
                 <input asp-for="@Model.User.JobTitle" class="form-control" autocomplete="jobtitle" aria-required="false" />
             </div>
-            <div class="col-sm-12 pt-2">
-                <label asp-for="@Model.User.EmployeeID" class="form-label"></label>
+            <div class="col-sm-12 pb-4">
+                <label asp-for="@Model.User.EmployeeID" class="control-label form-label-text"></label>
                 <input asp-for="@Model.User.EmployeeID" class="form-control" autocomplete="employeeid" aria-required="false" />
             </div>
-            <div class="col-12 pt-2">
-                <label asp-for="@Model.User.Email" class="form-label"></label>
+            <div class="col-12 pb-4">
+                <label asp-for="@Model.User.Email" class="control-label form-label-text"></label>
                 <div class="input-group has-validation">
                     <input asp-for="@Model.User.Email" class="form-control" autocomplete="email" aria-required="true" />
                     <span asp-validation-for="@Model.User.Email" class="text-danger"></span>
                 </div>
             </div>
         </div>
-        <p class="form-label pt-3">Roles</p>
+        <p class="form-label form-label-text">Roles</p>
         <div>
             @for (int i = 0; i < @Model.Roles.Count(); i++)
             {

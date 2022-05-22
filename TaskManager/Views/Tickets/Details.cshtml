@@ -140,14 +140,14 @@
                         </dd>
                     }
                     <dd class="col-md-10 mt-3 mb-2">
-                        Submitted by
+                        Opened by
                         <a class="name-link" asp-controller="User" asp-action="Details" asp-route-id="@Model.Ticket.SubmittedBy.Id">
                             <span class="ticket-details--item">@Model.Ticket.SubmittedBy!.FullName </span>
                         </a> on @Model.Ticket.CreatedAt
                     </dd>
                 </dl>
 
-                @***** TICKET ASSIGNED TO *****@
+                @***** TICKET ASSIGNMENTS *****@
                 <div class="d-flex align-items-center mt-3">
                     <ul class="avatars">
                         @foreach (var item in @Model.AssignedTo)

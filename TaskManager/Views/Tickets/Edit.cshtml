@@ -4,55 +4,55 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/ckeditor/ckeditor.js"></script>
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+@*<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />*@
 
 <div><a href="javascript:history.go(-1)">Back</a></div>
 
 <div class="container create--container pt-3">
-    <h1 class="mb-4">Update your ticket</h1>
+    <h1 class="mb-5 mt-2">Update your ticket</h1>
     <form asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.TicketId" method="post" role="form">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="TicketId" />
-        <div class="form-group">
-            <label asp-for="Title" class="control-label"></label>
+        <div class="form-group pb-1">
+            <label asp-for="Title" class="control-label form-label-text"></label>
             <input asp-for="Title" class="form-control" />
             <span asp-validation-for="Title" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="Description">Description</label>
+        <div class="form-group pb-1">
+            <label asp-for="Description" class="control-label form-label-text">Description</label>
             <textarea asp-for="Description" id="Description" class="ckeditor" name="Description" rows="15"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="Tag" class="control-label"></label>
+        <div class="form-group pb-1">
+            <label asp-for="Tag" class="control-label form-label-text"></label>
             <input asp-for="Tag" class="form-control" />
             <span asp-validation-for="Tag" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="TicketType" control="control-label"></label>
+        <div class="form-group pb-1">
+            <label asp-for="TicketType" class="control-label form-label-text"></label>
             <select asp-for="TicketType" class="form-control" asp-items="Html.GetEnumSelectList<TicketType>()">
                 <option value="">- Select -</option>
             </select>
         </div>
-        <div class="form-group">
-            <label asp-for="Status" control="control-label"></label>
+        <div class="form-group pb-1">
+            <label asp-for="Status" class="control-label form-label-text"></label>
             <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<Status>()">
                 <option value="">- Select -</option>
             </select>
         </div>
-        <div class="form-group">
-            <label asp-for="Priority" control="control-label"></label>
+        <div class="form-group pb-1">
+            <label asp-for="Priority" class="control-label form-label-text"></label>
             <select asp-for="Priority" class="form-control" asp-items="Html.GetEnumSelectList<Priority>()">
                 <option value=""> - Select - </option>
             </select>
         </div>
-        <div class="form-group">
-            <label asp-for="GoalDate" class="control-label"></label>
+        <div class="form-group pb-1">
+            <label asp-for="GoalDate" class="control-label form-label-text"></label>
             <input asp-for="GoalDate" class="form-control" />
             <span asp-validation-for="GoalDate" class="text-danger"></span>
         </div>
-        <div class="form-group mt-4 mb-2">
-            <input type="submit" value="Submit" class="btn btn-primary mt-3" />
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-dark-custom mt-4 mb-3" />
         </div>
     </form>
 </div>

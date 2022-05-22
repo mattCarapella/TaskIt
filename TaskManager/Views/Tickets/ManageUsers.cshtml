@@ -69,7 +69,7 @@
                                     </dd>
                                 </dl>
                                 <p class="mt-2 mb-4">
-                                    Submitted by
+                                    Opened by
                                     <a class="name-link" asp-controller="User" asp-action="Details" asp-route-id="@Model.Ticket.SubmittedBy.Id">
                                         <strong>@Model.Ticket.SubmittedBy!.FullName </strong>
                                     </a> on  <strong>@Model.Ticket.CreatedAt</strong>
@@ -119,21 +119,21 @@
             @foreach (var item in @Model.Ticket.AssignedTo)
             {
                 <tr>
-                    <td>
-                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">
-                            <strong>@Html.DisplayFor(modelItem => item.ApplicationUser.FullName)</strong>
+                    <td style="vertical-align: middle !important;">
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser!.Id">
+                            <strong>@Html.DisplayFor(modelItem => item.ApplicationUser!.FullName)</strong>
                         </a>
                     </td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
+                    <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser.EmployeeID)</td>
+                    <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
+                    <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
+                    <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
                     
                     <td>
                         <form 
                             asp-controller="Tickets" 
                             asp-action="RemoveUser" 
-                            asp-route-ticketId="@item.Ticket.TicketId"
+                            asp-route-ticketId="@item.Ticket!.TicketId"
                             asp-route-taId="@item.TicketAssignmentId"
                             method="post" 
                             role="form"

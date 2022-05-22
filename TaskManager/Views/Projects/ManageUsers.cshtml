@@ -81,7 +81,7 @@
                                     <select asp-for="UserId" class="form-control" asp-items="@(new SelectList(ViewBag.ListOfUsers, "Value", "Text"))"></select>
                                 </div>
                                 <div class="form-group">
-                                    <input id="Submit" class="btn btn-primary" type="submit" value="Submit" style="float: right;" />
+                                    <input id="Submit" class="btn btn-dark-custom" type="submit" value="Submit" style="float: right;" />
                                 </div>
                             </form>
                         </div>
@@ -108,30 +108,23 @@
                 <th>Email</th>
                 <th>Job Title</th>
                 <th></th>
-                <th></th>
             </tr>
             @if (@Model.Project.Contributers is not null)
             {
                 @foreach (var item in @Model.Project.Contributers)
                 {
                     <tr>
-                        <td>
+                        <td style="vertical-align: middle !important;">
                             <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser!.Id">
                                 <strong>@Html.DisplayFor(modelItem => item.ApplicationUser!.FullName)</strong>
                             </a>
                         </td>
-                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.EmployeeID)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.UserName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.Email)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ApplicationUser!.JobTitle)</td>
-                        <td>
-                            <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="View @item.ApplicationUser!.FirstName's Profile">
-                                <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">
-                                    <i class="material-icons account-button">account_circle</i>
-                                </a>
-                            </button>
-                        </td>
-                        <td>
+                        <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser!.EmployeeID)</td>
+                        <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser!.UserName)</td>
+                        <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser!.Email)</td>
+                        <td style="vertical-align: middle !important;">@Html.DisplayFor(modelItem => item.ApplicationUser!.JobTitle)</td>
+                        
+                        <td style="vertical-align: middle !important;">
                             <form asp-controller="Projects"
                           asp-action="RemoveUser"
                           asp-route-projectId="@item.ProjectId"
