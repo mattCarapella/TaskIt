@@ -1,17 +1,19 @@
 ﻿@model TaskManager.Core.ViewModels.Project.ProjectDetailsViewModel
-@{ ViewData["Title"] = "Project Details"; }
+@{
+    ViewData["Title"] = "Project Details";
+}
 
 <div><a asp-controller="Projects" asp-action="Index">Your Projects</a></div>
 <div class="main-container">
     <div class="container pb-2">
         <div class="row justify-content-center">
             <div class="col-xl-11 col-lg-11">
-                
+
                 @***** HEADER *****@
                 <div class="page-header mb-2">
                     <div class="wrapper pb-0">
                         <div class="media">
-                            <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden"/>
+                            <img alt="Image" src="~/images/projectA100.png" class="" overflow="hidden" />
                             <div class="media-body ml-3">
                                 <h1 class="mb-2 pr-2 pt-3">@Model.Project.Name</h1>
                             </div>
@@ -20,12 +22,11 @@
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                             {
                                 <button class="btn btn-round-med">
-                                    <a asp-controller="Projects" 
-                                       asp-action="Edit"
-                                       asp-route-id="@Model!.Project.Id" 
-                                       data-toggle="tooltip" 
-                                       data-title="Edit project"
-                                    >
+                                    <a asp-controller="Projects"
+                                   asp-action="Edit"
+                                   asp-route-id="@Model!.Project.Id"
+                                   data-toggle="tooltip"
+                                   data-title="Edit project">
                                         <i class="material-icons btn-icon btn-icon-lg">create</i>
                                     </a>
                                 </button>
@@ -33,11 +34,11 @@
                         </span>
                     </div>
                 </div>
-                <hr/>
-                
+                <hr />
+
                 @***** PROJECT DETAILS *****@
                 <p class="description-text">@Html.DisplayFor(modelItem => @Model!.Project.Description)</p>
-                <hr/>
+                <hr />
                 <dl class="row pb-2">
                     @if (@Model!.Project.Tag is not null)
                     {
@@ -65,7 +66,7 @@
                     }
                     @if (@Model.Project.UpdatedAt is not null)
                     {
-                        <dt class="col-sm-4 details-type" >
+                        <dt class="col-sm-4 details-type">
                             @Html.DisplayNameFor(model => model.Project.UpdatedAt)
                         </dt>
                         <dd class="col-sm-6">
@@ -83,17 +84,17 @@
                                 @if (item.ApplicationUser!.UserImage is not null)
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                                       data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                               data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
                                         <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                             src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))"/>
+                                     src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))" />
                                     </a>
                                 }
                                 else
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                                       data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                               data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
                                         <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                             src="~/images/user.jpg" />
+                                     src="~/images/user.jpg" />
                                     </a>
                                 }
                             </li>
@@ -122,36 +123,36 @@
                 </div>
 
                 @***** TAB SELECTION *****@
-                <ul class="nav nav-tabs nav-fill" role="tablist">
-                    <li class="nav-item">
+                <ul class="nav nav-tabs nav-tabs--container nav-fill tab-text" role="tablist">
+                    <li class="nav-item nav-item--tab p-0">
                         @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                         {
-                            <a class="nav-link active" data-toggle="tab" href="#open" role="tab" aria-controls="open" aria-selected="true">
+                            <a class="nav-link tab-link active" data-toggle="tab" href="#open" role="tab" aria-controls="open" aria-selected="true">
                                 Open Tickets
                             </a>
                         }
                         else
                         {
-                            <a class="nav-link active" data-toggle="tab" href="#open" role="tab" aria-controls="open" aria-selected="true">
+                            <a class="nav-link tab-link active" data-toggle="tab" href="#open" role="tab" aria-controls="open" aria-selected="true">
                                 Your Tickets
                             </a>
                         }
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
+                    <li class="nav-item nav-item--tab">
+                        <a class="nav-link tab-link" data-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="false">Notes</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false">Activity</a>
+                    <li class="nav-item nav-item--tab">
+                        <a class="nav-link tab-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#closed" role="tab" aria-controls="closed" aria-selected="false">Closed Tickets</a>
+                    <li class="nav-item nav-item--tab">
+                        <a class="nav-link tab-link" data-toggle="tab" href="#closed" role="tab" aria-controls="closed" aria-selected="false">Closed Tickets</a>
                     </li>
                 </ul>
 
                 @***** TAB CONTENT *****@
                 <div class="tab-content pt-1 pb-1">
-                    
-                    @***** OPEN TICKETS & NOTES *****@
+
+                    @***** OPEN TICKETS *****@
                     <div class="tab-pane fade show active" id="open" role="tabpanel">
                         <div class="content-list" data-filter-list="checklist">
                             <div class="row content-list-head">
@@ -166,16 +167,6 @@
                                         </button>
                                     }
                                 </div>
-                                <form class="col-md-auto">
-                                    <div class="input-group input-group-round">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="material-icons">filter_list</i>
-                                            </span>
-                                        </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter Tickets" aria-label="Filter Tickets">
-                                    </div>
-                                </form>
                             </div>
                             <div class="content-list-body">
                                 <div class="col">
@@ -265,90 +256,93 @@
                                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                                        asp-route-pageNumber="@(Model.OpenTicketsPaginated.PageIndex-1)" ;
                                        class="btn btn-default @prevDisabled">
-                                            Previous
+                                        Previous
                                     </a>
                                     <a asp-action="Details"
                                        asp-route-id="@Model.Project.Id"
                                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                                        asp-route-pageNumber="@(Model.OpenTicketsPaginated. PageIndex+1)" ;
                                        class="btn btn-default @nextDisabled">
-                                            Next
+                                        Next
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        
-                        @***** NOTES *****@
+                    </div>
+
+                    @***** NOTES *****@
+                    <div class="tab-pane fade" id="notes" role="tabpanel">
                         <div class="content-list" data-filter-list="content-list-body">
+
                             <div class="row content-list-head">
                                 <div class="col-auto">
-                                    <h3>Notes</h3>
-                                    
                                     <button class="btn btn-round-sm ml-3" data-toggle="tooltip" data-title="Add a note">
-                                            <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
-                                                <i class="material-icons btn-icon btn-icon-sm">add</i>
-                                            </a>
-                                        </button>
-                                    
+                                        <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
+                                            <i class="material-icons btn-icon btn-icon-sm">add</i>
+                                        </a>
+
+                                    </button>
+                                    <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id" class="pl-2 pt-1 mb-0">Add a note</a>
                                 </div>
-                                <form class="col-md-auto">
-                                    <div class="input-group input-group-round">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="material-icons">filter_list</i>
-                                            </span>
-                                        </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter notes" aria-label="Filter notes">
-                                    </div>
-                                </form>
                             </div>
 
-                            @***** NOTES *****@
+
+
                             <div class="content-list-body">
-                                @foreach (var note in @Model.Notes)
+                                @if (@Model.Notes.Any())
                                 {
-                                    <div class="card card-note">
-                                        <div class="card-header">
-                                            <div class="media align-items-center">
-                                                @*<img alt="@note.ApplicationUser!.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
-                                                    data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />*@
-                            
-                                                <img alt="@note.ApplicationUser!.FullName" src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))" 
-                                                    class="avatar" data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
-                                    
-                                                <div class="media-body">
-                                                    <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
+                                    @foreach (var note in @Model.Notes)
+                                    {
+                                        <div class="card card-note">
+                                            <div class="card-header">
+                                                <div class="media align-items-center">
+                                                    @if (note.ApplicationUser!.UserImage is not null)
+                                                    {
+                                                        <img alt="@note.ApplicationUser!.FullName" src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))"
+                                                 class="avatar" data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img alt="@note.ApplicationUser.FullName" src="~/images/user.jpg" class="avatar" data-toggle="tooltip"
+                                                 data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                    }
+                                                    <div class="media-body">
+                                                        <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
+                                                        <p class="note-author-text">by @note.ApplicationUser.FullName</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex">
+                                                    <span data-filter-by="text" class=".card-header--date pl-2 mr-2 mb-0">@note.CreatedAt.ToShortDateString()</span>
+                                                    @if ((await AuthorizationService.AuthorizeAsync(User, @note, TaskOperations.Update)).Succeeded)
+                                                    {
+                                                        <div class="ml-1 pb-2 dropdown card-options">
+                                                            <button class="btn btn-round btn-round-sm" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false" data-title="Manage note">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item text-primary" asp-controller="PNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                                                                {
+                                                                    <a class="dropdown-item text-danger" asp-controller="PNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center">
-                                                <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
-                                                @if ((await AuthorizationService.AuthorizeAsync(User, @note, TaskOperations.Update)).Succeeded){
-                                                     <div class="ml-1 dropdown card-options">
-                                                        <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="material-icons">more_vert</i>
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item text-primary" asp-controller="PNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
-                                                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
-                                                            {
-                                                                <a class="dropdown-item text-danger" asp-controller="PNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
-                                                            }
-                                                        </div>
-                                                    </div>
+                                            <div class="card-body" data-filter-by="text">
+                                                <p>@Html.Raw(note.Content)</p>
+                                                @if (@note.Link is not null)
+                                                {
+                                                    <span class="mt-2">
+                                                        <a href="@note.Link">@note.Link</a>
+                                                    </span>
                                                 }
                                             </div>
                                         </div>
-                                        <div class="card-body" data-filter-by="text">
-                                            <p>@Html.Raw(note.Content)</p>
-                                            @if (@note.Link != null)
-                                            {
-                                                <span class="mt-2">
-                                                    <a href="@note.Link">@note.Link</a>
-                                                </span>
-                                            }
-                                        </div>
-
-                                    </div>
+                                    }
                                 }
                             </div>
                         </div>
@@ -357,15 +351,15 @@
                     @***** FILES *****@
                     <div class="tab-pane fade" id="files" role="tabpanel" data-filter-list="dropzone-previews">
                         <div class="content-list">
-                            
+
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Files</h3>
                                 </div>
                             </div>
-                            
+
                             <div class="content-list-body">
-                                
+
                                 <form class="dropzone" action="https://mediumra.re/dropzone/upload.php">
                                     <span class="dz-message">Drop files here or click here to upload</span>
                                 </form>
@@ -437,78 +431,6 @@
                                     </li>
                                 </ul>
 
-                            </div>
-                        </div>
-                        <!--end of content list-->
-                    </div>
-
-                    @***** ACTIVITY *****@
-                    <div class="tab-pane fade" id="activity" role="tabpanel" data-filter-list="list-group-activity">
-                        <div class="content-list">
-                            <div class="row content-list-head">
-                                <div class="col-auto">
-                                    <h3>Activity</h3>
-                                </div>
-                                <form class="col-md-auto">
-                                    <div class="input-group input-group-round">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="material-icons">filter_list</i>
-                                            </span>
-                                        </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter activity" aria-label="Filter activity">
-                                    </div>
-                                </form>
-                            </div>
-                            <!--end of content list head-->
-                            <div class="content-list-body">
-                                <ol class="list-group list-group-activity">
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">edit</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Peggy" src="assets/img/avatar-female-2.jpg" class="avatar" data-filter-by="alt" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body">
-                                                <div>
-                                                    <span class="h6" data-filter-by="text">Peggy</span>
-                                                    <span data-filter-by="text">added the note</span><a href="#" data-filter-by="text">Client Meeting Notes</a>
-                                                </div>
-                                                <span class="text-small" data-filter-by="text">Yesterday</span>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">add</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="David" src="assets/img/avatar-male-4.jpg" class="avatar" data-filter-by="alt" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body">
-                                                <div>
-                                                    <span class="h6" data-filter-by="text">David</span>
-                                                    <span data-filter-by="text">started the task</span>
-                                                </div>
-                                                <span class="text-small" data-filter-by="text">6 days ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                </ol>
                             </div>
                         </div>
                         <!--end of content list-->
@@ -588,7 +510,7 @@
                                        asp-route-pageNumber="@(Model.ClosedTicketsPaginated.PageIndex-1)"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                                        class="btn btn-default @prevDisabledCl">
-                                            Previous
+                                        Previous
                                     </a>
                                     <a asp-action="Details"
                                        asp-route-id="@Model.Project.Id"
@@ -596,7 +518,7 @@
                                        asp-route-pageNumber="@(Model.ClosedTicketsPaginated. PageIndex+1)"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                                        class="btn btn-default @nextDisabledCl">
-                                            Next
+                                        Next
                                     </a>
                                 </div>
                             </div>
@@ -608,3 +530,6 @@
         </div>
     </div>
 </div>
+
+
+

@@ -12,7 +12,7 @@
                 <div class="page-content">
                     <div class="wrapper mb-2">
                         <div class="media">
-                            <img alt="Image" src="~/images/ticketA100.png" class="" overflow="hidden" />
+                            <img alt="Image" src="~/images/ticketA100.png" class="header-img" overflow="hidden" />
                             <span class="header-text pl-4 pr-2 pt-2">All Closed Tickets</span>
                         </div>
                         <span class="mt-2">
@@ -31,7 +31,7 @@
                             <p>
                                 <span class="pr-3">Search by name or description:</span>
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                                <button type="submit" class="btn btn-link pb-1">Search</button>
+                                <button type="submit" class="btn btn-link btn-link-offset-sm">Search</button>
                                 <a asp-action="AllTickets" class="btn-link">Clear</a>
                             </p>
                         </div>
@@ -74,15 +74,6 @@
                                         Ticket Type
                                     </a>
                                 </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="AllClosed"
-                                       asp-route-sortOrder="@ViewData["PrioritySortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Priority
-                                    </a>
-                                </th>
-                                
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="AllClosed"
@@ -142,9 +133,6 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.TicketType)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Priority)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.CreatedAt)

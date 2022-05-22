@@ -82,10 +82,10 @@ namespace TaskManager.Controllers
             switch (sortOrder)
             {
                 case "projectName":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
                 case "projectName_desc":
-                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    tickets = tickets.OrderByDescending(t => t.Project!.Name);
                     break;
                 case "ticketTitle":
                     tickets = tickets.OrderBy(t => t.Title);
@@ -182,10 +182,10 @@ namespace TaskManager.Controllers
             switch (sortOrder)
             {
                 case "projectName":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
                 case "projectName_desc":
-                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    tickets = tickets.OrderByDescending(t => t.Project!.Name);
                     break;
                 case "ticketTitle":
                     tickets = tickets.OrderBy(t => t.Title);
@@ -287,10 +287,10 @@ namespace TaskManager.Controllers
             switch (sortOrder)
             {
                 case "projectName":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
                 case "projectName_desc":
-                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    tickets = tickets.OrderByDescending(t => t.Project!.Name);
                     break;
                 case "ticketTitle":
                     tickets = tickets.OrderBy(t => t.Title);
@@ -335,7 +335,7 @@ namespace TaskManager.Controllers
                     tickets = tickets.OrderByDescending(t => t.TicketType);
                     break;
                 default:
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
             }
             var tList = tickets.ToList();
@@ -387,10 +387,10 @@ namespace TaskManager.Controllers
             switch (sortOrder)
             {
                 case "projectName":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
                 case "projectName_desc":
-                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    tickets = tickets.OrderByDescending(t => t.Project!.Name);
                     break;
                 case "ticketTitle":
                     tickets = tickets.OrderBy(t => t.Title);
@@ -423,7 +423,7 @@ namespace TaskManager.Controllers
                     tickets = tickets.OrderByDescending(t => t.TicketType);
                     break;
                 default:
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
             }
             var tList = tickets.ToList();
@@ -473,10 +473,10 @@ namespace TaskManager.Controllers
             switch (sortOrder)
             {
                 case "projectName":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
                 case "projectName_desc":
-                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    tickets = tickets.OrderByDescending(t => t.Project!.Name);
                     break;
                 case "ticketTitle":
                     tickets = tickets.OrderBy(t => t.Title);
@@ -515,7 +515,7 @@ namespace TaskManager.Controllers
                     tickets = tickets.OrderByDescending(t => t.TicketType);
                     break;
                 default:
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
             }
             var tList = tickets.ToList();
@@ -567,10 +567,10 @@ namespace TaskManager.Controllers
             switch (sortOrder)
             {
                 case "projectName":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
                 case "projectName_desc":
-                    tickets = tickets.OrderByDescending(t => t.Project.Name);
+                    tickets = tickets.OrderByDescending(t => t.Project!.Name);
                     break;
                 case "ticketTitle":
                     tickets = tickets.OrderBy(t => t.Title);
@@ -639,8 +639,8 @@ namespace TaskManager.Controllers
             {
                 Ticket = ticket,
                 AssignedTo = ticket.AssignedTo.ToList(),
-                Project = ticket.Project,
-                SubmittedBy = ticket.SubmittedBy,
+                Project = ticket.Project!,
+                SubmittedBy = ticket.SubmittedBy!,
                 Notes = ticket.TNotes
             };
 
@@ -704,7 +704,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Tickets/Edit/{Id}
-        //[Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == Guid.Empty)
@@ -718,11 +718,11 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var isAuthorized = await _authorizationService.AuthorizeAsync(User, ticket, TaskOperations.Update);
-            if (!isAuthorized.Succeeded)
-            {
-                return Forbid();
-            }
+            //var isAuthorized = await _authorizationService.AuthorizeAsync(User, ticket, TaskOperations.Update);
+            //if (!isAuthorized.Succeeded)
+            //{
+            //    return Forbid();
+            //}
 
             ViewData["Project"] = new SelectList(_context.Projects, "Id", "Name", ticket.ProjectId);
             return View(ticket);

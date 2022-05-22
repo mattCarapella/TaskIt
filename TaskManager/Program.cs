@@ -23,6 +23,18 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<TaskManagerContext>();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 8;
+
+    // User settings
+    options.User.RequireUniqueEmail = true;
+});
+
 builder.Services.AddControllersWithViews();
 
 #region Authorization

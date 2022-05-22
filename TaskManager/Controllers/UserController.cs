@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TaskManager.Areas.Identity.Data;
@@ -23,6 +24,7 @@ public class UserController : Controller
     }
 
 
+    [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
     public IActionResult Index(string sortOrder, int? pageNumber)
     {
         ViewData["CurrentSort"] = sortOrder;
@@ -89,6 +91,7 @@ public class UserController : Controller
     }
 
 
+    [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
     public async Task<IActionResult> Edit(string id )
     {
         if (id is null)
@@ -117,6 +120,7 @@ public class UserController : Controller
     }
 
 
+    [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
     [HttpPost]
     public async Task<IActionResult> OnPostAsync(EditUserViewModel data)
     {
@@ -155,7 +159,7 @@ public class UserController : Controller
         {
             await _signInManager.UserManager.RemoveFromRolesAsync(user, rolesToDelete);
         }
-        string uploadedFileName = UploadFile(data) ?? user.ProfilePicture!;
+        //string uploadedFileName = UploadFile(data) ?? user.ProfilePicture!;
         user.FirstName = data.User.FirstName;
         user.LastName = data.User.LastName;
         user.UserName = data.User.UserName;
@@ -163,26 +167,26 @@ public class UserController : Controller
         user.JobTitle = data.User.JobTitle;
         user.EmployeeID = data.User.EmployeeID;
         user.Email = data.User.Email;
-        user.ProfilePicture = uploadedFileName;
+        //user.ProfilePicture = uploadedFileName;
 
         _unitOfWork.UserRepository.UpdateUser(user);
         await _unitOfWork.SaveAsync();
         return RedirectToAction("Details", new { id = user.Id });
     }
 
-    private string UploadFile(EditUserViewModel data)
-    {
-        string fileName = "";
-        if (data.ProfilePicture is not null)
-        {
-            string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-            fileName = Guid.NewGuid().ToString() + "_" + data.ProfilePicture.FileName;
-            string filePath = Path.Combine(uploadDir, fileName);
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                data.ProfilePicture.CopyTo(fileStream);
-            }
-        }
-        return fileName;
-    }
+    //private string UploadFile(EditUserViewModel data)
+    //{
+    //    string fileName = "";
+    //    if (data.ProfilePicture is not null)
+    //    {
+    //        string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+    //        fileName = Guid.NewGuid().ToString() + "_" + data.ProfilePicture.FileName;
+    //        string filePath = Path.Combine(uploadDir, fileName);
+    //        using (var fileStream = new FileStream(filePath, FileMode.Create))
+    //        {
+    //            data.ProfilePicture.CopyTo(fileStream);
+    //        }
+    //    }
+    //    return fileName;
+    //}
 }

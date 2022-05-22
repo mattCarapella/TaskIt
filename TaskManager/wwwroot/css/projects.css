@@ -1,0 +1,27 @@
+﻿/***************************************************/
+/*   PROJECTS                                      */
+/***************************************************/
+.projects--index {
+    padding-top: 3%;
+    padding-bottom: 5%;
+}
+
+.project-create--form {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.create--container {
+    width: 70%;
+}
+
+.project-create--form {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.navbar-brand {
+    font-size: 1.4em;
+    padding-left: 30px;
+    padding-top: 10px;
+}

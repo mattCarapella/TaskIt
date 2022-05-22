@@ -159,7 +159,6 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Details/{id}
-        //[Authorize(Policy = "DevelopersOnly")]
         public async Task<IActionResult> Details(Guid id, string? sortOrder, int? pageNumber)
         {
             if (id == Guid.Empty)
@@ -274,7 +273,7 @@ namespace TaskManager.Controllers
 
 
         // GET: Projects/Create
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public IActionResult Create()
         {
             return View();
@@ -283,7 +282,7 @@ namespace TaskManager.Controllers
 
         // POST: Projects/Create
         [HttpPost]
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Tag,GoalDate")] Project project)
         {

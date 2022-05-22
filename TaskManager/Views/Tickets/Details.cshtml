@@ -80,13 +80,13 @@
                 <hr />
                 <dl class="row pb-2">
                     <dt class="col-sm-4">
-                        <strong>@Html.DisplayNameFor(model => model.Ticket.TicketType)</strong>
+                        <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.TicketType)</span>
                     </dt>
                     <dd class="col-sm-6">
                         @Html.DisplayFor(model => model.Ticket.TicketType)
                     </dd>
                     <dt class="col-sm-4">
-                        <strong>@Html.DisplayNameFor(model => model.Ticket.Status)</strong>
+                        <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.Status)</span>
                     </dt>
                     <dd class="col-sm-6">
                         <span class="ticket-status">
@@ -106,7 +106,7 @@
                     @if (@Model.Ticket.Priority is not null)
                     {
                         <dt class="col-sm-4">
-                            <strong>@Html.DisplayNameFor(model => model.Ticket.Priority)</strong>
+                            <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.Priority)</span>
                         </dt>
                         <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Ticket.Priority)
@@ -115,7 +115,7 @@
                     @if (@Model.Ticket.GoalDate is not null)
                     {
                         <dt class="col-sm-4">
-                            <strong>@Html.DisplayNameFor(model => model.Ticket.GoalDate)</strong>
+                            <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.GoalDate)</span>
                         </dt>
                         <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Ticket.GoalDate)
@@ -124,7 +124,7 @@
                     @if (@Model.Ticket.UpdatedAt is not null)
                     {
                          <dt class="col-sm-4">
-                            <strong>@Html.DisplayNameFor(model => model.Ticket.UpdatedAt)</strong>
+                            <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.UpdatedAt)</span>
                          </dt>
                          <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Ticket.UpdatedAt)
@@ -133,7 +133,7 @@
                     @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.COMPLETED)
                     {
                         <dt class="col-sm-4">
-                            <strong>@Html.DisplayNameFor(model => model.Ticket.ClosedAt)</strong>
+                            <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.ClosedAt)</span>
                         </dt>
                         <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Ticket.ClosedAt)
@@ -142,7 +142,7 @@
                     <dd class="col-md-10 mt-3 mb-2">
                         Submitted by
                         <a class="name-link" asp-controller="User" asp-action="Details" asp-route-id="@Model.Ticket.SubmittedBy.Id">
-                            <strong>@Model.Ticket.SubmittedBy!.FullName </strong>
+                            <span class="ticket-details--item">@Model.Ticket.SubmittedBy!.FullName </span>
                         </a> on @Model.Ticket.CreatedAt
                     </dd>
                 </dl>
@@ -195,15 +195,15 @@
                 </div>
 
                 @***** TAB SELECTION *****@
-                <ul class="nav nav-tabs nav-fill" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="true">Notes</a>
+                <ul class="nav nav-tabs nav-tabs--container nav-fill tab-text" role="tablist">
+                    <li class="nav-item nav-item--tab">
+                        <a class="nav-link tab-link active" data-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="true"><div class="content">Notes</div></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
+                    <li class="nav-item nav-item--tab">
+                        <a class="nav-link tab-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false"><div class="content">Files</div></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false">Activity</a>
+                    <li class="nav-item nav-item--tab">
+                        <a class="nav-link tab-link" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false"><div class="content">Activity</div></a>
                     </li>
                 </ul>
 
@@ -213,17 +213,18 @@
                     @***** TAB: NOTES *****@
                     <div class="tab-pane fade show active" id="notes" role="tabpanel">
                         <div class="content-list" data-filter-list="content-list-body">
+                            
                             <div class="row content-list-head">
                                 <div class="col-auto">
-                                    <h3>Notes</h3>
                                     <button class="btn btn-round-sm ml-3" data-toggle="tooltip" data-title="Add a note">
                                         <a asp-controller="TNotes" asp-action="Create" asp-route-ticketid="@Model.Ticket.TicketId">
                                             <i class="material-icons btn-icon btn-icon-sm">add</i>
                                         </a>
                                     </button>
+                                    <a asp-controller="TNotes" asp-action="Create" asp-route-ticketid="@Model.Ticket.TicketId" class="pl-2 pt-1 mb-0">Add a note</a>
                                 </div>
                             </div>
-                            @***** NOTES *****@
+                            
                             <div class="content-list-body">
                                 @if (@Model.Notes.Any())
                                 {
@@ -232,10 +233,10 @@
                                         <div class="card card-note">
                                             <div class="card-header">
                                                 <div class="media align-items-center">
-                                                    @if (@note.ApplicationUser!.ProfilePicture is not null)
+                                                    @if (@note.ApplicationUser!.UserImage is not null)
                                                     {
-                                                        <img alt="@note.ApplicationUser.FullName" src="~/images/@note.ApplicationUser.ProfilePicture" class="avatar"
-                                                            data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                        <img alt="@note.ApplicationUser!.FullName" src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))" 
+                                                            class="avatar" data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
                                                     }
                                                     else
                                                     {
@@ -243,16 +244,17 @@
                                                             data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
                                                     }
                                                     <div class="media-body">
-                                                        <h4 class="mb-0" data-filter-by="text">@note.Title</h4>
+                                                        <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
                                                         <p class="note-author-text">by @note.ApplicationUser.FullName</p>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span data-filter-by="text">@note.CreatedAt.ToShortDateString()</span>
+                                                <div class="d-flex">
+                                                    <span data-filter-by="text" class=".card-header--date pl-2 mr-2 mb-0">@note.CreatedAt.ToShortDateString()</span>
                                                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                                                     {
-                                                        <div class="ml-1 dropdown card-options">
-                                                            <button class="btn btn-round" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <div class="ml-1 pb-2 dropdown card-options">
+                                                            <button class="btn btn-round btn-round-sm" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" 
+                                                                aria-expanded="false" data-title="Manage note">
                                                                 <i class="material-icons">more_vert</i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">

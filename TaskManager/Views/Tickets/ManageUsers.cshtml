@@ -128,13 +128,7 @@
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
                     <td>@Html.DisplayFor(modelItem => item.ApplicationUser.JobTitle)</td>
-                     <td>
-                        <button class="btn btn-round pt-1 mr-1" data-toggle="tooltip" data-title="View @item.ApplicationUser.FirstName's Profile">
-                            <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id">
-                                <i class="material-icons account-button">account_circle</i>
-                            </a>
-                        </button>
-                    </td>
+                    
                     <td>
                         <form 
                             asp-controller="Tickets" 
