@@ -1,6 +1,8 @@
 ﻿@using TaskManager.Core
 @model PaginatedList<TaskManager.Models.Ticket>
-@{ ViewData["Title"] = "Submitted for Review"; }
+@{
+    ViewData["Title"] = "Submitted for Review";
+}
 
 <div class="main-container">
     <div class="container">
@@ -82,18 +84,18 @@
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="SubmittedForReview"
+                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Opened On
+                                    </a>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="SubmittedForReview"
                                        asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Goal Date
                                     </a>
                                 </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="SubmittedForReview"
-                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Created On
-                                    </a>
                                 </th>
                                 <th></th>
                             </tr>
@@ -135,10 +137,10 @@
                                         @Html.DisplayFor(modelItem => item.Priority)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.GoalDate)
+                                        @Html.DisplayFor(modelItem => item.CreatedAt)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                                        @Html.DisplayFor(modelItem => item.GoalDate)
                                     </td>
                                     <td>
                                         <div class="button-group">

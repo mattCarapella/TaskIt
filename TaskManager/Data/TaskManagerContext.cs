@@ -20,13 +20,13 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
     public DbSet<TicketAssignment> TicketAssignments { get; set; }
     public DbSet<PNote> PNote { get; set; }
     public DbSet<TNote> TNote { get; set; }
+    public DbSet<FileModel> Files { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
-
 
         builder.Entity<ProjectAssignment>()
             .HasOne(u => u.ApplicationUser)
@@ -38,8 +38,8 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
             .WithMany(u => u.Contributers)
             .HasForeignKey(pa => pa.ProjectId);
 
-        builder.Entity<ProjectAssignment>().HasKey(pa => new { pa.ProjectId, pa.ApplicationUserId });
-
+        builder.Entity<ProjectAssignment>()
+            .HasKey(pa => new { pa.ProjectId, pa.ApplicationUserId });
 
         builder.Entity<TicketAssignment>()
             .HasOne(u => u.ApplicationUser)
@@ -51,14 +51,13 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
             .WithMany(u => u.AssignedTo)
             .HasForeignKey(pa => pa.TicketId);
 
-        builder.Entity<TicketAssignment>().HasKey(ta => new { ta.TicketId, ta.ApplicationUserId });
-
+        builder.Entity<TicketAssignment>()
+            .HasKey(ta => new { ta.TicketId, ta.ApplicationUserId });
 
         builder.Entity<Ticket>()
             .HasOne(p => p.Project)
             .WithMany(t => t.Tickets)
             .OnDelete(DeleteBehavior.Cascade);
-
 
         builder.Entity<PNote>()
             .HasOne(p => p.Project)
@@ -70,11 +69,11 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
             .WithMany(n => n.TNotes)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<FileModel>()
+            .HasOne(t => t.Ticket)
+            .WithMany(f => f.TicketFiles)
+            .OnDelete(DeleteBehavior.Cascade);
     }
-
-
-
-    
 
 }
 

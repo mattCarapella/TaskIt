@@ -23,6 +23,9 @@ public class FileModel
 
     public string UploadedByUserId { get; set; } = String.Empty;
 
+    public Guid TicketId { get; set; }
+    public Ticket? Ticket { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     
 }

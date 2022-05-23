@@ -1,5 +1,5 @@
 html {
-    font-size: 14px;
+    /*font-size: 14px;*/
     position: relative;
     min-height: 100%;
 }
@@ -13,16 +13,50 @@ html {
 body {
     margin-bottom: 60px;
     line-height: 1.3;
+    background-color: #f4f4f4;
+    font-family: 'Abel', sans-serif;
+    font-size: 1.1rem;
+}
+
+svg {
+    max-height: 50px !important;
+    transform: translate(0px,-7px);
+    opacity: 0.8;
+}
+
+.content {
+    flex: 1;
+    margin-top: 3rem;
+}
+
+.container-fluid {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--bs-gutter-x,.75rem);
+    padding-right: var(--bs-gutter-x,.75rem);
+}
+
+.container-lg {
+    min-width: 70% !important;
+}
+
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: calc(var(--bs-gutter-x)*-.5);
+    margin-right: calc(var(--bs-gutter-x)*-.5);
+    margin-top: calc(var(--bs-gutter-y)*-1);
+}
+
+.table-responsive {
+    background-color: #fff;
 }
 
 .footer {
     line-height: 27px !important;
 }
-
-/*.bg-dark {
-    background-color: none !important;
-}*/
-
 
 .container-body {
     margin-top: 45px;
@@ -41,6 +75,7 @@ body {
 }
 
 .header-text {
+    /*font-family: 'Oswald', sans-serif;*/
     font-size: 3.1rem;
     font-weight: 600;
     color: black;
@@ -71,7 +106,7 @@ body {
 }
 
 .description-text {
-    color: #252525 !important;
+    color: #282828 !important;
     font-size: 1.0rem;
     font-weight: 200;
 }
@@ -81,10 +116,9 @@ body {
 }
 
 .nav-dark {
-    background-color: #273340 !important;
+    background: linear-gradient(135deg, #273340 80%, #1a2f46) !important;
     --bs-bg-opacity: 1;
 }
-
 
 .note-author-text {
     font-size: .92rem;
@@ -98,6 +132,8 @@ body {
 th {
     vertical-align: top !important;
 }
+
+
 
 /****** FORMS ******/
 .form-label-text {

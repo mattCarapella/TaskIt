@@ -69,6 +69,7 @@ public class Ticket
 
     public ICollection<TNote> TNotes { get; set; } = new List<TNote>();
 
+    public ICollection<FileModel> TicketFiles { get; set; } = new List<FileModel>();
 
     public Project? Project { get; set; }
 
