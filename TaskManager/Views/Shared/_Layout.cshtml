@@ -6,61 +6,58 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TaskIt</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - TaskIt</title>
 
-    <link href="~/assets/img/favicon.ico" rel="icon" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet" />
+        <link href="~/assets/img/favicon.ico" rel="icon" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600&family=Raleway:wght@200;300;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Gothic+A1:wght@200;300;400;500&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Abel&family=Oswald:wght@200;300;400;500;600;700&family=Quicksand:wght@300;400&family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,700&display=swap" rel="stylesheet">
 
-    <link href="~/assets/css/theme.css" rel="stylesheet" type="text/css" media="all" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/buttons.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/projects.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/tickets.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/users.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/homepage.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TaskManager.styles.css" asp-append-version="true" />
+        <link href="~/assets/css/theme.css" rel="stylesheet" type="text/css" media="all" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/buttons.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/projects.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/tickets.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/users.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/homepage.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/TaskManager.styles.css" asp-append-version="true" />
+    </head>
 
-</head>
+    <body>
+        <partial name="_NavbarPartial" />
+        <div class="container-lg">
+            <main role="main" class="content mb-5">
+                @RenderBody()
+            </main>
+        </div>
+        <footer class="mt-3 border-top footer text-muted text-center text-small">
+            <p class="mb-1 pt-2">©2022 TaskIt</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Privacy</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Support</a></li>
+            </ul>
+        </footer>
 
-<body>
-    <partial name="_NavbarPartial" />
-    <div class="container-lg">
-        <main role="main" class="content mb-5">
-            @RenderBody()
-        </main>
-    </div>
-    <footer class="mt-3 border-top footer text-muted text-center text-small">
-        <p class="mb-1 pt-2">©2022 TaskIt</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#">Privacy</a></li>
-            <li class="list-inline-item"><a href="#">Terms</a></li>
-            <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-    </footer>
+        <!-- Required vendor scripts (Do not remove) -->
+        <script type="text/javascript" src="~/assets/js/jquery.min.js"></script>
+        <script src="~/js/ckeditor/ckeditor.js"></script>
+        <script type="text/javascript" src="~/assets/js/popper.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/bootstrap.js"></script>
 
-    <!-- Required vendor scripts (Do not remove) -->
-    <script type="text/javascript" src="~/assets/js/jquery.min.js"></script>
-    <script src="~/js/ckeditor/ckeditor.js"></script>
-    <script type="text/javascript" src="~/assets/js/popper.min.js"></script>
-    <script type="text/javascript" src="~/assets/js/bootstrap.js"></script>
+        <!-- List.js - filter list elements -->
+        <script type="text/javascript" src="~/assets/js/list.min.js"></script>
 
-    <!-- List.js - filter list elements -->
-    <script type="text/javascript" src="~/assets/js/list.min.js"></script>
+        <!-- Required theme scripts (Do not remove) -->
+        <script type="text/javascript" src="~/assets/js/theme.js"></script>
 
-    <!-- Required theme scripts (Do not remove) -->
-    <script type="text/javascript" src="~/assets/js/theme.js"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
 </html>
 
 
@@ -70,9 +67,15 @@
 
 
 
+@*font-family: 'Abel', sans-serif;
+font-family: 'Oswald', sans-serif;
+font-family: 'Quicksand', sans-serif;
+font-family: 'Roboto Flex', sans-serif;*@
 
 
-@*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+
+
+
 
 
 @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>

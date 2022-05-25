@@ -603,7 +603,7 @@ namespace TaskManager.Controllers
                     tickets = tickets.OrderByDescending(t => t.TicketType);
                     break;
                 default:
-                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    tickets = tickets.OrderBy(t => t.Project!.Name);
                     break;
             }
             var tList = tickets.ToList();
@@ -941,7 +941,7 @@ namespace TaskManager.Controllers
             var vm = new AssignUserTicketViewModel
             {
                 Ticket = ticket,
-                Project = ticket.Project,
+                Project = ticket.Project!,
                 ListOfUsers = userList
             };
             return vm;

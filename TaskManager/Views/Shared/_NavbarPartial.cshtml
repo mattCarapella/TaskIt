@@ -5,15 +5,16 @@
 
 <div class="layout layout-nav-top">
     <div class="navbar navbar-expand-lg nav-dark navbar-dark sticky-top">
-        <div class="row">
-            <div class="col-md-3">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                    <img alt="Pipeline" src="~/assets/img/logo.svg" />
+        <div class="navbar-logo">
+            <a class="navbar-brand-img" asp-controller="Home" asp-action="Index">
+                <img alt="Pipeline" src="~/assets/img/logo.svg" />
+            </a>
+            <span class="navbar-logo-name">
+                <a class="navbar-brand-text" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="brand-task-sm">Task</span>
+                    <span class="brand-it-sm">It</span>
                 </a>
-            </div>
-            <div class="col-md-3">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TaskIt</a>
-            </div>
+            </span>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,14 +27,17 @@
                     {
                         var currentUser = @UserManager.Users.FirstOrDefault(u => u.UserName == @UserManager.GetUserName(User));
                         <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
                         </li>
                         <li class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Tickets</a>
                                 <div class="dropdown-menu">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Open</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Closed">Closed</a>
+                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Open</a>
+                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="Closed">Closed</a>
                                 </div>
                             </div>
                         </li>
@@ -41,13 +45,13 @@
                         {
                             <li class="nav-item">
                                 <div class="dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Admin</a>
+                                    <a class="nav-link navbar-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Admin</a>
                                     <div class="dropdown-menu">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">Current Projects</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="AllTickets">Open Tickets</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="ToAssign">Unassigned Tickets</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="SubmittedForReview">Submitted Tickets</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="AllClosed">Closed Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">Current Projects</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllTickets">Open Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="ToAssign">Unassigned Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="SubmittedForReview">Submitted Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllClosed">Closed Tickets</a>
                                     </div>
                                 </div>
                             </li>

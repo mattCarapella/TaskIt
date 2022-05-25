@@ -25,24 +25,27 @@ public class Ticket
     public string? Tag { get; set; }
 
 
-    [Display(Name = "Ticket Type")]
-    public TicketType? TicketType { get; set; }
+    [Required(ErrorMessage = "Ticket type is required"), Display(Name = "Ticket Type")]
+    public TicketType TicketType { get; set; }
 
 
     [Required(ErrorMessage = "Ticket status is required"), Display(Name = "Ticket Status")]
     public Status Status { get; set; } = 0;
 
 
-    public Priority? Priority { get; set; }
+    [Required(ErrorMessage = "Priority is required")]
+    public Priority Priority { get; set; }
+
 
     public bool Flagged { get; set; } = false;
+
 
     public int Upvotes { get; set; } = 0;
 
 
     [DataType(DataType.Date), Display(Name = "Goal Date")]
-    [ValidFutureDate(ErrorMessage = "Date must be in the future.")]
-    public DateTime? GoalDate { get; set; }
+    [Required, ValidFutureDate(ErrorMessage = "Date must be in the future."), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+    public DateTime GoalDate { get; set; }
 
 
     [DataType(DataType.Date), Display(Name = "Created On")]
@@ -62,7 +65,13 @@ public class Ticket
 
     [Display(Name = "Submitted by")]
     public ApplicationUser? SubmittedBy { get; set; }
+
     public string? SubmittedById { get; set;  }
+
+    public Project? Project { get; set; }
+
+    [Required]
+    public Guid ProjectId { get; set; }
 
 
     public ICollection<TicketAssignment> AssignedTo { get; set; } = new List<TicketAssignment>();
@@ -71,12 +80,6 @@ public class Ticket
 
     public ICollection<FileModel> TicketFiles { get; set; } = new List<FileModel>();
 
-    public Project? Project { get; set; }
 
-    [Required]
-    public Guid ProjectId { get; set; }
 
 }
-
-
-

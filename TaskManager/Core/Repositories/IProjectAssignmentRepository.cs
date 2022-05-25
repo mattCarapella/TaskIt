@@ -4,6 +4,8 @@ namespace TaskManager.Core.Repositories;
 
 public interface IProjectAssignmentRepository
 {
+    int GetUserProjectCount(string userId);
+
     Task<ProjectAssignment> GetProjectAssignment(Guid paId, bool tracking=true);
     Task<ProjectAssignment> GetProjectAssignmentForUser(string userId);
 

@@ -1,12 +1,14 @@
 ﻿@model TaskManager.Core.ViewModels.Ticket.TicketDetailsViewModel;
-@{ ViewData["Title"] = "Ticket Details"; }
+@{
+    ViewData["Title"] = "Ticket Details";
+}
 
 <div class=""><a href="javascript:history.go(-1)">Back</a></div>
 <div class="main-container">
     <div class="container pb-2">
         <div class="row justify-content-center">
             <div class="col-xl-11 col-lg-11">
-                
+
                 @*@***** HEADER @******@
                 <div class="page-header mb-2">
                     <div class="wrapper pb-0">
@@ -24,39 +26,35 @@
                         </div>
                     </div>
                 </div>
-                
+
                 @***** BUTTONS *****@
                 <span class="center-vert pt-2 ml-1">
                     <span class="button-group">
                         @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.INPROGRESS)
                         {
-                            <form 
-                                asp-controller="Tickets"
-                                asp-action="SubmitForReview"
-                                asp-route-ticketId="@Model.Ticket.TicketId"
-                                method="post"
-                                role="form"
-                                data-toggle="tooltip" 
-                                data-title="Submit for review"
-                            >
-                                    <button class="btn btn-round-med mr-2" id="submit">
-                                        <i class="material-icons btn-icon">flag</i>
-                                    </button>        
+                            <form asp-controller="Tickets"
+                              asp-action="SubmitForReview"
+                              asp-route-ticketId="@Model.Ticket.TicketId"
+                              method="post"
+                              role="form"
+                              data-toggle="tooltip"
+                              data-title="Submit for review">
+                                <button class="btn btn-round-med mr-2" id="submit">
+                                    <i class="material-icons btn-icon">flag</i>
+                                </button>
                             </form>
                         }
                         @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.SUBMITTED)
                         {
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                             {
-                                <form 
-                                    asp-controller="Tickets"
-                                    asp-action="MarkAsCompleted"
-                                    asp-route-ticketId="@Model.Ticket.TicketId"
-                                    method="post"
-                                    role="form"
-                                    data-toggle="tooltip" 
-                                    data-title="Mark as completed"
-                                >
+                                <form asp-controller="Tickets"
+                              asp-action="MarkAsCompleted"
+                              asp-route-ticketId="@Model.Ticket.TicketId"
+                              method="post"
+                              role="form"
+                              data-toggle="tooltip"
+                              data-title="Mark as completed">
                                     <button class="btn btn-round-med mr-2" id="submit">
                                         <i class="material-icons btn-icon">add_task</i>
                                     </button>
@@ -67,9 +65,9 @@
                         {
                             <button class="btn btn-round-med mr-2">
                                 <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Ticket.TicketId" data-toggle="tooltip" data-title="Edit ticket">
-                                     <i class="material-icons btn-icon">create</i>
+                                    <i class="material-icons btn-icon">create</i>
                                 </a>
-                             </button>
+                            </button>
                         }
                     </span>
                 </span>
@@ -94,41 +92,36 @@
                             @if (Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.SUBMITTED)
                             {
                                 <form asp-controller="Tickets"
-                                asp-action="CancelSubmission"
-                                asp-route-ticketId="@Model.Ticket.TicketId"
-                                method="post"
-                                role="form">
+                                  asp-action="CancelSubmission"
+                                  asp-route-ticketId="@Model.Ticket.TicketId"
+                                  method="post"
+                                  role="form">
                                     <input id="Submit" class="btn btn-link ticket-cancel-btn" type="submit" value="Cancel" />
                                 </form>
                             }
                         </span>
                     </dd>
-                    @if (@Model.Ticket.Priority is not null)
-                    {
-                        <dt class="col-sm-4">
-                            <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.Priority)</span>
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Ticket.Priority)
-                        </dd>
-                    }
-                    @if (@Model.Ticket.GoalDate is not null)
-                    {
-                        <dt class="col-sm-4">
-                            <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.GoalDate)</span>
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Ticket.GoalDate)
-                        </dd>
+                    <dt class="col-sm-4">
+                        <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.Priority)</span>
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Ticket.Priority)
+                    </dd>
+                    <dt class="col-sm-4">
+                        <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.GoalDate)</span>
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Ticket.GoalDate)
+                    </dd>
                     }
                     @if (@Model.Ticket.UpdatedAt is not null)
                     {
-                         <dt class="col-sm-4">
+                        <dt class="col-sm-4">
                             <span class="ticket-details--item">@Html.DisplayNameFor(model => model.Ticket.UpdatedAt)</span>
-                         </dt>
-                         <dd class="col-sm-6">
+                        </dt>
+                        <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Ticket.UpdatedAt)
-                         </dd>
+                        </dd>
                     }
                     @if (@Model.Ticket.Status == TaskManager.Core.Enums.Enums.Status.COMPLETED)
                     {
@@ -156,17 +149,17 @@
                                 @if (item.ApplicationUser!.UserImage is not null)
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                                       data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                               data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
                                         <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                             src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))"/>
+                                     src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))" />
                                     </a>
                                 }
                                 else
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                                            data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                               data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
                                         <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                            src="~/images/user.jpg" />
+                                     src="~/images/user.jpg" />
                                     </a>
                                 }
                             </li>
@@ -219,7 +212,7 @@
                     @***** TAB: NOTES *****@
                     <div class="tab-pane fade show active" id="notes" role="tabpanel">
                         <div class="content-list" data-filter-list="content-list-body">
-                            
+
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <button class="btn btn-round-sm ml-3" data-toggle="tooltip" data-title="Add a note">
@@ -230,7 +223,7 @@
                                     <a asp-controller="TNotes" asp-action="Create" asp-route-ticketid="@Model.Ticket.TicketId" class="pl-2 pt-1 mb-0">Add a note</a>
                                 </div>
                             </div>
-                            
+
                             <div class="content-list-body">
                                 @if (@Model.Notes.Any())
                                 {
@@ -241,13 +234,13 @@
                                                 <div class="media align-items-center">
                                                     @if (@note.ApplicationUser!.UserImage is not null)
                                                     {
-                                                        <img alt="@note.ApplicationUser!.FullName" src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))" 
-                                                            class="avatar" data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                        <img alt="@note.ApplicationUser!.FullName" src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))"
+                                                 class="avatar" data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
                                                     }
                                                     else
                                                     {
                                                         <img alt="@note.ApplicationUser.FullName" src="~/images/user.jpg" class="avatar" data-toggle="tooltip"
-                                                            data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                 data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
                                                     }
                                                     <div class="media-body">
                                                         <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
@@ -259,8 +252,8 @@
                                                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                                                     {
                                                         <div class="ml-1 pb-2 dropdown card-options">
-                                                            <button class="btn btn-round btn-round-sm" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" 
-                                                                aria-expanded="false" data-title="Manage note">
+                                                            <button class="btn btn-round btn-round-sm" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false" data-title="Manage note">
                                                                 <i class="material-icons">more_vert</i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">

@@ -14,7 +14,6 @@
                 <div class="page-content">
                     <div class="wrapper mb-2">
                         <div class="media">
-                            @*<img class="header-img" alt="Image" src="~/images/userA100.png" overflow="hidden" />*@
                             <i class="material-icons user-index--icon">account_circle</i>
                             <span class="header-text pl-3">All Users</span>
                         </div>
@@ -66,18 +65,17 @@
                                     <td>
                                         <div class="button-group pt-1">
                                             <button class="btn btn-round-sm mr-1">
-                                                <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id" data-toggle="tooltip" data-title="Project details">
+                                                <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id" data-toggle="tooltip" data-title="User details">
                                                     <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
                                                 </a>
                                             </button>
                                             <button class="btn btn-round-sm mr-1">
-                                                <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id">
+                                                <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id"  data-toggle="tooltip" data-title="Edit user">
                                                     <i class="material-icons btn-icon btn-icon-sm">create</i>
                                                 </a>
-
                                             </button>
                                             <button class="btn btn-round-sm mr-1">
-                                                <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id">
+                                                <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id"  data-toggle="tooltip" data-title="Delete user">
                                                     <i class="material-icons btn-icon btn-icon-sm">delete</i>
                                                 </a>
                                             </button>
@@ -110,14 +108,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-@*<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex+1)" ;
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>*@

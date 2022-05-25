@@ -14,7 +14,13 @@ public class ProjectAssignmentRepository : IProjectAssignmentRepository
         _context = context;
     }
 
-
+    public int GetUserProjectCount(string userId)
+    {
+        return _context.ProjectAssignments
+               .Where(u => u.ApplicationUserId == userId)
+               .AsNoTracking()
+               .Count();
+    }
 
     public async Task<ProjectAssignment> GetProjectAssignment(Guid paId, bool tracking=true)
     {

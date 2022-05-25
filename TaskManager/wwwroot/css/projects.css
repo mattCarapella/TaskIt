@@ -1,14 +1,9 @@
-﻿/***************************************************/
-/*   PROJECTS                                      */
-/***************************************************/
+﻿/*************************************************************/
+/*                       PROJECTS                            */
+/*************************************************************/
 .projects--index {
     padding-top: 3%;
     padding-bottom: 5%;
-}
-
-.project-create--form {
-    padding-top: 25px;
-    padding-bottom: 25px;
 }
 
 .create--container {
@@ -20,8 +15,66 @@
     padding-bottom: 25px;
 }
 
-.navbar-brand {
-    font-size: 1.4em;
-    padding-left: 30px;
-    padding-top: 10px;
+.details-type {
+    color: #212529 !important;
+}
+
+.assignment-text {
+    color: black;
+}
+
+.description-text {
+    color: #282828 !important;
+    font-size: 1.0rem;
+    font-weight: 200;
+}
+
+/*************************************************************/
+/*                         TABS                              */
+/*************************************************************/
+.tab-link {
+    border-radius: 0.9rem !important;
+    transition: all 1.5s ease-in-out;
+    color: #212529 !important;
+}
+
+    .tab-link.active {
+        font-weight: 600 !important;
+        color: #2C7BE2 !important;
+        box-shadow: 0px 2px 2px rgba(0,0,0,0.1);
+    }
+
+    .tab-link:not(.active):hover {
+        color: #4A6B96 !important;
+        background: rgb(233,236,239);
+        background: -moz-linear-gradient(90deg, rgba(233,236,239,1) 0%, rgba(222,222,222,1) 49%, rgba(233,236,239,1) 100%);
+        background: -webkit-linear-gradient(90deg, rgba(233,236,239,1) 0%, rgba(222,222,222,1) 49%, rgba(233,236,239,1) 100%);
+        background: linear-gradient(90deg, rgba(233,236,239,1) 0%, rgba(222,222,222,1) 49%, rgba(233,236,239,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e9ecef",endColorstr="#e9ecef",GradientType=1);
+    }
+
+.tab-inner-text {
+    font-size: 1.0rem !important;
+}
+
+.nav-item--tab {
+    margin: 0.4rem !important;
+}
+
+.nav-tabs--container {
+    border-radius: 0.95rem !important;
+}
+
+.tab-text {
+    font-size: .90rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 2px;
+}
+
+/*************************************************************/
+/*                        NOTES                              */
+/*************************************************************/
+.note-author-text {
+    font-size: .92rem;
+    padding-top: 4px;
 }
