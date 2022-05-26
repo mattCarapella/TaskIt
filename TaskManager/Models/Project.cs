@@ -46,4 +46,6 @@ public class Project
 
     public ICollection<PNote> Notes { get; set; } = new List<PNote>();
 
+    public ICollection<ProjectFile> ProjectFiles { get; set; } = new List<ProjectFile>();
+
 }

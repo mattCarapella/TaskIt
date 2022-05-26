@@ -21,6 +21,7 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
     public DbSet<PNote> PNote { get; set; }
     public DbSet<TNote> TNote { get; set; }
     public DbSet<FileModel> Files { get; set; }
+    public DbSet<ProjectFile> ProjectFiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -72,6 +73,11 @@ public class TaskManagerContext : IdentityDbContext<ApplicationUser>
         builder.Entity<FileModel>()
             .HasOne(t => t.Ticket)
             .WithMany(f => f.TicketFiles)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ProjectFile>()
+            .HasOne(p => p.Project)
+            .WithMany(f => f.ProjectFiles)
             .OnDelete(DeleteBehavior.Cascade);
     }
 

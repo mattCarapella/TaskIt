@@ -301,10 +301,8 @@ namespace TaskManager.Controllers
                     break;
             }
 
-
             var userTicketsForProj = new List<Ticket>();
             if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
-                //(User.IsInRole("Manager") && project.CreatedByUserId == User.Identity.GetUserId()))
             {
                 // Displays all tickets for the project
                 userTicketsForProj = tickets.ToList();
@@ -342,7 +340,8 @@ namespace TaskManager.Controllers
                 Contributers = project.Contributers!.ToList(),    
                 ClosedTicketsPaginated = paginatedClosedTicketList,
                 OpenTicketsPaginated = paginatedOpenTicketList,
-                Notes = project.Notes
+                Notes = project.Notes,
+                Files = project.ProjectFiles
             };
 
             return View(vm);

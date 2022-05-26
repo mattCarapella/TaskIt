@@ -363,88 +363,108 @@
                     @***** FILES *****@
                     <div class="tab-pane fade" id="files" role="tabpanel" data-filter-list="dropzone-previews">
                         <div class="content-list">
-
-                            <div class="row content-list-head">
-                                <div class="col-auto">
-                                    <h3>Files</h3>
-                                </div>
-                            </div>
-
                             <div class="content-list-body">
-
-                                
-
-
-                                <ul class="list-group list-group-activity dropzone-previews">
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">insert_drive_file</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Peggy Brown" src="~/assets/img/avatar-female-2.jpg" class="avatar" data-title="Peggy Brown" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">client-questionnaire</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">48kb Text Doc</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div class="container pb-2">
+                                    <form method="post" enctype="multipart/form-data">
+                                        <input type="file" name="files" style="margin-bottom: 20px; font-size: 0.9rem !important"/>
+                                        <button 
+                                            class="btn btn-submit float-end" 
+                                            type="submit" 
+                                            asp-controller="ProjectFiles" 
+                                            asp-action="UploadFile" 
+                                            asp-route-projectId="@Model.Project.Id">
+                                                Submit
+                                        </button>
+                                        <div class="row">
+                                            <input 
+                                                type="text" 
+                                                autocomplete="off" 
+                                                placeholder="Enter file description" 
+                                                name="description"
+                                                style="width: 100% !important; margin-bottom: 20px; margin-left: 10px; margin-right: 10px; padding: 5px;"
+                                                required 
+                                            />
                                         </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">folder</i>
+                                    </form>
+                                </div>
+                                <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
+                                    @if (@Model.Files is not null && @Model.Files.Count() > 0)
+                                    {
+                                        @foreach (var file in @Model.Files)
+                                        {
+                                            <li class="list-group-item pb-2 mb-2">
+                                                <div class="media align-items-center">
+                                                    <ul class="avatars">
+                                                        <li>
+                                                            <div class="avatar bg-greyblue" style="height: 2.8rem; width: 2.8rem;">
+                                                                <i class="material-icons">insert_drive_file</i>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            @if (file.UploadedByUser.UserImage is not null)
+                                                            {
+                                                                <a asp-controller="User" 
+                                                                   asp-action="Details" 
+                                                                   asp-route-id="file.UploadedByUser.Id" 
+                                                                   data-toggle="tooltip" 
+                                                                   data-placement="top" 
+                                                                   title="Uploaded by @file.UploadedByUser.FullName"
+                                                                >
+                                                                    <img alt="@file.UploadedByUser.UserName" 
+                                                                         class="avatar profile-pic details-avatar" 
+                                                                         src="data:image/*;base64,@(Convert.ToBase64String(file.UploadedByUser.UserImage))"
+                                                                         style="height: 2.6rem !important; width: 2.6rem !important"
+                                                                    />
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a asp-controller="User" 
+                                                                   asp-action="Details" 
+                                                                   asp-route-id="file.UploadedByUser.Id"
+                                                                   data-toggle="tooltip" 
+                                                                   data-placement="top" 
+                                                                   title="@file.UploadedByUser.FullName"
+                                                                >
+                                                                    <img alt="@file.UploadedByUser.UserName" 
+                                                                         class="avatar profile-pic details-avatar"
+                                                                         src="~/images/user.jpg" 
+                                                                    />
+                                                                </a>
+                                                            }
+                                                        </li>
+                                                    </ul>
+                                                    <div class="media-body d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <a href="#" data-filter-by="text">@file.Name@file.Extension</a> 
+                                                            <br>
+                                                            <span class="text-small" data-filter-by="text">@file.Description</span>
+                                                        </div>
                                                     </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Harry Xai" src="~/assets/img/avatar-male-2.jpg" class="avatar" data-title="Harry Xai" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">moodboard_images</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">748kb ZIP</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                    <div class="float-end">
+                                                        <button class="btn btn-round-sm flex-shrink-0 float-end" data-toggle="tooltip" data-title="Download file">
+                                                            <a asp-controller="ProjectFiles" asp-action="DownloadFile" asp-route-id="@file.Id">
+                                                                <i class="material-icons btn-icon btn-icon-sm">download</i>
+                                                            </a>
+                                                        </button>
                                                     </div>
+                                                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                                    {
+                                                        <div class="float-end">
+                                                            <button class="btn btn-round-sm flex-shrink-0 float-end ml-2" data-toggle="tooltip" data-title="Delete file">
+                                                                <a asp-controller="ProjectFiles" asp-action="DeleteFileFromDb" asp-route-id="@file.Id">
+                                                                    <i class="material-icons btn-icon btn-icon-sm">delete</i>
+                                                                </a>
+                                                            </button>
+                                                        </div>
+                                                    }
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                            </li>
+                                        }
+                                    }
                                 </ul>
-
                             </div>
                         </div>
-                        <!--end of content list-->
                     </div>
 
                     @***** CLOSED TICKETS *****@

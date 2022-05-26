@@ -46,6 +46,8 @@ public class ProjectRepository : IProjectRepository
                         .ThenInclude(u=>u.ApplicationUser)
                 .Include(n => n.Notes)
                     .ThenInclude(u => u.ApplicationUser)
+                .Include(p => p.ProjectFiles)
+                    .ThenInclude(u => u.UploadedByUser)
                 .Include(p => p.CreatedByUser)
                 .AsNoTracking()
                 .AsSplitQuery()

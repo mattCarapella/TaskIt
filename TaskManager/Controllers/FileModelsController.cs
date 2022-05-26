@@ -127,7 +127,7 @@ public class FileModelsController : Controller
         }
         catch (DbUpdateException)
         {
-            return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            return RedirectToAction("Details", "Tickets", new { id = file.TicketId });
         }
     }
 

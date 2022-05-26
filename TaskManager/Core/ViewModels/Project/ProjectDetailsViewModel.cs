@@ -16,4 +16,6 @@ public class ProjectDetailsViewModel
 
     public ICollection<PNote> Notes { get; set; }
 
+    public ICollection<ProjectFile> Files { get; set; }
+
 }
