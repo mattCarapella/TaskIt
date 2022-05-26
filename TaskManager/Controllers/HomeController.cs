@@ -76,7 +76,16 @@ public class HomeController : Controller
                                                             Priority = grp.Key,
                                                             PriorityCount = grp.Count()
                                                         };
-
+        var priorityCounts = new List<int>();
+        var typeCounts = new List<int>();
+        foreach (var item in priorityData)
+        {
+            priorityCounts.Add(item.PriorityCount);
+        }
+        foreach (var item in typeData)
+        {
+            typeCounts.Add(item.TypeCount);
+        }
 
         var upcomingDeadlines = await _unitOfWork.TicketAssignmentRepository.GetUpcomingTicketDeadlines(currentUserId);
         var projectCount = _unitOfWork.ProjectAssignmentRepository.GetUserProjectCount(currentUserId);
@@ -93,7 +102,9 @@ public class HomeController : Controller
             TicketPriorityGroup = priorityData,
             TicketStatusGroup = statusData,
             TicketTypeGroup = typeData,
-            CurrentUserName = user.FirstName
+            CurrentUserName = user.FirstName,
+            PriorityCounts = priorityCounts,
+            TypeCounts = typeCounts
         };
 
         return View(vm);

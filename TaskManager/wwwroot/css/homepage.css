@@ -182,8 +182,6 @@
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-
-
 .assignment-item-header {
     flex: 1;
     -webkit-box-flex: 1;
@@ -195,7 +193,6 @@
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-
 .text-medium {
     font-size: 1.25rem !important;
     font-weight: 400 !important;
@@ -206,7 +203,6 @@
     font-weight: 500 !important;
     color: var(--darkgrey);
 }
-
 
 
 .bg-circle-light {
@@ -224,7 +220,7 @@
 /*                         GRAPHS                                */
 /*****************************************************************/
 .graph-card {
-    min-height: 305px;
+    /*min-height: 400px;*/
 }
 
 .group-data {
@@ -304,7 +300,17 @@
     }
 }
 
+@media (max-width: 928px) {
+    .create--container {
+        width: 85%;
+    }
+}
 
+@media (max-width: 768px) {
+    .create--container {
+        width: 90%;
+    }
+}
 
 /*font-family: 'Fjalla One', sans-serif;*/
 
@@ -312,85 +318,3 @@
 
 
 
-
-
-@media (max-width: 1415px) {
-    /*.homepage-welcome {
-        font-size: 2.7rem;
-    }*/
-}
-
-@media (max-width: 1303px) {
-    /*.homepage-welcome {
-        font-size: 2.3rem;
-    }*/
-}
-
-@media (max-width: 1200px) {
-    /*.homepage-welcome {
-        font-size: 2.5vh;
-    }
-
-    h5 {
-        font-size: 1.15rem;
-    }*/
-}
-
-@media (max-width: 928px) {
-    /*.homepage-welcome {
-        font-size: 1.6rem;
-        font-weight: 400;
-    }*/
-}
-
-@media (max-width: 890px) {
-    /*h5 {
-        font-size: 1.0rem;
-    }*/
-}
-
-@media (max-width: 811px) {
-    /*h5 {
-        font-size: 0.97rem;
-    }*/
-}
-
-@media (max-width: 768px) {
-    /* .homepage-welcome {
-        font-size: 2.5rem;
-        font-weight: 500;
-    }
-
-    h5 {
-        font-size: 1.3rem;
-    }*/
-}
-
-@media (max-width: 483px) {
-    /*  .homepage-welcome {
-        font-size: 1.2rem;
-    }*/
-}
-
-@media (max-width: 375px) {
-    /* .homepage-welcome {
-        font-size: 1.8rem;
-    }
-
-    h5 {
-        font-size: 1.1rem;
-    }*/
-}
-
-@media (max-width: 265px) {
-    /*.homepage-welcome {
-        font-size: 1.0rem;
-    }*/
-}
-
-@media (min-width: 1965px) {
-    /* .homepage-assignments {
-        font-size: 2.0rem;
-        font-weight: 600;
-    }*/
-}

@@ -15,5 +15,7 @@ public class DashboardViewModel
     public IEnumerable<Models.Ticket>? UpcomingDeadlines { get; set; }
 
     public string? CurrentUserName { get; set; }
+    public List<int>? PriorityCounts { get; set; }
+    public List<int>? TypeCounts { get; set; }
 
 }

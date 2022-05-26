@@ -5,34 +5,34 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
+@*<div class="mb-4">
+    <span class="login-welcome-brand"><strong>Task</strong>It</span> 
+    <span class="login-welcome-text pl-1">is a project and ticket management application built with ASP.NET Core MVC.</span>
+</div>
+<hr/>*@
+<div class="row pb-5">
+    <div class="col-md-4 mb-4 pl-3 pr-3">
         <section>
+            <h1 class="mb-3">@ViewData["Title"]</h1>
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                <div class="form-floating mb-2">
                     <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true"/>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-floating">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                <div class="form-floating mb-4">
                     <label asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div>
-                    <div class="checkbox">
+                    <div class="checkbox pl-3 mb-4">
                         <label asp-for="Input.RememberMe" class="form-label">
                             <input class="form-check-input" asp-for="Input.RememberMe" />
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
                         </label>
                     </div>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
                 </div>
                 <div>
                     <p>
@@ -45,10 +45,62 @@
                         <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
                     </p>
                 </div>
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mb-4 mt-5">Submit</button>
+                </div>
             </form>
         </section>
     </div>
-    <div class="col-md-6 col-md-offset-2">
+
+    <div class="col-md-8 col-md-offset-2 pl-3 pr-3 center-vert">
+        <section>
+            <div class="card p-4">
+                <div class="login-welcome-text-md pb-3">
+                    Full functionality, including the ability to create projects and ticket requests, is reversed for users with <strong>Administrator</strong> and <strong>Manager</strong> roles.
+                </div>
+                <div class="login-welcome-text-md">
+                    To demo these roles, use the following login credentials:
+                </div>
+                <div class="card flex-fill mt-4 mb-4 pt-0 pb-3 pl-1 pr-1" style="background: rgb(232, 240, 254)">
+                    <div class="card-body p-4">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 pt-3">
+                                    <h3 style="font-weight: 700 !important">Administrator</h3>
+                                    <h5><strong>Login:</strong> admin@taskit.com</h5>
+                                    <h5><strong>Password:</strong> Pa$$w0rd</h5>
+                                </div>
+                                <div class="col-md-6 pt-3">
+                                    <h3 style="font-weight: 700 !important">Manager</h3>
+                                    <h5><strong>Login:</strong> manager@taskit.com</h5>
+                                    <h5><strong>Password:</strong> Pa$$w0rd</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="login-welcome-text-md pb-2" style="font-size: 1.1rem !important;">Source code can be viewed at</div>
+                <a href="http://www.github.com/mattCarapella" style="font-size: 1.2rem !important; font-weight: bold !important; text-align: center !important;">
+                    https://github.com/mattCarapella/TaskIt
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+
+
+
+
+
+
+@*
+<div class="col-md-6 col-md-offset-2">
         <section>
             <h3>Use another service to log in.</h3>
             <hr />
@@ -79,7 +131,4 @@
         </section>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+*@

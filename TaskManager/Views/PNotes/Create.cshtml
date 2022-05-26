@@ -1,17 +1,13 @@
 ﻿@model TaskManager.Core.ViewModels.Note.PNoteCreateViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add a note";
 }
-
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/js/ckeditor/ckeditor.js"></script>
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 <div>
     <a href="javascript:history.go(-1)">Back</a>
 </div>
-<div class="container create--container pt-5">
+<div class="container create--container pt-4 pb-4">
     <h1 class="mb-3">Add a note</h1>
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

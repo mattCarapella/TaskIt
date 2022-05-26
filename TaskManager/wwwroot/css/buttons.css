@@ -70,7 +70,7 @@ a {
 }
     .btn-round-sm:hover {
         box-shadow: 0px 6px 6px rgba(0,0,0,0.27);
-        background: #D1D1D1 !important;
+        background: #dedede !important;
     }
 
 .btn-round-med {
@@ -83,11 +83,11 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 5px 5px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
 }
     .btn-round-med:hover {
-        box-shadow: 0px 6px 6px rgba(0,0,0,0.27);
-        background: #D1D1D1;
+        box-shadow: 0px 5px 5px rgba(0,0,0,0.27);
+        background: #dedede !important;
     }
 
 .btn-icon {
