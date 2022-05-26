@@ -248,12 +248,12 @@ th {
 
 .login-welcome-text {
     font-size: 1.8rem;
-    color: #333333;
+    color: #5e5e5e;
 }
 
 .login-welcome-text-md {
-    font-size: 1.3rem !important;
-    color: #333333 !important;
+    font-size: 1.2rem !important;
+    color: #5e5e5e !important;
     text-align: center !important;
 }
 

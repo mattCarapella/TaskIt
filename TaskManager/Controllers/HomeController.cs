@@ -112,12 +112,16 @@ public class HomeController : Controller
             OpenTicketCount = openTicketCount,
             ClosedTicketCount = closedTicketCount,
             UpcomingDeadlines = upcomingDeadlines,
+            
             TicketPriorityGroup = priorityData,
             TicketStatusGroup = statusData,
             TicketTypeGroup = typeData,
+            
             CurrentUserName = user.FirstName,
+            
             PriorityCounts = priorityCounts,
             TypeCounts = typeCounts,
+            
             ManagerProjects = managerProjects,
             ManagerTicketsToAssign = toAssign,
             ManagerTicketsToReview = toReview

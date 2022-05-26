@@ -14,7 +14,7 @@ public class Enums
 
     public enum Status
     {
-        [Display(Name = "To Do")]
+        [Display(Name = "Unassigned")]
         TODO,
         [Display(Name = "In Progress")]
         INPROGRESS = 1,
