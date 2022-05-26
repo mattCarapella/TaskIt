@@ -65,7 +65,7 @@ public class TicketAssignmentRepository : ITicketAssignmentRepository
                     .ToListAsync();
     }
 
-    public async Task<IEnumerable<Ticket>> GetUpcomingTicketDeadlines(string userId)
+    public async Task<List<Ticket>> GetUpcomingTicketDeadlines(string userId)
     {
         var ta = await _context.TicketAssignments
                        .Where(u => u.ApplicationUserId == userId)
@@ -77,8 +77,7 @@ public class TicketAssignmentRepository : ITicketAssignmentRepository
                        .AsNoTracking()
                        .ToListAsync();
 
-        var tickets = from t in ta select t.Ticket;
-        
+        var tickets = (from t in ta select t.Ticket).ToList();
         return tickets;
     }
 

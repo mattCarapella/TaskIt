@@ -78,14 +78,18 @@ public class HomeController : Controller
                                                         };
 
         var priorityCounts = new List<int>();
+        var priorityKeys = new List<string>();
         var typeCounts = new List<int>();
+        var typeKeys = new List<string>();
         foreach (var item in priorityData)
         {
             priorityCounts.Add(item.PriorityCount);
+            priorityKeys.Add(item.Priority.ToString()!);
         }
         foreach (var item in typeData)
         {
             typeCounts.Add(item.TypeCount);
+            typeKeys.Add(item.Type.ToString()!);
         }
 
         var upcomingDeadlines = await _unitOfWork.TicketAssignmentRepository.GetUpcomingTicketDeadlines(currentUserId);
@@ -121,6 +125,8 @@ public class HomeController : Controller
             
             PriorityCounts = priorityCounts,
             TypeCounts = typeCounts,
+            PriorityKeys = priorityKeys,
+            TypeKeys = typeKeys,
             
             ManagerProjects = managerProjects,
             ManagerTicketsToAssign = toAssign,

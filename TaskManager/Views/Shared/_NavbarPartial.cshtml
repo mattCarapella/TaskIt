@@ -58,6 +58,12 @@
                                         </a>
                                         @if (!(await UserManager.IsInRoleAsync(currentUser, "Administrator")))
                                         {
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="ToAssign">
+                                                Tickets to Assign
+                                            </a>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="SubmittedForReview">
+                                                Submitted for Review
+                                            </a>
                                             <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">
                                                 All Projects
                                             </a>

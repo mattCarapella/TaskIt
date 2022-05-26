@@ -68,15 +68,6 @@ public class TicketRepository : ITicketRepository
     }
 
 
-    public async Task<List<Ticket>> GetTicketsToAssign()
-    {
-        return await _context.Tickets
-                        .AsNoTracking()
-                        .Where(t => t.Status == Core.Enums.Enums.Status.TODO)
-                        .Include(p => p.Project)
-                        .ToListAsync();
-    }
-
     public async Task<List<Ticket>> GetTicketsWithProjects()
     {
         return await _context.Tickets
@@ -85,6 +76,7 @@ public class TicketRepository : ITicketRepository
                         .Include(p => p.Project)
                         .ToListAsync();
     }
+
 
     public async Task<List<Ticket>> GetClosedTicketsWithProjects()
     {
@@ -95,27 +87,58 @@ public class TicketRepository : ITicketRepository
                         .ToListAsync();
     }
 
-    public async Task<List<Ticket>> GetTicketsForReview()
+
+    public async Task<List<Ticket>> GetTicketsForManagersProjects(string userId)
+    {
+        var user = _context.Users.Find(userId);
+        return await _context.Tickets
+                            .Include(t => t.Project)
+                            .Where(t => t.Project.CreatedByUserId == userId)
+                            .AsNoTracking()
+                            .ToListAsync();
+    }
+
+
+    public async Task<List<Ticket>> GetTicketsToAssign()
     {
         return await _context.Tickets
-                        .Where(t=>t.Status == Core.Enums.Enums.Status.SUBMITTED)
                         .Include(p => p.Project)
+                        .Where(t => t.Status == Core.Enums.Enums.Status.TODO)
                         .AsNoTracking()
                         .ToListAsync();
     }
 
 
-    public async Task<List<Ticket>> GetTicketsForManagersProjects(string userId)
+    public async Task<List<Ticket>> GetTicketsToAssignForManager(string userId)
     {
         var user = _context.Users.Find(userId);
+        return await _context.Tickets
+                        .Include(t => t.Project)
+                        .Where(t => t.Project.CreatedByUserId == userId)
+                        .Where(t => t.Status == Core.Enums.Enums.Status.TODO)
+                        .AsNoTracking()
+                        .ToListAsync();
+    }
 
-        var tickets = await _context.Tickets
-                            .Include(t => t.Project)
-                            .Where(t => t.Project.CreatedByUserId == userId)
-                            .AsNoTracking()
-                            .ToListAsync();
 
-        return tickets;
+    public async Task<List<Ticket>> GetTicketsForReview()
+    {
+        return await _context.Tickets
+                        .Where(t => t.Status == Core.Enums.Enums.Status.SUBMITTED)
+                        .Include(p => p.Project)
+                        .AsNoTracking()
+                        .ToListAsync();
+    }
+
+    public async Task<List<Ticket>> GetTicketsForReviewForManager(string userId)
+    {
+        var user = _context.Users.Find(userId);
+        return await _context.Tickets
+                        .Include(t => t.Project)
+                        .Where(t => t.Project.CreatedByUserId == userId)
+                        .Where(t => t.Status == Core.Enums.Enums.Status.SUBMITTED)
+                        .AsNoTracking()
+                        .ToListAsync();
     }
 
 

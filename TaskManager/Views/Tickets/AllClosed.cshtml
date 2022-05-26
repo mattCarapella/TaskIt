@@ -145,13 +145,13 @@
                                     </td>
                                     <td>
                                         <div class="button-group">
-                                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                                            {
-                                                <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
-                                                    <a asp-action="Details" asp-route-id="@item.TicketId">
-                                                        <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
-                                                    </a>
-                                                </button>
+                                            <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
+                                                <a asp-action="Details" asp-route-id="@item.TicketId">
+                                                    <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
+                                                </a>
+                                            </button>
+                                            @if ((await AuthorizationService.AuthorizeAsync(User, @Model, TaskOperations.Update)).Succeeded)
+                                            {    
                                                 <button class="btn btn-round-sm mr-1">
                                                     <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
                                                         <i class="material-icons btn-icon btn-icon-sm">create</i>

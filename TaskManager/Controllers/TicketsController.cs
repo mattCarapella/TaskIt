@@ -476,7 +476,16 @@ namespace TaskManager.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var ticketList = await _unitOfWork.TicketRepository.GetTicketsToAssign();
+            var ticketList = new List<Ticket>();
+            
+            if (User.IsInRole(Constants.Roles.Administrator))
+            {
+                ticketList = await _unitOfWork.TicketRepository.GetTicketsToAssign();
+            }
+            else if (User.IsInRole(Constants.Roles.Manager))
+            {
+                ticketList = await _unitOfWork.TicketRepository.GetTicketsToAssignForManager(User.Identity.GetUserId());
+            }
             var tickets = from t in ticketList select t;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -656,7 +665,15 @@ namespace TaskManager.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var ticketList = await _unitOfWork.TicketRepository.GetTicketsForReview();
+            var ticketList = new List<Ticket>();
+            if (User.IsInRole(Constants.Roles.Administrator))
+            {
+                ticketList = await _unitOfWork.TicketRepository.GetTicketsForReview();
+            }
+            else if (User.IsInRole(Constants.Roles.Manager))
+            {
+                ticketList = await _unitOfWork.TicketRepository.GetTicketsForReviewForManager(User.Identity.GetUserId());
+            }
             var tickets = from t in ticketList select t;
 
             if (!String.IsNullOrEmpty(searchString))

@@ -13,12 +13,14 @@ public class DashboardViewModel
     public IEnumerable<TicketPriorityGroup>? TicketPriorityGroup { get; set; }
     public IEnumerable<TicketStatusGroup>? TicketStatusGroup { get; set; }
     public IEnumerable<TicketTypeGroup>? TicketTypeGroup { get; set; }
-    public IEnumerable<Models.Ticket>? UpcomingDeadlines { get; set; }
+    public List<Models.Ticket>? UpcomingDeadlines { get; set; }
 
 
     public string? CurrentUserName { get; set; }
     public List<int>? PriorityCounts { get; set; }
     public List<int>? TypeCounts { get; set; }
+    public List<string>? PriorityKeys { get; set; }
+    public List<string>? TypeKeys { get; set; }
 
 
     public List<Models.Project>? ManagerProjects { get; set; }
