@@ -41,17 +41,45 @@
                                 </div>
                             </div>
                         </li>
+                        @if (await UserManager.IsInRoleAsync(currentUser, "Manager"))
+                        {
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a class="nav-link navbar-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" 
+                                        aria-haspopup="true" id="nav-dropdown-2">
+                                            Management
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="Manager">
+                                            Manager | Projects
+                                        </a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="Manager">
+                                            Manager | Tickets
+                                        </a>
+                                        @if (!(await UserManager.IsInRoleAsync(currentUser, "Administrator")))
+                                        {
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">
+                                                All Projects
+                                            </a>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllClosed">
+                                                All Closed Tickets
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }
                         @if (await UserManager.IsInRoleAsync(currentUser, "Administrator"))
                         {
                             <li class="nav-item">
                                 <div class="dropdown">
                                     <a class="nav-link navbar-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Admin</a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">Current Projects</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllTickets">Open Tickets</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="ToAssign">Unassigned Tickets</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="SubmittedForReview">Submitted Tickets</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllClosed">Closed Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">All Projects</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllTickets">All Open Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="ToAssign">All Unassigned Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="SubmittedForReview">All Submitted Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllClosed">All Closed Tickets</a>
                                     </div>
                                 </div>
                             </li>
@@ -63,12 +91,9 @@
                 </ul>
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    @*var currentUser = @UserManager.Users.FirstOrDefault(u => u.UserName == @UserManager.GetUserName(User));*@
                     <div class="d-none d-lg-block">
                         <div class="dropdown">
                             <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @*@if (currentUser is not null && currentUser.UserImage is not null)*@
-                                
                                 @if (UserManager.GetUserAsync(User).Result is not null && UserManager.GetUserAsync(User).Result.UserImage is not null)
                                 {
                                     <img alt="Image" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.UserImage))" class="rounded-circle navbar-avatar"/>
@@ -104,56 +129,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-@*
-    <div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-    <span class="fs-4">Simple header</span>
-    </a>
-
-    <ul class="nav nav-pills">
-    <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
-    <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-    <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-    <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
-    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-    </ul>
-    </header>
-    </div>*@
-
-
-
-@*@if (SignInManager.IsSignedIn(User))
-    {
-    var currentUser = @UserManager.Users.FirstOrDefault(u => u.UserName == @UserManager.GetUserName(User));
-    <li class="nav-item">
-    <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-    Hello, @UserManager.GetUserName(User)
-    </a>
-    </li>
-    <li class="nav-item">
-    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
-    asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-    </form>
-    </li>
-    }
-    else
-    {
-    <li class="nav-item">
-    <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-    }
-    </ul>*@

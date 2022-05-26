@@ -87,8 +87,6 @@ void AddAuthorizationPolicies(IServiceCollection services)
         options.FallbackPolicy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
             .Build();
-
-        
     });
 
     builder.Services.AddAuthorization(options =>
@@ -114,8 +112,16 @@ void AddScoped()
     builder.Services.AddScoped<IPNoteRepository, PNoteRepository>();
 
     builder.Services.AddScoped<IAuthorizationHandler, TicketIsSubmitterAuthorizationHandler>();
+    builder.Services.AddScoped<IAuthorizationHandler, TicketAdminAuthorizationHandler>();
+
+    builder.Services.AddScoped<IAuthorizationHandler, ProjectAdminAuthorizationHandler>();
+    builder.Services.AddScoped<IAuthorizationHandler, ProjectManagerAuthorizationHandler>();
 
     builder.Services.AddScoped<IAuthorizationHandler, PNoteIsSubmitterAuthorizationHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, PNoteManagerAuthorizationHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, PNoteAdminAuthorizationHandler>();
+
+    builder.Services.AddScoped<IAuthorizationHandler, TNoteIsSubmitterAuthorizationHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, TNoteManagerAuthorizationHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, TNoteAdminAuthorizationHandler>();
 }

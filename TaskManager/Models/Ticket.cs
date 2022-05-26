@@ -44,7 +44,7 @@ public class Ticket
 
 
     [DataType(DataType.Date), Display(Name = "Goal Date")]
-    [Required, ValidFutureDate(ErrorMessage = "Date must be in the future."), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+    [Required, ValidFutureDate(ErrorMessage = "Date must be in the future."), DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
     public DateTime GoalDate { get; set; }
 
 

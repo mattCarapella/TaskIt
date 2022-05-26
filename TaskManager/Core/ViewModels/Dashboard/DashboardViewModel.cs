@@ -1,4 +1,5 @@
 ﻿using TaskManager.Core.ViewModels.Dashboard;
+using TaskManager.Models;
 
 namespace TaskManager.Core.ViewModels;
 
@@ -14,8 +15,15 @@ public class DashboardViewModel
     public IEnumerable<TicketTypeGroup>? TicketTypeGroup { get; set; }
     public IEnumerable<Models.Ticket>? UpcomingDeadlines { get; set; }
 
+
     public string? CurrentUserName { get; set; }
     public List<int>? PriorityCounts { get; set; }
     public List<int>? TypeCounts { get; set; }
+
+
+    public List<Models.Project>? ManagerProjects { get; set; }
+    public List<Models.Ticket>? ManagerTicketsToAssign { get; set; }
+    public List<Models.Ticket>? ManagerTicketsToReview { get; set; }
+
 
 }

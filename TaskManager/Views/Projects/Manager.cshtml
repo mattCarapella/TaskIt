@@ -2,9 +2,8 @@
 @using TaskManager.Core.Enums
 @using TaskManager.Core.ViewModels.Project
 @using static TaskManager.Core.Enums.Enums
-@model PaginatedList<TaskManager.Models.Project>
-
-@{ ViewData["Title"] = "All Projects"; }
+@model ProjectIndexViewModel;
+@{ ViewData["Title"] = "Manager | Projects"; }
 
 <div class="main-container">
     <div class="container">
@@ -14,7 +13,7 @@
                     <div class="wrapper mb-2">
                         <div class="media">
                             <img class="header-img" alt="Image" src="~/images/projectA100.png" overflow="hidden" />
-                            <span class="header-text pl-4 pt-2">All Projects</span>
+                            <span class="header-text pl-4 pt-2">Managed Projects</span>
                         </div>
                         <span class="mt-2">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
@@ -33,7 +32,7 @@
                                 <span class="pr-3">Search by name or description:</span>
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
                                 <button type="submit" class="btn btn-link">Search</button>
-                                <a asp-action="AllProjects" class="btn-link">Clear</a>
+                                <a asp-action="Manager" class="btn-link">Clear</a>
                             </p>
                         </div>
                     </form>
@@ -42,7 +41,7 @@
                             <tr>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllProjects"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["NameSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Name
@@ -51,7 +50,7 @@
                                 <th>Description</th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllProjects"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["OpenTicketSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Open Tickets
@@ -59,7 +58,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllProjects"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Created On
@@ -67,7 +66,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="AllProjects"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Goal Date
@@ -79,8 +78,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Projects)
                             {
+                                var ticketCount = item.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count();
                                 <tr>
                                     <td>
                                         <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id">
@@ -98,7 +98,7 @@
                                         }
                                     </td>
                                     <td>
-                                        @item.Tickets.Where(t => t.Status != Enums.Status.COMPLETED).Count()
+                                        @Html.DisplayFor(modelItem => ticketCount)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.CreatedAt)
@@ -114,7 +114,7 @@
                                     </td>
                                     <td>
                                         <div class="button-group pt-1">
-                                                <button class="btn btn-round-sm mr-1">
+                                            <button class="btn btn-round-sm mr-1">
                                                     <a asp-action="Details" asp-route-id="@item.Id" data-toggle="tooltip" data-title="Project details">
                                                         <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
                                                     </a>
@@ -139,19 +139,19 @@
                         </tbody>
                     </table>
                     @{
-                        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-                        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                        var prevDisabled = !Model.Projects.HasPreviousPage ? "disabled" : "";
+                        var nextDisabled = !Model.Projects.HasNextPage ? "disabled" : "";
                     }
-                    <a asp-action="AllProjects"
+                    <a asp-action="Manager"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
-                       asp-route-pageNumber="@(Model.PageIndex-1)" ;
+                       asp-route-pageNumber="@(Model.Projects.PageIndex-1)" ;
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        class="btn btn-default @prevDisabled">
                         Previous
                     </a>
-                    <a asp-action="AllProjects"
+                    <a asp-action="Manager"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
-                       asp-route-pageNumber="@(Model.PageIndex+1)" ;
+                       asp-route-pageNumber="@(Model.Projects.PageIndex+1)" ;
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        class="btn btn-default @nextDisabled">
                         Next

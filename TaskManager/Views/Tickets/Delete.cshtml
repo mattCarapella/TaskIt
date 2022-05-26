@@ -70,17 +70,11 @@
                     @Html.DisplayFor(model => model.UpdatedAt)
                 </dd>
             }
-            @*<dt class="col-sm-2 form-label-text pb-2">
-                @Html.DisplayNameFor(model => model.Project)
-                </dt>
-                <dd class="col-sm-10 pb-2">
-                @Html.DisplayFor(model => model.Project.Name)
-                </dd>*@
         </dl>
         <div class="btn-group mt-4">
             <form asp-action="Delete">
                 <input type="hidden" asp-for="TicketId" />
-                <input type="submit" value="Delete" class="btn btn-dark-custom mr-3" />
+                <input type="submit" value="Delete" class="btn btn-submit-lg mr-3" />
             </form>
             <button class="btn btn-cancel ">
                 <a asp-action="Index">Cancel</a>

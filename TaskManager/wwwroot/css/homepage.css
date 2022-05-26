@@ -58,7 +58,8 @@
 }
 
 .card-header {
-    background: #FFFEEF;
+    /*background: #FFFEEF;*/
+    background: #eeeeee;
 }
 
 .homepage-card-header-dark {

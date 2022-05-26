@@ -24,14 +24,6 @@ public class ProjectRepository : IProjectRepository
         return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
     }
 
-    public async Task<Project> GetProjectWithTickets(Guid projectId, bool tracking = true)
-    {
-        if (!tracking)
-        {
-            return await _context.Projects.Include(t=>t.Tickets).AsNoTracking().FirstOrDefaultAsync(p => p.Id == projectId);
-        }
-        return await _context.Projects.Include(t => t.Tickets).FirstOrDefaultAsync(p => p.Id == projectId);
-    }
 
     public async Task<Project> GetProjectWithUsers(Guid projectId)
     {
@@ -44,7 +36,6 @@ public class ProjectRepository : IProjectRepository
     }
 
 
-
     public async Task<Project> GetProjectWithTicketsNotesUsers(Guid projectId)
     {
         return await _context.Projects
@@ -55,28 +46,21 @@ public class ProjectRepository : IProjectRepository
                         .ThenInclude(u=>u.ApplicationUser)
                 .Include(n => n.Notes)
                     .ThenInclude(u => u.ApplicationUser)
+                .Include(p => p.CreatedByUser)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == projectId);
-
-        //return await _context.Projects
-        //    .Include(p => p.Contributers)
-        //        .ThenInclude(p => p.ApplicationUser)
-        //            .ThenInclude(p => p.Tickets)
-        //                .ThenInclude(p => p.Ticket)
-        //    .Include(p => p.Notes)
-        //        .ThenInclude(p=>p.ApplicationUser)
-        //    .AsNoTracking()
-        //    .OrderBy(p => p.GoalDate)
-        //    .FirstOrDefaultAsync(p => p.Id == projectId);
     }
 
 
-
-    // Get all projects - For Admin or Manager
-    public async Task<ICollection<Project>> GetProjects()
+    public async Task<List<Project>> GetProjectsForManager(string userId)
     {
-        return await _context.Projects.AsNoTracking().ToListAsync();
+        var user = _context.Users.Find(userId);
+        return await _context.Projects
+            .Where(p => p.CreatedByUser == user)
+            .Include(p => p.Tickets)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
 
@@ -102,28 +86,3 @@ public class ProjectRepository : IProjectRepository
         _context.Projects.Remove(project);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//public Project GetProject(Guid projectId)
-//{
-//    return _context.Projects.Find(projectId);
-//}
-
-
-//public IQueryable<Project> GetProjectsWithTickets()
-//{
-//    return _context.Projects.Include(p => p.Tickets);
-//}

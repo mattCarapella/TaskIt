@@ -49,7 +49,7 @@
         <div class="col-12 col-md-4 col-xxl-4 homepage-col d-flex order-2 order-xxl-2 mb-2">
             <div class="card flex-fill">
                 <div class="card-header pb-1">
-                    <span class="assignment-item-header">Goals</span>
+                    <span class="assignment-item-header">Upcoming</span>
                     <svg class="float-end" viewBox="17 20 170 170" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
                         <linearGradient gradientUnits="userSpaceOnUse" id="a" x1="34.931" x2="168.523" y1="168.884" y2="35.292">
                             <stop offset="0" stop-color="#182542" class="stop-color-12c2e9"></stop>
@@ -148,18 +148,22 @@
                     <div class="col-md-12 center-vert center-hor">
                         <div class="">You have</div>
                         <div class="text-large pt-2 pb-2"><a href="/Tickets/Closed">@Model.ClosedTicketCount closed tickets</a></div>
-                        <div class="">with an average</div>
-                        <div class="pb-1">completion time of</div>
-                        <div class="text-large pt-2">- - -</div>
+                        @if (@Model.ClosedTicketCount > 0)
+                        {    
+                            <div class="">with an average</div>
+                            <div class="pb-1">completion time of</div>
+                            <div class="text-large pt-2">- - -</div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     @******  ROW 2: GRAPHS  ******@
     <div class="row homepage-row">
         @******  PRIORITY  ******@
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-6 mb-2">
             <div class="card graph-card flex-fill">
                 <div class="card-header pb-1">
                     <span class="assignment-item-header">Tickets by Priority</span>
@@ -248,6 +252,140 @@
             </div>
         </div>
     </div>
+    @******  ROW 3: MANAGER  ******@
+    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManager")).Succeeded)
+    {
+        <div class="row homepage-row">
+        @******  MANAGED PROJECTS  ******@
+        <div class="col-12 col-md-4 col-xxl-4 homepage-col d-flex order-1 order-xxl-1 mb-2">
+            <div class="card flex-fill">
+                <div class="card-header pb-3">
+                    <span class="assignment-item-header">Managed Projects</span>
+                </div>
+                <div class="card-body homepage-card-body p-1">
+                    <div class="assignments">
+                        
+                        <div class="assignment-item">
+                            <div class="assignment-item-name">
+                                Managed Projects
+                            </div>
+                            <div class="assignment-item-value assignment-item-value-workload">
+                                <a class="btn assignment-item-btn" asp-controller="Projects" asp-action="Manager">
+                                    <span class="btn-helper"></span>
+                                        @if (@Model.ManagerProjects is not null)
+                                        {
+                                            <strong>@Model.ManagerProjects.Count</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>0</strong>
+                                        }
+                                    </a>
+                            </div>
+                        </div>
+                        <div class="assignment-item">
+                            <div class="assignment-item-name">
+                                To Assign
+                            </div>
+                            <div class="assignment-item-value assignment-item-value-workload">
+                                <a class="btn assignment-item-btn" asp-controller="Tickets" asp-action="Manager">
+                                    <span class="btn-helper"></span>
+                                    @if (@Model.ManagerTicketsToAssign is not null)
+                                    {
+                                        <strong>@Model.ManagerTicketsToAssign.Count</strong>
+                                    }
+                                    else
+                                    {
+                                        <strong>0</strong>
+                                    }
+                                </a>
+                            </div>
+                        </div>
+                        <div class="assignment-item">
+                            <div class="assignment-item-name">
+                                To Review
+                            </div>
+                            <div class="assignment-item-value assignment-item-value-workload">
+                                <a class="btn assignment-item-btn" asp-controller="Tickets" asp-action="Manager">
+                                    <span class="btn-helper"></span>
+                                    @if (@Model.ManagerTicketsToReview is not null)
+                                    {
+                                        <strong>@Model.ManagerTicketsToReview.Count</strong>
+                                    }
+                                    else
+                                    {
+                                        <strong>0</strong>
+                                    }
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*****  TO ASSIGN  *****@
+        <div class="col-12 col-md-4 col-xxl-4 homepage-col d-flex order-2 order-xxl-2 mb-2">
+            <div class="card flex-fill">
+                <div class="card-header pb-3">
+                    <span class="assignment-item-header">Tickets to Assign</span>
+                </div>
+                <div class="card-body pl-1 pr-1 pt-0 pb-0">
+                    <div class="assignments">
+                        @if (@Model.ManagerTicketsToAssign is not null && @Model.ManagerTicketsToAssign.Count > 0)
+                        {
+                            @foreach (var item in @Model.ManagerTicketsToAssign)
+                            {
+                                <div class="assignment-item">
+                                    <div class="assignment-item-name">
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
+                                            @item.Title
+                                        </a>
+                                    </div>
+                                    
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="mt-5" style="text-align: center">You're all caught up.</div>
+                        }
+                        </div>
+                </div>
+            </div>
+        </div>
+        @******  TO REVIEW ******@
+        <div class="col-12 col-md-4 col-xxl-4 homepage-col d-flex order-2 order-xxl-2 mb-2">
+            <div class="card flex-fill">
+                <div class="card-header pb-3">
+                    <span class="assignment-item-header">Tickets to Review</span>
+                </div>
+                <div class="card-body pl-1 pr-1 pt-0 pb-0">
+                    <div class="assignments">
+                        @if (@Model.ManagerTicketsToReview is not null && @Model.ManagerTicketsToReview.Count > 0)
+                        {
+                            @foreach (var item in @Model.ManagerTicketsToReview)
+                            {
+                                <div class="assignment-item">
+                                    <div class="assignment-item-name">
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
+                                            @item.Title
+                                        </a>
+                                    </div>
+                                    
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="mt-5" style="text-align: center">You're all caught up.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

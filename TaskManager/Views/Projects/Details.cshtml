@@ -19,10 +19,10 @@
                             </div>
                         </div>
                         <span class="mt-2">
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                            @if ((await AuthorizationService.AuthorizeAsync(User, @Model.Project, TaskOperations.Update)).Succeeded)
                             {
                                 <button class="btn btn-round-med">
-                                    <a asp-controller="Projects"
+                                   <a asp-controller="Projects"
                                    asp-action="Edit"
                                    asp-route-id="@Model!.Project.Id"
                                    data-toggle="tooltip"
@@ -73,6 +73,12 @@
                             @Html.DisplayFor(model => model.Project.UpdatedAt)
                         </dd>
                     }
+                    <dt class="col-sm-4 details-type">
+                            Managed by
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Project.CreatedByUser!.FullName)
+                        </dd>
                 </dl>
 
                 @***** PROJECT CONTRIBUTERS *****@
@@ -238,7 +244,7 @@
                                                     {
                                                         @if (ticket.Description.Length > 200)
                                                         {
-                                                            <p>@ticket.DescriptionNoHtml.Substring(0, 199)...</p>
+                                                            <p>@ticket.Description.Substring(0, 199)...</p>
                                                         }
                                                         else
                                                         {

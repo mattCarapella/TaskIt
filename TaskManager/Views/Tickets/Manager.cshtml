@@ -1,10 +1,10 @@
 ﻿@using TaskManager.Core
 @model PaginatedList<TaskManager.Models.Ticket>
+
 @{
-    ViewData["Title"] = "Your Tickets";
+    ViewData["Title"] = "Manager | Tickets";
 }
 
-<div class="container container-body">
 <div class="main-container">
     <div class="container">
         <div class="row justify-content-center">
@@ -12,8 +12,8 @@
                 <div class="page-content">
                     <div class="wrapper mb-2">
                         <div class="media">
-                            <img class="header-img" alt="Image" src="~/images/ticketA100.png" overflow="hidden" />
-                            <span class="header-text pl-4 pr-2 pt-2">Your Tickets</span>
+                            <img alt="Image" src="~/images/ticketA100.png" class="header-img" overflow="hidden" />
+                            <div class="header-text pl-4 pr-2 pt-2">Tickets for Managed Projects</div>
                         </div>
                         <span class="mt-2">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
@@ -26,22 +26,25 @@
                             }
                         </span>
                     </div>
-                    <form asp-action="Index" method="get">
+
+                    <form asp-action="AllTickets" method="get">
                         <div class="form-actions no-color">
                             <p>
                                 <span class="pr-3">Search by name or description:</span>
                                 <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
                                 <button type="submit" class="btn btn-link btn-link-offset-sm">Search</button>
-                                <a asp-action="Index" class="btn-link">Clear</a>
+                                <a asp-action="Manager" class="btn-link">Clear</a>
                             </p>
                         </div>
                     </form>
-                    <table class="table table-bordered table-responsive mt-4">
+
+
+                    <table class="table table-bordered table-responsive  mt-4">
                         <thead class="align-items-center">
                             <tr>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Ticket
@@ -49,7 +52,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Project
@@ -60,7 +63,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["StatusSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Status
@@ -68,7 +71,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Ticket Type
@@ -76,7 +79,7 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["PrioritySortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Priority
@@ -84,20 +87,21 @@
                                 </th>
                                 <th>
                                     <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Opened On
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
+                                       asp-action="Manager"
                                        asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         Goal Date
                                     </a>
                                 </th>
+                                <th>
+                                    <a class="index--sort-link"
+                                       asp-action="Manager"
+                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        Opened On
+                                    </a>
+                                </th>
+                                
                                 <th></th>
                             </tr>
                         </thead>
@@ -138,26 +142,24 @@
                                         @Html.DisplayFor(modelItem => item.Priority)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                                        @Html.DisplayFor(modelItem => item.GoalDate)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.GoalDate)
+                                        @Html.DisplayFor(modelItem => item.CreatedAt)
                                     </td>
                                     <td>
                                         <div class="button-group">
                                             <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
                                                 <a asp-action="Details" asp-route-id="@item.TicketId">
-                                                    <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
+                                                    <i class="material-icons btn-icon">format_align_right</i>
                                                 </a>
                                             </button>
-                                            @if ((await AuthorizationService.AuthorizeAsync(User, @item, TaskOperations.Update)).Succeeded)
-                                            {
-                                                <button class="btn btn-round-sm mr-1">
-                                                    <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
-                                                        <i class="material-icons btn-icon btn-icon-sm">create</i>
-                                                    </a>
-                                                </button>
-                                            }
+
+                                            <button class="btn btn-round-sm mr-1">
+                                                <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
+                                                    <i class="material-icons btn-icon btn-icon-sm">create</i>
+                                                </a>
+                                            </button>
                                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                                             {
                                                 <button class="btn btn-round-sm">
@@ -176,14 +178,14 @@
                         var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
                         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
                     }
-                    <a asp-action="Index"
+                    <a asp-action="Manager"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex-1)" ;
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        class="btn btn-default @prevDisabled">
                         Previous
                     </a>
-                    <a asp-action="Index"
+                    <a asp-action="Manager"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex+1)" ;
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -194,5 +196,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>

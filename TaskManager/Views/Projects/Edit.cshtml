@@ -6,8 +6,8 @@
 
 <div><a href="javascript:history.go(-1)">Back</a></div>
 
-<div class="container create--container pt-5">
-    <h1 class="mb-3">Update project</h1>
+<div class="container create--container pt-3 pb-3">
+    <h1 class="mb-1">Update project</h1>
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
@@ -27,14 +27,14 @@
                 <input asp-for="Tag" class="form-control" />
                 <span asp-validation-for="Tag" class="text-danger"></span>
             </div>
-            <div class="form-group pb-3">
+            <div class="form-group">
                 <label asp-for="GoalDate" class="control-label form-label-text"></label>
                 <input asp-for="GoalDate" class="form-control" />
                 <span asp-validation-for="GoalDate" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-dark-custom mt-2 mb-3" />
+            <input type="submit" value="Submit" class="btn btn-submit-lg mt-2 mb-3" />
         </div>
     </form>
 </div>

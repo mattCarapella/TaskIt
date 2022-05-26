@@ -2,8 +2,8 @@
 
 public class ProjectIndexViewModel
 {
-    public ICollection<Models.Project> Projects { get; set; }
-
+    public PaginatedList<Models.Project> Projects { get; set; }
+    
     public int OpenTicketCount;
 
 }

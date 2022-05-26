@@ -31,24 +31,24 @@ public class HomeController : Controller
         var ticketAssignmentList = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsForUser(currentUserId);
         var userTickets = from t in ticketAssignmentList select t.Ticket;
 
-        var priorityGroups = (from t in userTickets
-                              where t.Status != Core.Enums.Enums.Status.COMPLETED
-                              group t by t.Priority into priorityGroup
-                              select new
-                              {
-                                  Priority = priorityGroup.Key,
-                                  PriorityCount = priorityGroup.Count()
-                              }).ToList();
+        //var priorityGroups = (from t in userTickets
+        //                      where t.Status != Core.Enums.Enums.Status.COMPLETED
+        //                      group t by t.Priority into priorityGroup
+        //                      select new
+        //                      {
+        //                          Priority = priorityGroup.Key,
+        //                          PriorityCount = priorityGroup.Count()
+        //                      }).ToList();
 
 
-        var typeGroups = (from t in userTickets
-                          where t.Status != Core.Enums.Enums.Status.COMPLETED
-                          group t by t.TicketType into typeGroup
-                          select new
-                          {
-                              Type = typeGroup.Key,
-                              TypeCount = typeGroup.Count()
-                          }).ToList();
+        //var typeGroups = (from t in userTickets
+        //                  where t.Status != Core.Enums.Enums.Status.COMPLETED
+        //                  group t by t.TicketType into typeGroup
+        //                  select new
+        //                  {
+        //                      Type = typeGroup.Key,
+        //                      TypeCount = typeGroup.Count()
+        //                  }).ToList();
 
 
         IEnumerable<TicketTypeGroup> typeData = from t in userTickets
@@ -76,6 +76,7 @@ public class HomeController : Controller
                                                             Priority = grp.Key,
                                                             PriorityCount = grp.Count()
                                                         };
+
         var priorityCounts = new List<int>();
         var typeCounts = new List<int>();
         foreach (var item in priorityData)
@@ -93,6 +94,18 @@ public class HomeController : Controller
         var closedTicketCount = _unitOfWork.TicketAssignmentRepository.GetUserClosedTicketCount(currentUserId);
         var user = await _unitOfWork.UserRepository.GetCurrentUser();
 
+        var managerProjects = new List<Project>();
+        var managerTickets = new List<Ticket>();
+        var toAssign = new List<Ticket>();
+        var toReview = new List<Ticket>();
+
+        if (User.IsInRole(Core.Constants.Roles.Manager)) {
+            managerProjects = await _unitOfWork.ProjectRepository.GetProjectsForManager(currentUserId);
+            managerTickets = await _unitOfWork.TicketRepository.GetTicketsForManagersProjects(currentUserId);
+            toAssign = managerTickets.Where(t => t.Status == Core.Enums.Enums.Status.TODO).ToList();
+            toReview = managerTickets.Where(t => t.Status == Core.Enums.Enums.Status.SUBMITTED).ToList();
+        }
+
         var vm = new DashboardViewModel
         {
             ProjectCount = projectCount,
@@ -104,7 +117,10 @@ public class HomeController : Controller
             TicketTypeGroup = typeData,
             CurrentUserName = user.FirstName,
             PriorityCounts = priorityCounts,
-            TypeCounts = typeCounts
+            TypeCounts = typeCounts,
+            ManagerProjects = managerProjects,
+            ManagerTicketsToAssign = toAssign,
+            ManagerTicketsToReview = toReview
         };
 
         return View(vm);

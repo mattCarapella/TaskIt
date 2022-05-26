@@ -105,21 +105,16 @@ public class TicketRepository : ITicketRepository
     }
 
 
-    public async Task<List<Ticket>> GetTicketsAssignedToUser(string userId)
+    public async Task<List<Ticket>> GetTicketsForManagersProjects(string userId)
     {
         var user = _context.Users.Find(userId);
+
         var tickets = await _context.Tickets
                             .Include(t => t.Project)
-                            .Include(u => u.AssignedTo)
-                                .ThenInclude(a => a.ApplicationUser)
-                             .AsNoTracking()
+                            .Where(t => t.Project.CreatedByUserId == userId)
+                            .AsNoTracking()
                             .ToListAsync();
 
-                               //.Include(t => t.AssignedTo 
-                               //     .Where(u => u.ApplicationUserId == userId))
-                               //     .ThenInclude(x => x.ApplicationUser)
-                               //.OrderBy(u => u.Title)
-                               //.ToListAsync();
         return tickets;
     }
 

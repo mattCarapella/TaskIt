@@ -1,30 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using TaskManager.Areas.Identity.Data;
 using TaskManager.Core;
-using TaskManager.Core.Repositories;
-using TaskManager.Data;
 using TaskManager.Models;
 
 namespace TaskManager.Authorization;
 
-public class TicketIsSubmitterAuthorizationHandler :
-    AuthorizationHandler<OperationAuthorizationRequirement, Ticket>
+public class ProjectManagerAuthorizationHandler :
+    AuthorizationHandler<OperationAuthorizationRequirement, Project>
 {
     UserManager<ApplicationUser> _userManager;
-    private readonly TaskManagerContext _context;
 
-    public TicketIsSubmitterAuthorizationHandler(UserManager<ApplicationUser> userManager, TaskManagerContext context)
+    public ProjectManagerAuthorizationHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
-        _context = context;
     }
 
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                     OperationAuthorizationRequirement requirement,
-                                                    Ticket resource)
+                                                    Project resource)
     {
         if (context.User is null || resource is null)
         {
@@ -38,16 +33,9 @@ public class TicketIsSubmitterAuthorizationHandler :
         {
             return Task.CompletedTask;
         }
-        var project = _context.Projects.AsNoTracking().FirstOrDefault(p => p.Id == resource.ProjectId);
 
-        //if (resource.SubmittedById == _userManager.GetUserId(context.User) && 
-        //    context.User.IsInRole(Constants.Roles.Manager))
-        //{
-        //    context.Succeed(requirement);
-        //}
-
-        if (resource.SubmittedById == _userManager.GetUserId(context.User) || 
-            project is not null && project.CreatedByUserId == _userManager.GetUserId(context.User))
+        if (resource.CreatedByUserId == _userManager.GetUserId(context.User) &&
+            context.User.IsInRole(Constants.Roles.Manager))
         {
             context.Succeed(requirement);
         }

@@ -1,12 +1,12 @@
 ﻿@model TaskManager.Models.PNote
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Note";
 }
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/ckeditor/ckeditor.js"></script>
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+@*<script src="~/lib/jquery/dist/jquery.js"></script>
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />*@
 
 <div><a href="javascript:history.go(-1)">Back</a></div>
 
@@ -31,7 +31,7 @@
             <span asp-validation-for="Link" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-dark-custom mt-2 mb-3" />
+            <input type="submit" value="Submit" class="btn btn-submit-lg mt-2 mb-3" />
         </div>
     </form>
 </div>
