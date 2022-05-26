@@ -15,4 +15,6 @@ public class TicketDetailsViewModel
 
     public ICollection<TNote> Notes { get; set; }
 
+    public ICollection<FileModel> Files { get; set; }
+
 }

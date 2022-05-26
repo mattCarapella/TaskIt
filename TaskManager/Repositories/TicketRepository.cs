@@ -52,12 +52,12 @@ public class TicketRepository : ITicketRepository
                     .ThenInclude(u => u.ApplicationUser)
                 .Include(n => n.TNotes)
                     .ThenInclude(u => u.ApplicationUser)
+                .Include(t => t.TicketFiles)
+                    .ThenInclude(u => u.UploadedByUser)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
     }
-
-
 
 
     public async Task<ICollection<Ticket>> GetTickets()

@@ -641,7 +641,8 @@ namespace TaskManager.Controllers
                 AssignedTo = ticket.AssignedTo.ToList(),
                 Project = ticket.Project!,
                 SubmittedBy = ticket.SubmittedBy!,
-                Notes = ticket.TNotes
+                Notes = ticket.TNotes,
+                Files = ticket.TicketFiles
             };
 
             return View(vm);

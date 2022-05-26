@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TaskManager.Areas.Identity.Data;
 
 namespace TaskManager.Models;
 
@@ -21,7 +22,10 @@ public class FileModel
     [Required, StringLength(300)]
     public string Description { get; set; }
 
+    public long FileSize { get; set; }
+
     public string UploadedByUserId { get; set; } = String.Empty;
+    public ApplicationUser UploadedByUser { get; set; } 
 
     public Guid TicketId { get; set; }
     public Ticket? Ticket { get; set; }

@@ -18,6 +18,15 @@ a {
 /***************************************************/
 /*   BUTTONS                                       */
 /***************************************************/
+
+
+.bg-greyblue {
+    background: #4a6b96 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .button-group {
     display: flex;
 }
@@ -92,7 +101,10 @@ a {
 
 .btn-icon {
     color: #4a6b96 !important;
-    vertical-align: middle !important;
+    /*vertical-align: middle !important;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
     .btn-icon:hover {
         color: #012f66 !important;
@@ -210,6 +222,19 @@ a {
 }
     .btn-dark-custom:hover {
         background: #4a6b96 !important;
+        color: #fff;
+        box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.25);
+    }
+
+.btn-submit {
+    background: #4a6b96 !important;
+    color: #fff !important;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s ease-in-out;
+    font-size: 0.9rem !important;
+}
+    .btn-submit:hover {
+        background: #335075 !important;
         color: #fff;
         box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.25);
     }
