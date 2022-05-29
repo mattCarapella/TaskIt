@@ -15,6 +15,16 @@ public class TicketRepository : ITicketRepository
         _context = context;
     }
 
+    public IDictionary<string, int> GetTicketCounts(IEnumerable<Ticket> userTickets, string userId)
+    {
+        var open = userTickets.Where(t => t.Status != Core.Enums.Enums.Status.COMPLETED).Count();
+        var closed = userTickets.Where(t => t.Status == Core.Enums.Enums.Status.COMPLETED).Count();
+        var tickets = new Dictionary<string, int>();
+        tickets.Add("OPEN", open);
+        tickets.Add("CLOSED", closed);
+        return tickets;
+    }
+
     public async Task<Ticket> GetTicket(Guid ticketId, bool tracking=true)
     {
         if (!tracking)
@@ -24,25 +34,18 @@ public class TicketRepository : ITicketRepository
         return await _context.Tickets.FindAsync(ticketId);
     }
 
-
-    public async Task<Ticket> GetTicketWithProject(Guid ticketId)
+    public async Task<IEnumerable<Ticket>> GetTicketsAssignedToUser(string userId)
     {
-        return await _context.Tickets
-                        .Include(p => p.Project.Id)
-                        .FirstOrDefaultAsync(x => x.TicketId == ticketId);
+        var user = await _context.Users.FindAsync(userId);
+        return await _context.TicketAssignments
+                .Where(u => u.ApplicationUserId == userId)
+                .Select(t => t.Ticket)
+                .Include(t => t.Project)
+                .AsNoTracking()
+                .ToListAsync();
     }
 
 
-    public async Task<Ticket> GetTicketWithAssignedUsers(Guid ticketId)
-    {
-        return await _context.Tickets
-                        .Include(a => a.AssignedTo)
-                        .ThenInclude(u => u.ApplicationUser)
-                        .FirstOrDefaultAsync(x => x.TicketId == ticketId);
-    }
-
-
-    //public async Task<Ticket> GetTicketToAssignUser(Guid id)
     public async Task<Ticket> GetTicketWithProjectAndUserDetails(Guid ticketId)
     {
         return await _context.Tickets
@@ -57,14 +60,6 @@ public class TicketRepository : ITicketRepository
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
-    }
-
-
-    public async Task<ICollection<Ticket>> GetTickets()
-    {
-        return await _context.Tickets
-                        .AsNoTracking()
-                        .ToListAsync();
     }
 
 
@@ -86,6 +81,19 @@ public class TicketRepository : ITicketRepository
                         .Include(p => p.Project)
                         .ToListAsync();
     }
+
+
+    public async Task<IEnumerable<Ticket>> GetClosedTicketsWithProjectsForUser(string userId)
+    {
+        return await _context.TicketAssignments
+                    .AsNoTracking()
+                    .Where(u => u.ApplicationUserId == userId)
+                    .Where(t => t.Ticket!.Status == Core.Enums.Enums.Status.COMPLETED)
+                    .Select(t => t.Ticket)
+                        .Include(t => t!.Project)
+                    .ToListAsync();
+    }
+
 
 
     public async Task<List<Ticket>> GetTicketsForManagersProjects(string userId)
@@ -142,6 +150,120 @@ public class TicketRepository : ITicketRepository
     }
 
 
+    public async Task<List<Ticket>> GetTicketsForProjectDetailsPage(Guid projectId, string userId)
+    {
+        var currentUser = _context.Users.Find(userId);
+        return await _context.TicketAssignments
+                     .Where(t => t.ApplicationUser == currentUser)
+                     .Where(t => t.Ticket.ProjectId == projectId)
+                     .Select(t => t.Ticket)
+                     .AsNoTracking()
+                     .ToListAsync();
+    }
+
+
+    /*******************************************************************************/
+    /*                                   DASHBOARD                                 */
+    /*******************************************************************************/
+
+    public List<Ticket> GetUpcomingTicketDeadlines(IEnumerable<Ticket> userTickets)
+    {
+        return userTickets.Where(t => t.Status != Core.Enums.Enums.Status.COMPLETED)
+                          .Where(t => t.GoalDate > DateTime.Now && t.GoalDate < DateTime.Now.AddDays(14))
+                          .Take(5)
+                          .OrderBy(t => t.GoalDate)
+                          .ToList();
+    }
+
+
+    public async Task<IDictionary<string, List<Ticket>>> GetTicketDetailsForUserDashboard(string userId)
+    {
+        var tickets = await _context.TicketAssignments
+                            .Where(u => u.ApplicationUserId == userId)
+                            .Select(t => t.Ticket)
+                            .AsNoTracking()
+                            .ToListAsync();
+
+        var deadlines = tickets.Where(t => t.Status != Core.Enums.Enums.Status.COMPLETED)
+                               .Where(t => t.GoalDate > DateTime.Now && t.GoalDate < DateTime.Now.AddDays(14))
+                               .Take(5)
+                               .OrderBy(t => t.GoalDate)
+                               .ToList();
+
+        var ticketDict = new Dictionary<string, List<Ticket>>();
+        ticketDict.Add("USER_TICKETS", tickets);
+        ticketDict.Add("DEADLINES", deadlines);
+        return ticketDict;
+    }
+
+
+    public async Task<IDictionary<string, List<Ticket>>> GetTicketDetailsForManagerDashboard(string userId)
+    {
+        var user = _context.Users.Find(userId);
+        var tickets = await _context.Tickets
+                            .Where(t => t.Project.CreatedByUserId == userId)
+                            .AsNoTracking()
+                            .ToListAsync();
+
+        var toAssign = tickets.Where(t => t.Status == Core.Enums.Enums.Status.TODO).Take(5);
+        var toReview = tickets.Where(t => t.Status == Core.Enums.Enums.Status.SUBMITTED).Take(5);
+        var ticketDict = new Dictionary<string, List<Ticket>>();
+        ticketDict.Add("TO_ASSIGN", toAssign.ToList());
+        ticketDict.Add("TO_REVIEW", toReview.ToList());
+        return ticketDict;
+    }
+
+    public async Task<IDictionary<string, int>> GetTicketDetailsCountForManagerDashboard(string userId)
+    {
+        var user = _context.Users.Find(userId);
+        var tickets = await _context.Tickets
+                            .Where(t => t.Project.CreatedByUserId == userId)
+                            .AsNoTracking()
+                            .ToListAsync();
+
+        var toAssign = tickets.Where(t => t.Status == Core.Enums.Enums.Status.TODO).Count();
+        var toReview = tickets.Where(t => t.Status == Core.Enums.Enums.Status.SUBMITTED).Count();
+        var ticketDict = new Dictionary<string, int>();
+        ticketDict.Add("TO_ASSIGN", toAssign);
+        ticketDict.Add("TO_REVIEW", toReview);
+        return ticketDict;
+    }
+
+
+    public async Task<IDictionary<string, List<Ticket>>> GetTicketDetailsForAdminDashboard(string userId)
+    {
+        var user = _context.Users.Find(userId);
+        var tickets = await _context.Tickets
+                            .AsNoTracking()
+                            .ToListAsync();
+
+        var toAssign = tickets.Where(t => t.Status == Core.Enums.Enums.Status.TODO).Take(5);
+        var toReview = tickets.Where(t => t.Status == Core.Enums.Enums.Status.SUBMITTED).Take(5);
+        var ticketDict = new Dictionary<string, List<Ticket>>();
+        ticketDict.Add("TO_ASSIGN", toAssign.ToList());
+        ticketDict.Add("TO_REVIEW", toReview.ToList());
+        return ticketDict;
+    }
+
+    public async Task<IDictionary<string, int>> GetTicketDetailsCountForAdminDashboard(string userId)
+    {
+        var user = _context.Users.Find(userId);
+        var tickets = await _context.Tickets
+                             .AsNoTracking()
+                             .ToListAsync();
+
+        var toAssign = tickets.Where(t => t.Status == Core.Enums.Enums.Status.TODO).Count();
+        var toReview = tickets.Where(t => t.Status == Core.Enums.Enums.Status.SUBMITTED).Count();
+        var ticketDict = new Dictionary<string, int>();
+        ticketDict.Add("TO_ASSIGN", toAssign);
+        ticketDict.Add("TO_REVIEW", toReview);
+        return ticketDict;
+    }
+
+
+    /*******************************************************************************/
+    /*                                  CRUD                                       */
+    /*******************************************************************************/
     public async Task AddTicket(Ticket ticket)
     {
         await _context.Tickets.AddAsync(ticket);
@@ -150,9 +272,8 @@ public class TicketRepository : ITicketRepository
 
     public async Task DeleteTicket(Guid ticketId)
     {
-        var ticket = await _context.Tickets.FindAsync(ticketId); 
+        var ticket = await _context.Tickets.FindAsync(ticketId);
         _context.Tickets.Remove(ticket);
     }
-
 
 }

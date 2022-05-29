@@ -22,6 +22,8 @@ public class Project
 
     public string? Tag { get; set; }
 
+    //public bool Archived { get; set; } = false;
+
     [Display(Name= "Goal Date"), DataType(DataType.Date)]
     [ValidFutureDate(ErrorMessage = "Date must be in the future.")]
     public DateTime? GoalDate { get; set; }

@@ -21,7 +21,7 @@
                         </div>
                         <div class="assignment-item">
                             <div class="assignment-item-name assignment-item-name-workload">
-                                Projects
+                                <a asp-controller="Projects" asp-action="Index">Projects</a>
                             </div>
                             <div class="assignment-item-value assignment-item-value-workload">
                                 <a class="btn assignment-item-btn" asp-controller="Projects" asp-action="Index">
@@ -32,7 +32,7 @@
                         </div>
                         <div class="assignment-item">
                             <div class="assignment-item-name assignment-item-name-workload">
-                                Tickets
+                                <a asp-controller="Tickets" asp-action="Index">Tickets</a>
                             </div>
                             <div class="assignment-item-value assignment-item-value-workload">
                                 <a class="btn assignment-item-btn" asp-controller="Tickets" asp-action="Index">
@@ -45,11 +45,11 @@
                 </div>
             </div>
         </div>
-        @*****  GOALS  *****@
+        @*****  DEADLINES  *****@
         <div class="col-12 col-md-4 col-xxl-4 homepage-col d-flex order-2 order-xxl-2 mb-2">
             <div class="card flex-fill">
                 <div class="card-header pb-1">
-                    <span class="assignment-item-header">Upcoming</span>
+                    <span class="assignment-item-header">Deadlines</span>
                     <svg class="float-end" viewBox="17 20 170 170" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
                         <linearGradient gradientUnits="userSpaceOnUse" id="a" x1="34.931" x2="168.523" y1="168.884" y2="35.292">
                         <stop offset="0" stop-color="#182542" class="stop-color-12c2e9"></stop>
@@ -105,9 +105,9 @@
                         <path d="M165.408 65.513h-8.562a3.5 3.5 0 1 0 0 7h8.562a3.5 3.5 0 1 0 0-7z" fill="url(#i)" class="fillurl(-i)"></path>
                         </svg>
                 </div>
-                <div class="card-body center-vert pl-2 pr-2 pt-0 pb-0">
-                    @if (@Model.UpcomingDeadlines is not null && @Model.UpcomingDeadlines.Count > 0)
-                    {
+                @if (@Model.UpcomingDeadlines is not null && @Model.UpcomingDeadlines.Count > 0)
+                {
+                    <div class="card-body pl-2 pr-2 pt-0 pb-0">
                         <div class="assignments">
                             @foreach (var item in @Model.UpcomingDeadlines)
                             {
@@ -123,13 +123,14 @@
                                 </div>
                             }
                         </div>
-                    }
-                    else
-                    {
-                        <div class="" style="text-align: center">No goal dates within the next 14 days.</div>
-                    }
-
-                </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-body center-vert pl-2 pr-2 pt-0 pb-0">
+                        <div class="" style="text-align: center">No deadlines within the next 14 days.</div>
+                    </div>
+                }
             </div>
         </div>
         @******  PRODUCTIVITY ******@
@@ -280,9 +281,9 @@
                                 <div class="assignment-item-value assignment-item-value-workload">
                                     <a class="btn assignment-item-btn" asp-controller="Projects" asp-action="Manager">
                                         <span class="btn-helper"></span>
-                                        @if (@Model.ManagerProjects is not null)
+                                        @if (@Model.ManagerProjectCount is not null)
                                         {
-                                            <strong>@Model.ManagerProjects.Count</strong>
+                                            <strong>@Model.ManagerProjectCount</strong>
                                         }
                                         else
                                         {
@@ -298,9 +299,9 @@
                                 <div class="assignment-item-value assignment-item-value-workload">
                                     <a class="btn assignment-item-btn" asp-controller="Tickets" asp-action="Manager">
                                         <span class="btn-helper"></span>
-                                        @if (@Model.ManagerTicketsToAssign is not null)
+                                        @if (@Model.AssignCount is not null)
                                         {
-                                            <strong>@Model.ManagerTicketsToAssign.Count</strong>
+                                            <strong>@Model.AssignCount</strong>
                                         }
                                         else
                                         {
@@ -316,9 +317,9 @@
                                 <div class="assignment-item-value assignment-item-value-workload">
                                     <a class="btn assignment-item-btn" asp-controller="Tickets" asp-action="Manager">
                                         <span class="btn-helper"></span>
-                                        @if (@Model.ManagerTicketsToReview is not null)
+                                        @if (@Model.ReviewCount is not null)
                                         {
-                                            <strong>@Model.ManagerTicketsToReview.Count</strong>
+                                            <strong>@Model.ReviewCount</strong>
                                         }
                                         else
                                         {
@@ -337,11 +338,11 @@
                     <div class="card-header pb-3">
                         <span class="assignment-item-header">Tickets to Assign</span>
                     </div>
-                    <div class="card-body pl-1 pr-1 pt-0 pb-0">
-                        <div class="assignments">
-                            @if (@Model.ManagerTicketsToAssign is not null && @Model.ManagerTicketsToAssign.Count > 0)
-                            {
-                                @foreach (var item in @Model.ManagerTicketsToAssign)
+                    @if (@Model.TicketsToAssign is not null && @Model.TicketsToAssign.Count > 0)
+                    {
+                        <div class="card-body pl-1 pr-1 pt-0 pb-0">
+                            <div class="assignments">
+                                @foreach (var item in @Model.TicketsToAssign)
                                 {
                                     <div class="assignment-item">
                                         <div class="assignment-item-name">
@@ -349,16 +350,27 @@
                                                 @item.Title
                                             </a>
                                         </div>
-
                                     </div>
                                 }
-                            }
-                            else
-                            {
-                                <div class="mt-5" style="text-align: center">You're all caught up.</div>
-                            }
+                                @if (@Model.AssignCount > 5)
+                                {
+                                    <div class="assignment-item">
+                                        <div class="assignment-item-name">
+                                            <a asp-controller="Tickets" asp-action="ToAssign">
+                                                <strong>View All (@Model.AssignCount)</strong>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="card-body center-vert pl-1 pr-1 pt-0 pb-0">
+                            <div style="text-align: center">You're all caught up.</div>
+                        </div>
+                    }
                 </div>
             </div>
             @******  TO REVIEW ******@
@@ -367,28 +379,39 @@
                     <div class="card-header pb-3">
                         <span class="assignment-item-header">Tickets to Review</span>
                     </div>
-                    <div class="card-body pl-1 pr-1 pt-0 pb-0">
-                        <div class="assignments">
-                            @if (@Model.ManagerTicketsToReview is not null && @Model.ManagerTicketsToReview.Count > 0)
-                            {
-                                @foreach (var item in @Model.ManagerTicketsToReview)
+                    @if (@Model.TicketsToReview is not null && @Model.TicketsToReview.Count > 0)
+                    {
+                        <div class="card-body pl-1 pr-1 pt-0 pb-0">
+                            <div class="assignments">
+                                @foreach (var item in @Model.TicketsToReview)
                                 {
                                     <div class="assignment-item">
-                                        <div class="assignment-item-name">
+                                         <div class="assignment-item-name">
                                             <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
                                                 @item.Title
                                             </a>
+                                         </div>
+                                     </div>
+                                }
+                                @if (@Model.ReviewCount > 5)
+                                {
+                                    <div class="assignment-item">
+                                        <div class="assignment-item-name">
+                                            <a asp-controller="Tickets" asp-action="SubmittedForReview">
+                                                <strong>View All (@Model.ReviewCount)</strong>
+                                            </a>
                                         </div>
-
                                     </div>
                                 }
-                            }
-                            else
-                            {
-                                <div class="mt-5" style="text-align: center">You're all caught up.</div>
-                            }
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="card-body center-vert pl-1 pr-1 pt-0 pb-0">
+                            <div style="text-align: center">You're all caught up.</div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

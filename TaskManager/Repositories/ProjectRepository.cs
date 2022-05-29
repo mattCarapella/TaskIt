@@ -19,11 +19,12 @@ public class ProjectRepository : IProjectRepository
     {
         if (!tracking)
         {
-            return await _context.Projects.AsNoTracking().FirstOrDefaultAsync(p => p.Id == projectId);
+            return await _context.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == projectId);
         }
         return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
     }
-
 
     public async Task<Project> GetProjectWithUsers(Guid projectId)
     {
@@ -34,7 +35,6 @@ public class ProjectRepository : IProjectRepository
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == projectId);
     }
-
 
     public async Task<Project> GetProjectWithTicketsNotesUsers(Guid projectId)
     {
@@ -54,25 +54,51 @@ public class ProjectRepository : IProjectRepository
                 .FirstOrDefaultAsync(x => x.Id == projectId);
     }
 
-
     public async Task<List<Project>> GetProjectsForManager(string userId)
     {
         var user = _context.Users.Find(userId);
         return await _context.Projects
-            .Where(p => p.CreatedByUser == user)
-            .Include(p => p.Tickets)
-            .AsNoTracking()
-            .ToListAsync();
+                .Where(p => p.CreatedByUser == user)
+                .Include(p => p.Tickets)
+                .AsNoTracking()
+                .ToListAsync();
     }
 
+    public async Task<int> GetProjectCountForManager(string userId)
+    {
+        var user = _context.Users.Find(userId);
+        return _context.Projects
+                .Where(p => p.CreatedByUser == user)
+                .AsNoTracking()
+                .Count();
+    }
 
-    public async Task<List<Project>> GetProjectsWithTickets()
+    public async Task<IEnumerable<Project>> GetProjectsWithTickets()
     {
         return await _context.Projects
-            .Include(p => p.Tickets)
-            .AsNoTracking()
-            .AsSplitQuery()
-            .ToListAsync();
+                .Include(p => p.Tickets)
+                .AsNoTracking()
+                .AsSplitQuery()
+                .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Project>> GetProjectsWithTicketsForUser(string userId)
+    {
+        return await _context.ProjectAssignments
+                .Where(u => u.ApplicationUserId == userId)
+                .Include(p => p.Project)
+                    .ThenInclude(p => p!.Tickets)
+                .Select(p => p.Project)
+                .AsNoTracking()
+                .ToListAsync();
+    }
+
+    public int GetProjectCountForUser(string userId)
+    {
+        return _context.ProjectAssignments
+               .Where(u => u.ApplicationUserId == userId)
+               .AsNoTracking()
+               .Count();
     }
 
 

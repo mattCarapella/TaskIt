@@ -33,6 +33,7 @@ namespace TaskManager.Controllers
         }
 
         // GET: Projects
+        // Gets all projects assigned to a user
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
@@ -52,8 +53,7 @@ namespace TaskManager.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var projectList = await _unitOfWork.ProjectAssignmentRepository.GetProjectAssignmentsWithTicketsForUser(User.Identity.GetUserId());
-            var projects = from p in projectList select p.Project;
+            var projects = await _unitOfWork.ProjectRepository.GetProjectsWithTicketsForUser(User.Identity.GetUserId());
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -95,6 +95,7 @@ namespace TaskManager.Controllers
 
 
         // GET: AllProjects
+        // Gets all projects
         [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
         public async Task<IActionResult> AllProjects(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
@@ -115,8 +116,7 @@ namespace TaskManager.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var projectList = await _unitOfWork.ProjectRepository.GetProjectsWithTickets();
-            var projects = from p in projectList select p;
+            var projects = await _unitOfWork.ProjectRepository.GetProjectsWithTickets();
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -178,21 +178,8 @@ namespace TaskManager.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == User.Identity.GetUserId());
-            if (currentUser is null) return NotFound();
-
             var projectList = await _unitOfWork.ProjectRepository.GetProjectsForManager(User.Identity.GetUserId());
             var projects = from p in projectList select p;
-
-            //var projectList = await _context.Projects
-            //                        .Where(p => p.CreatedByUser == currentUser)
-            //                        .Include(p => p.Tickets)
-            //                        .AsNoTracking()
-            //                        .ToListAsync();
-
-
-
-
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -309,21 +296,7 @@ namespace TaskManager.Controllers
             }
             else
             {
-                // Displays only the tickets assigned to the currently logged in user
-                var userTickets = await _context.TicketAssignments
-                    .AsNoTracking()
-                    .Where(t => t.ApplicationUserId == User.Identity.GetUserId())
-                    .Include(t => t.Ticket)
-                        .ThenInclude(t => t!.Project)
-                    .ToListAsync();
-                
-                foreach (var t in userTickets)
-                {
-                    if (t.Ticket?.Project!.Id == id)
-                    {
-                        userTicketsForProj.Add(t.Ticket);
-                    }
-                }
+                userTicketsForProj = await _unitOfWork.TicketRepository.GetTicketsForProjectDetailsPage(project.Id, User.Identity.GetUserId());
             }
 
             var pageSize = 8;

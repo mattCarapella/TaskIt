@@ -159,7 +159,7 @@
     z-index: 9;
     position: relative;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
-    background: linear-gradient(45deg, var(--navbar-blue-l) 4%, var(--btn-blue-gradient-r)) !important;
+    background: linear-gradient(45deg, var(--navbar-blue-l) 4%, #4876b3) !important;
     transition: all 1.3s ease-in-out;
 }
 

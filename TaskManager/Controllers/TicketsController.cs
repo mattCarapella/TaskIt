@@ -66,13 +66,9 @@ namespace TaskManager.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            //var ticketContext = _context.Tickets.Include(t => t.Project);   
-            //var ticketList = await _unitOfWork.TicketRepository.GetTicketsWithProjects();
-            //var tickets = from t in ticketList select t;
 
-            var ticketList = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
-            var tickets = from t in ticketList select t.Ticket;
-
+            var ticketAssignments = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
+            var tickets = from t in ticketAssignments select t.Ticket;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -171,8 +167,8 @@ namespace TaskManager.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var ticketList = await _unitOfWork.TicketAssignmentRepository.GetClosedTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
-            var tickets = from t in ticketList select t.Ticket;
+            var ticketAssignments = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
+            var tickets = from t in ticketAssignments select t.Ticket;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -241,7 +237,6 @@ namespace TaskManager.Controllers
 
             var paginatedTicketList = PaginatedList<Ticket>.Create(tList, pageNumber ?? 1, pageSize);
             return View(paginatedTicketList);
-            //return View(await tickets.AsNoTracking().ToListAsync());
         }
 
 
@@ -857,7 +852,7 @@ namespace TaskManager.Controllers
             {
                 try
                 {
-                    if (ticketToUpdate.Description != noHtml)
+                    if (ticketToUpdate.DescriptionNoHtml != noHtml)
                     {
                         ticketToUpdate.DescriptionNoHtml = noHtml;
                     }

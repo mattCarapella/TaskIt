@@ -242,9 +242,9 @@
                                                 <td>
                                                     @if (ticket.DescriptionNoHtml is not null)
                                                     {
-                                                        @if (ticket.Description.Length > 200)
+                                                        @if (ticket.DescriptionNoHtml.Length > 200)
                                                         {
-                                                            <p>@ticket.Description.Substring(0, 199)...</p>
+                                                            <p>@ticket.DescriptionNoHtml.Substring(0, 200)...</p>
                                                         }
                                                         else
                                                         {

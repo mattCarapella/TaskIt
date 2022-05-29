@@ -118,7 +118,7 @@
                                         {
                                             @if (@item.DescriptionNoHtml.Length > 150)
                                             {
-                                                <p>@item.DescriptionNoHtml</p>
+                                                <p>@item.DescriptionNoHtml.Substring(0, 150)...</p>
                                             }
                                             else
                                             {
