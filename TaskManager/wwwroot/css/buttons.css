@@ -20,6 +20,9 @@ a {
 /***************************************************/
 
 
+
+
+
 .bg-greyblue {
     background: #4a6b96 !important;
     display: flex;
@@ -227,17 +230,54 @@ a {
     }
 
 .btn-submit {
-    background: #4a6b96 !important;
+    background: #113255 !important;
     color: #fff !important;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
     transition: all 0.4s ease-in-out;
-    font-size: 0.9rem !important;
+    font-size: 1.1rem !important;
+    text-shadow: 1px 2px 20px #cbcccd;
+    font-weight: 100;
 }
     .btn-submit:hover {
-        background: #335075 !important;
-        color: #fff;
+        background: #011933 !important;
+        color: #ffffeb !important;
         box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.25);
     }
+
+.btn-demo {
+    background: #113255 !important;
+    color: #fff !important;
+    padding: 5px;
+    font-size: 1.1rem;
+    text-shadow: 1px 2px 20px #cbcccd;
+    font-weight: 100;
+    justify-content: center !important;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s ease-in-out;
+}
+    .btn-demo:hover {
+        background: #011933 !important;
+        color: #ffffeb !important;
+        box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.25);
+    }
+    @media (min-width: 1000px) {
+        .btn-demo {
+            min-width: 210px !important;
+        }
+    }
+    @media (max-width: 825px) {
+        .btn-demo {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+    }
+    @media (min-width: 445px) {
+        .btn-demo {
+            min-height: 115px !important;
+        }
+    }
+
+
 
 .btn-submit-lg {
     background: #4a6b96 !important;

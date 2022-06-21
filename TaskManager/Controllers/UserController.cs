@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 using TaskManager.Areas.Identity.Data;
 using TaskManager.Core;
 using TaskManager.Core.Repositories;
@@ -63,7 +64,6 @@ public class UserController : Controller
     }
 
 
-
     public async Task<IActionResult> Details(string id)
     {
         if (id is null)
@@ -92,7 +92,7 @@ public class UserController : Controller
 
 
     [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
-    public async Task<IActionResult> Edit(string id )
+    public async Task<IActionResult> Edit(string id)
     {
         if (id is null)
         {
@@ -106,8 +106,8 @@ public class UserController : Controller
 
         var roleItemsSelect = roles.Select(role =>
             new SelectListItem(
-                role.Name, 
-                role.Id, 
+                role.Name,
+                role.Id,
                 userRoles.Any(r => r.Contains(role.Name)))).ToList();
 
         var vm = new EditUserViewModel
@@ -118,7 +118,6 @@ public class UserController : Controller
 
         return View(vm);
     }
-
 
     [Authorize(Roles = $"{Constants.Roles.Administrator},{Constants.Roles.Manager}")]
     [HttpPost]
@@ -159,7 +158,6 @@ public class UserController : Controller
         {
             await _signInManager.UserManager.RemoveFromRolesAsync(user, rolesToDelete);
         }
-        //string uploadedFileName = UploadFile(data) ?? user.ProfilePicture!;
         user.FirstName = data.User.FirstName;
         user.LastName = data.User.LastName;
         user.UserName = data.User.UserName;
@@ -167,26 +165,50 @@ public class UserController : Controller
         user.JobTitle = data.User.JobTitle;
         user.EmployeeID = data.User.EmployeeID;
         user.Email = data.User.Email;
-        //user.ProfilePicture = uploadedFileName;
-
         _unitOfWork.UserRepository.UpdateUser(user);
         await _unitOfWork.SaveAsync();
         return RedirectToAction("Details", new { id = user.Id });
     }
 
-    //private string UploadFile(EditUserViewModel data)
-    //{
-    //    string fileName = "";
-    //    if (data.ProfilePicture is not null)
-    //    {
-    //        string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-    //        fileName = Guid.NewGuid().ToString() + "_" + data.ProfilePicture.FileName;
-    //        string filePath = Path.Combine(uploadDir, fileName);
-    //        using (var fileStream = new FileStream(filePath, FileMode.Create))
-    //        {
-    //            data.ProfilePicture.CopyTo(fileStream);
-    //        }
-    //    }
-    //    return fileName;
-    //}
+
+
+    [AllowAnonymous]
+    public async Task<IActionResult> Demo(string userRole)
+    {
+        string demoEmail = $"{userRole}@taskit.com";
+        string demoPw = "Pa$$w0rd";
+        string returnUrl = Url.Content("~/");
+
+        var user = await _signInManager.UserManager.FindByEmailAsync(demoEmail);
+        if (user == null)
+        {
+            ModelState.AddModelError(String.Empty, "Invalid login attempt.");
+            return RedirectToAction("Home", "Index");
+        }
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, demoPw, false);
+        if (result.Succeeded)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("amr", "pwd"),
+            };
+
+            var roles = await _signInManager.UserManager.GetRolesAsync(user);
+            if (roles.Any())
+            {
+                var roleClaim = string.Join(",", roles);
+                claims.Add(new Claim("Roles", roleClaim));
+            }
+
+            await _signInManager.SignInWithClaimsAsync(user, false, claims);
+            return LocalRedirect(returnUrl);
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return RedirectToAction("Home", "Index");
+        }
+    }
+
 }

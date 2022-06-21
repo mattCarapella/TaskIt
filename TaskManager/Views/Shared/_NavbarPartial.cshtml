@@ -16,7 +16,8 @@
                 </a>
             </span>
         </div>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" 
+            aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
@@ -30,14 +31,23 @@
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
+                            <a class="nav-link" asp-area="" asp-controller="Projects" asp-action="Index">
+                                Projects
+                            </a>
                         </li>
                         <li class="nav-item">
                             <div class="dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Tickets</a>
+                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" 
+                                    aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Tickets</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Open</a>
-                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="Closed">Closed</a>
+                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                        asp-action="Index">
+                                            Open
+                                    </a>
+                                    <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                        asp-action="Closed">
+                                            Closed
+                                    </a>
                                 </div>
                             </div>
                         </li>
@@ -45,30 +55,36 @@
                         {
                             <li class="nav-item">
                                 <div class="dropdown">
-                                    <a class="nav-link navbar-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" 
-                                        aria-haspopup="true" id="nav-dropdown-2">
+                                    <a class="nav-link navbar-link dropdown-toggle" href="#" data-toggle="dropdown" 
+                                        aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">
                                             Management
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="Manager">
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" 
+                                            asp-action="Manager">
                                             Manager | Projects
                                         </a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="Manager">
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                            asp-action="Manager">
                                             Manager | Tickets
                                         </a>
                                         @if (!(await UserManager.IsInRoleAsync(currentUser, "Administrator")))
                                         {
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="ToAssign">
-                                                Tickets to Assign
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                                asp-action="ToAssign">
+                                                    Tickets to Assign
                                             </a>
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="SubmittedForReview">
-                                                Submitted for Review
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                                asp-action="SubmittedForReview">
+                                                    Submitted for Review
                                             </a>
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">
-                                                All Projects
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" 
+                                                asp-action="AllProjects">
+                                                    All Projects
                                             </a>
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllClosed">
-                                                All Closed Tickets
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                                asp-action="AllClosed">
+                                                    All Closed Tickets
                                             </a>
                                         }
                                     </div>
@@ -79,13 +95,31 @@
                         {
                             <li class="nav-item">
                                 <div class="dropdown">
-                                    <a class="nav-link navbar-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">Admin</a>
+                                    <a class="nav-link navbar-link dropdown-toggle" href="#" data-toggle="dropdown" 
+                                        aria-expanded="false" aria-haspopup="true" id="nav-dropdown-2">
+                                            Admin
+                                    </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" asp-action="AllProjects">All Projects</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllTickets">All Open Tickets</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="ToAssign">All Unassigned Tickets</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="SubmittedForReview">All Submitted Tickets</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" asp-action="AllClosed">All Closed Tickets</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Projects" 
+                                            asp-action="AllProjects">
+                                                All Projects
+                                        </a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                            asp-action="AllTickets">
+                                                All Open Tickets
+                                        </a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                            asp-action="ToAssign">
+                                                All Unassigned Tickets
+                                        </a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                            asp-action="SubmittedForReview">
+                                                All Submitted Tickets
+                                        </a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Tickets" 
+                                            asp-action="AllClosed">
+                                                All Closed Tickets
+                                        </a>
                                     </div>
                                 </div>
                             </li>
@@ -100,21 +134,32 @@
                     <div class="d-none d-lg-block">
                         <div class="dropdown">
                             <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @if (UserManager.GetUserAsync(User).Result is not null && UserManager.GetUserAsync(User).Result.UserImage is not null)
+                                @if (UserManager.GetUserAsync(User).Result is not null 
+                                    && UserManager.GetUserAsync(User).Result.UserImage is not null)
                                 {
-                                    <img alt="Image" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.UserImage))" class="rounded-circle navbar-avatar"/>
+                                    <img alt="Image" 
+                                         src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.UserImage))" 
+                                         class="rounded-circle navbar-avatar"/>
                                 }
                                 else
                                 {
-                                    <img alt="user-profile" class="rounded-circle navbar-avatar" src="~/images/user.jpg" />
+                                    <img alt="user-profile" class="rounded-circle navbar-avatar" 
+                                         src="~/images/user.jpg" />
                                 }
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item text-dark" asp-controller="User" asp-action="Details" asp-route-id="@UserManager.GetUserAsync(User).Result!.Id">Profile</a>
-                                <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">Account Settings</a>
-                                <form id="logoutForm" class="dropdown-item text-dark pl-0 pt-0" asp-area="Identity" asp-page="/Account/Logout"
-                                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button id="logout" type="submit" class="dropdown-item text-dark">Logout</button>
+                                <a class="dropdown-item text-dark" asp-controller="User" asp-action="Details" 
+                                    asp-route-id="@UserManager.GetUserAsync(User).Result!.Id">
+                                        Profile
+                                </a>
+                                <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
+                                    Account Settings
+                                </a>
+                                <form id="logoutForm" class="dropdown-item text-dark pl-0 pt-0" asp-area="Identity" 
+                                    asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button id="logout" type="submit" class="dropdown-item text-dark">
+                                        Logout
+                                    </button>
                                 </form>
                             </div>
                         </div>

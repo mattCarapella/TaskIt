@@ -301,7 +301,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("UploadedByUserId");
 
-                    b.ToTable("Files");
+                    b.ToTable("Files", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Models.PNote", b =>
@@ -341,7 +341,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("PNote");
+                    b.ToTable("PNote", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Models.Project", b =>
@@ -384,7 +384,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("CreatedByUserId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Models.ProjectAssignment", b =>
@@ -408,7 +408,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("ProjectAssignments");
+                    b.ToTable("ProjectAssignments", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Models.ProjectFile", b =>
@@ -460,7 +460,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("UploadedByUserId");
 
-                    b.ToTable("ProjectFiles");
+                    b.ToTable("ProjectFiles", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Models.Ticket", b =>
@@ -525,7 +525,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("SubmittedById");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Models.TicketAssignment", b =>
@@ -546,7 +546,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("TicketAssignments");
+                    b.ToTable("TicketAssignments", (string)null);
                 });
 
             modelBuilder.Entity("TaskManager.Models.TNote", b =>
@@ -586,7 +586,7 @@ namespace TaskManager.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("TNote");
+                    b.ToTable("TNote", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

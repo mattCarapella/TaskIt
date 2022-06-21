@@ -9,7 +9,7 @@
 
 <div class="main-container">
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mb-4">
             <div class="col-xl-12 col-lg-12">
                 <div class="page-content">
                     <div class="wrapper mb-2">
@@ -76,9 +76,13 @@
                                                         <i class="material-icons btn-icon btn-icon-sm">create</i>
                                                     </a>
                                                 </button>
-                                                 <button class="btn btn-round-sm mr-1">
-                                                    <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id"  data-toggle="tooltip" data-title="Delete user">
-                                                        <i class="material-icons btn-icon btn-icon-sm">delete</i>
+                                                 <button class="btn btn-round-sm mr-1 disabled btn-disabled">
+                                                    <a asp-controller="User" 
+                                                       asp-action="Delete" 
+                                                       asp-route-id="@user.Id"  
+                                                       data-toggle="tooltip" 
+                                                       data-title="Delete user">
+                                                           <i class="material-icons btn-icon btn-icon-sm">delete</i>
                                                     </a>
                                                  </button>
                                             }

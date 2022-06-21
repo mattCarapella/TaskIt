@@ -5,25 +5,20 @@
     ViewData["Title"] = "Log in";
 }
 
-@*<div class="mb-4">
-    <span class="login-welcome-brand"><strong>Task</strong>It</span> 
-    <span class="login-welcome-text pl-1">is a project and ticket management application built with ASP.NET Core MVC.</span>
-</div>
-<hr/>*@
 <div class="row pb-5">
-    <div class="col-md-4 mb-4 pl-3 pr-3">
+    <div class="col-md-4 login-container">
         <section>
-            <h1 class="mb-3">@ViewData["Title"]</h1>
+            <h1 class="mb-4" style="font-weight: 700 !important;">@ViewData["Title"]</h1>
             <form id="account" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mb-2">
                     <label asp-for="Input.Email" class="form-label"></label>
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true"/>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-4">
                     <label asp-for="Input.Password" class="form-label"></label>
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                    <input asp-for="Input.Password" class="form-control" aria-required="true" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div>
@@ -35,100 +30,103 @@
                     </div>
                 </div>
                 <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
+                    <p><a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a></p>
+                    <p><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a></p>
+                    <p><a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a></p>
                 </div>
                 <div>
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-submit mb-4 mt-5">Submit</button>
                 </div>
             </form>
+
+
+
         </section>
     </div>
 
-    <div class="col-md-8 col-md-offset-2 pl-3 pr-3 center-vert">
+    <div class="col-md-8 col-md-offset-2 pt-3 pl-3 pr-3 center-vert">
         <section>
-            <div class="card p-4">
-                <div class="login-welcome-text-md pb-3">
-                    Full functionality, including the ability to create projects and ticket requests, is reversed for users with <strong>Administrator</strong> and <strong>Manager</strong> roles.
+            <h2 class="login--demo-header">
+                Use the following demo accounts to test roles
+            </h2>
+
+
+            <div class="container">
+
+                <div class="row mb-4">
+
+                    <div class="col-8">
+                        <p><strong>Admin permissions</strong></p>
+                        <ul>
+                            <li>Full CRUD capabilities on all models</li>
+                            <li>View all projects and tasks for all managers and users</li>
+                            <li>Assign managers to projects</li>
+                            <li>Assign users from projects</li>
+                            <li>Assign tasks to users</li>
+                            <li>Manage roles to users</li>
+                            <li>Access the database of all users</li>
+                            <li>Edit and delete users</li>
+                        </ul>
+                    </div>
+
+                    <div class="col-4 center-vert">
+                        <a asp-controller="User" asp-action="Demo" asp-route-userRole="admin"
+                           class="btn btn-demo d-flex align-items-center w-80">
+                            Log in as Admin [DEMO]
+                        </a>
+                    </div>
+
                 </div>
-                <div class="login-welcome-text-md">
-                    To demo these roles, use the following login credentials:
-                </div>
-                <div class="card flex-fill mt-4 mb-4 pt-0 pb-3 pl-1 pr-1" style="background: rgb(232, 240, 254); color: #474a4d !important;">
-                    <div class="card-body p-4">
-                        <div class="container">
-                            <div class="row"">
-                                <div class="col-md-6 pt-3">
-                                    <h3 style="font-weight: 700 !important;">Administrator</h3>
-                                    <h5><strong>Login:</strong> admin@test.com</h5>
-                                    <h5><strong>Password:</strong> Pa$$w0rd</h5>
-                                </div>
-                                <div class="col-md-6 pt-3">
-                                    <h3 style="font-weight: 700 !important">Manager</h3>
-                                    <h5><strong>Login:</strong> manager@test.com</h5>
-                                    <h5><strong>Password:</strong> Pa$$w0rd</h5>
-                                </div>
-                            </div>
-                        </div>
+
+                <div class="row mb-4">
+                    <div class="col-8 pr-3">
+                        <p style="font-weight: 700;">Manager permissions</p>
+                        <ul>
+                            <li>Create new projects</li>
+                            <li>Update projects that you manage</li>
+                            <li>Assign users to projects that you manage</li>
+                            <li>Assign tasks to users for projects that you manage</li>
+                            <li>View all projects or projects that you manage</li>
+                            <li>View unassigned, open, submitted, and closed tasks for projects that you manage</li>
+                            <li>Edit and delete notes by users on tasks and projects that you manage</li>
+                        </ul>
+                    </div>
+                    <div class="col-4 center-vert">
+                        <a asp-controller="User" asp-action="Demo" asp-route-userRole="manager"
+                           class="btn btn-demo text-center d-flex align-items-center w-80">
+                            Log in as Manager [DEMO]
+                        </a>
                     </div>
                 </div>
-                <div class="login-welcome-text-md pb-2" style="font-size: 1.1rem !important;">Source code can be viewed at</div>
-                <a href="http://www.github.com/mattCarapella" style="font-size: 1.2rem !important; font-weight: bold !important; text-align: center !important;">
-                    https://github.com/mattCarapella/TaskIt
-                </a>
+
+                <div class="row">
+                    <div class="col-8 pr-3">
+                        <p style="font-weight: 700;">User permissions</p>
+                        <ul>
+                            <li>View assigned projects</li>
+                            <li>View assigned tasks</li>
+                            <li>Create and edit notes on assigned projects and tasks</li>
+                            <li>Upload files to assigned projects and tasks</li>
+                        </ul>
+                    </div>
+                    <div class="col-4 center-vert">
+                        <a asp-controller="User" asp-action="Demo" asp-route-userRole="user"
+                           class="btn btn-demo w-80 d-flex align-items-center">
+                            Log in as User [DEMO]
+                        </a>
+                    </div>
+
+                </div>
+
+
+
             </div>
+
         </section>
     </div>
+
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }
-
-
-
-
-
-
-
-
-@*
-<div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
-</div>
-*@

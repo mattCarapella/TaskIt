@@ -101,7 +101,6 @@ namespace TaskManager.Areas.Identity.Pages.Account
                     var claims = new List<Claim>
                     {
                         new Claim("amr", "pwd"),
-                        //new Claim("JobTitle", user.JobTitle)
                     };
 
                     var roles = await _signInManager.UserManager.GetRolesAsync(user);

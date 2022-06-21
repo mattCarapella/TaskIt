@@ -7,7 +7,7 @@
 <div class="main-container">
     <div class="container pb-2">
         <div class="row justify-content-center">
-            <div class="col-xl-11 col-lg-11">
+            <div class="col-xl-11 col-lg-11 mb-4">
 
                 @***** HEADER *****@
                 <div class="page-header mb-2">
@@ -90,17 +90,17 @@
                                 @if (item.ApplicationUser!.UserImage is not null)
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                               data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
-                                        <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                     src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))" />
+                                        data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                                            <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
+                                                src="data:image/*;base64,@(Convert.ToBase64String(@item.ApplicationUser.UserImage))" />
                                     </a>
                                 }
                                 else
                                 {
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.ApplicationUser.Id"
-                               data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
-                                        <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
-                                     src="~/images/user.jpg" />
+                                        data-toggle="tooltip" data-placement="top" title="@item.ApplicationUser.FullName">
+                                            <img alt="@item.ApplicationUser!.UserName" class="avatar profile-pic details-avatar"
+                                                src="~/images/user.jpg" />
                                     </a>
                                 }
                             </li>
@@ -285,21 +285,21 @@
                     @***** NOTES *****@
                     <div class="tab-pane fade" id="notes" role="tabpanel">
                         <div class="content-list" data-filter-list="content-list-body">
-
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <button class="btn btn-round-sm ml-3" data-toggle="tooltip" data-title="Add a note">
                                         <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id">
                                             <i class="material-icons btn-icon btn-icon-sm">add</i>
                                         </a>
-
                                     </button>
-                                    <a asp-controller="PNotes" asp-action="Create" asp-route-projectid="@Model.Project.Id" class="pl-2 pt-1 mb-0">Add a note</a>
+                                    <a asp-controller="PNotes" 
+                                       asp-action="Create" 
+                                       asp-route-projectid="@Model.Project.Id" 
+                                       class="pl-2 pt-1 mb-0">
+                                           Add a note
+                                   </a>
                                 </div>
                             </div>
-
-
-
                             <div class="content-list-body">
                                 @if (@Model.Notes.Any())
                                 {
@@ -310,13 +310,21 @@
                                                 <div class="media align-items-center">
                                                     @if (note.ApplicationUser!.UserImage is not null)
                                                     {
-                                                        <img alt="@note.ApplicationUser!.FullName" src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))"
-                                                 class="avatar" data-toggle="tooltip" data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                        <img alt="@note.ApplicationUser!.FullName" 
+                                                             src="data:image/*;base64,@(Convert.ToBase64String(@note.ApplicationUser.UserImage))"
+                                                             class="avatar" 
+                                                             data-toggle="tooltip" 
+                                                             data-title="@note.ApplicationUser.FullName" 
+                                                             data-filter-by="alt" />
                                                     }
                                                     else
                                                     {
-                                                        <img alt="@note.ApplicationUser.FullName" src="~/images/user.jpg" class="avatar" data-toggle="tooltip"
-                                                 data-title="@note.ApplicationUser.FullName" data-filter-by="alt" />
+                                                        <img alt="@note.ApplicationUser.FullName" 
+                                                             src="~/images/user.jpg" 
+                                                             class="avatar" 
+                                                             data-toggle="tooltip"
+                                                             data-title="@note.ApplicationUser.FullName" 
+                                                             data-filter-by="alt" />
                                                     }
                                                     <div class="media-body">
                                                         <h6 class="mb-0" data-filter-by="text">@note.Title</h6>
@@ -325,19 +333,32 @@
                                                 </div>
 
                                                 <div class="d-flex">
-                                                    <span data-filter-by="text" class=".card-header--date pl-2 mr-2 mb-0">@note.CreatedAt.ToShortDateString()</span>
+                                                    <span data-filter-by="text" class=".card-header--date pl-2 mr-2 mb-0">
+                                                        @note.CreatedAt.ToShortDateString()
+                                                    </span>
                                                     @if ((await AuthorizationService.AuthorizeAsync(User, @note, TaskOperations.Update)).Succeeded)
                                                     {
                                                         <div class="ml-1 pb-2 dropdown card-options">
-                                                            <button class="btn btn-round btn-round-sm" type="button" id="note-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false" data-title="Manage note">
-                                                                <i class="material-icons">more_vert</i>
+                                                            <button class="btn btn-round btn-round-sm" type="button" id="note-dropdown-button-1" 
+                                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+                                                                    data-title="Manage note">
+                                                                        <i class="material-icons">more_vert</i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item text-primary" asp-controller="PNotes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+                                                                <a asp-controller="PNotes" 
+                                                                   asp-action="Edit" 
+                                                                   asp-route-id="@note.Id" 
+                                                                   class="dropdown-item text-primary">
+                                                                      Edit
+                                                                </a>
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
                                                                 {
-                                                                    <a class="dropdown-item text-danger" asp-controller="PNotes" asp-action="Delete" asp-route-id="@note.Id">Delete</a>
+                                                                    <a asp-controller="PNotes" 
+                                                                       asp-action="Delete" 
+                                                                       asp-route-id="@note.Id"
+                                                                       class="dropdown-item text-danger">
+                                                                           Delete
+                                                                   </a>
                                                                 }
                                                             </div>
                                                         </div>
@@ -413,8 +434,7 @@
                                                                     <img alt="@file.UploadedByUser.UserName" 
                                                                          class="avatar profile-pic details-avatar" 
                                                                          src="data:image/*;base64,@(Convert.ToBase64String(file.UploadedByUser.UserImage))"
-                                                                         style="height: 2.6rem !important; width: 2.6rem !important"
-                                                                    />
+                                                                         style="height: 2.6rem !important; width: 2.6rem !important"/>
                                                                 </a>
                                                             }
                                                             else
@@ -428,8 +448,7 @@
                                                                 >
                                                                     <img alt="@file.UploadedByUser.UserName" 
                                                                          class="avatar profile-pic details-avatar"
-                                                                         src="~/images/user.jpg" 
-                                                                    />
+                                                                         src="~/images/user.jpg"/>
                                                                 </a>
                                                             }
                                                         </li>
@@ -442,7 +461,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="float-end">
-                                                        <button class="btn btn-round-sm flex-shrink-0 float-end" data-toggle="tooltip" data-title="Download file">
+                                                        <button class="btn btn-round-sm flex-shrink-0 float-end" 
+                                                                data-toggle="tooltip" 
+                                                                data-title="Download file"
+                                                        >
                                                             <a asp-controller="ProjectFiles" asp-action="DownloadFile" asp-route-id="@file.Id">
                                                                 <i class="material-icons btn-icon btn-icon-sm">download</i>
                                                             </a>
@@ -451,7 +473,10 @@
                                                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                                                     {
                                                         <div class="float-end">
-                                                            <button class="btn btn-round-sm flex-shrink-0 float-end ml-2" data-toggle="tooltip" data-title="Delete file">
+                                                            <button class="btn btn-round-sm flex-shrink-0 float-end ml-2" 
+                                                                    data-toggle="tooltip"
+                                                                    data-title="Delete file"
+                                                            >
                                                                 <a asp-controller="ProjectFiles" asp-action="DeleteFileFromDb" asp-route-id="@file.Id">
                                                                     <i class="material-icons btn-icon btn-icon-sm">delete</i>
                                                                 </a>
@@ -481,7 +506,8 @@
                                                 <i class="material-icons">filter_list</i>
                                             </span>
                                         </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter Tickets" aria-label="Filter Tickets">
+                                        <input type="search" class="form-control filter-list-input" placeholder="Filter Tickets" 
+                                            aria-label="Filter Tickets">
                                     </div>
                                 </form>
                             </div>
@@ -489,21 +515,11 @@
                                 <div class="col">
                                     <table class="table table-bordered table-responsive">
                                         <tr>
-                                            <th>
-                                                Ticket
-                                            </th>
-                                            <th>
-                                                Description
-                                            </th>
-                                            <th>
-                                                Status
-                                            </th>
-                                            <th>
-                                                Type
-                                            </th>
-                                            <th>
-                                                Closed At
-                                            </th>
+                                            <th>Ticket</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Type</th>
+                                            <th>Closed At</th>
                                         </tr>
                                         @foreach (var ticket in Model.ClosedTicketsPaginated)
                                         {
@@ -556,11 +572,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
-
-

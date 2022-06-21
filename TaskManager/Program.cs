@@ -10,7 +10,8 @@ using TaskManager.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("TaskManagerContextConnection");
+//var connectionString = builder.Configuration.GetConnectionString("TaskManagerContextConnectionDev");
+var connectionString = builder.Configuration["ConnectionStrings:TaskManagerContextConnection"];
 
 builder.Services.AddDbContext<TaskManagerContext>(options =>
     options

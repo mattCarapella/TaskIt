@@ -5,162 +5,54 @@
 }
 
 <div class="row pb-4">
-    
-    <div class="col-md-4 mb-4 pl-3 pr-3">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
+    <div class="col-md-12 mb-4 pl-3 pr-3 form-center">
+        <form id="registerForm" class="w-70" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h1 class="mt-4 mb-4" style="font-weight: 700 !important; text-align: center !important;">
+                Create a new account
+            </h1>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <label asp-for="Input.UserName"></label>
+            <div class="form-floating mb-3">
+                <label asp-for="Input.UserName">User Name</label>
                 <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
                 <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <label asp-for="Input.FirstName"></label>
+            <div class="form-floating mb-3">
+                <label asp-for="Input.FirstName">First Name</label>
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <label asp-for="Input.LastName"></label>
+            <div class="form-floating mb-3">
+                <label asp-for="Input.LastName">Last Name</label>
                 <input asp-for="Input.LastName" class="form-control" autocomplete="lastname" aria-required="true" />
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mb-3">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mb-3">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mb-3">
                 <label asp-for="Input.ConfirmPassword"></label>
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-submit mt-3">Register</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-submit mt-3">
+                Register
+            </button>
         </form>
-    </div>
-    
-    <div class="col-md-8 col-md-offset-2 pl-3 pr-3 center-vert">
-        <section>
-            <div class="card p-4">
-                <div class="login-welcome-text-md pb-3">
-                    Full functionality, including the ability to create projects and ticket requests, is reversed for users with <strong>Administrator</strong> and <strong>Manager</strong> roles.
-                </div>
-                <div class="login-welcome-text-md">
-                    To demo these roles, use the following login credentials:
-                </div>
-                <div class="card flex-fill mt-4 mb-4 pt-0 pb-3 pl-1 pr-1" style="background: rgb(232, 240, 254)">
-                    <div class="card-body p-4">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-6 pt-3">
-                                    <h3 style="font-weight: 700 !important">Administrator</h3>
-                                    <h5><strong>Login:</strong> admin@taskit.com</h5>
-                                    <h5><strong>Password:</strong> Pa$$w0rd</h5>
-                                </div>
-                                <div class="col-md-6 pt-3">
-                                    <h3 style="font-weight: 700 !important">Manager</h3>
-                                    <h5><strong>Login:</strong> manager@taskit.com</h5>
-                                    <h5><strong>Password:</strong> Pa$$w0rd</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="login-welcome-text-md pb-2" style="font-size: 1.1rem !important;">Source code can be viewed at</div>
-                <a href="http://www.github.com/mattCarapella" style="font-size: 1.2rem !important; font-weight: bold !important; text-align: center !important;">
-                    https://github.com/mattCarapella/TaskIt
-                </a>
-            </div>
-        </section>
+        
     </div>
 </div>
+<div class="center-link">
+        <a asp-area="Identity" asp-page="/Account/Login" class="link-center">Already have an account? Log In.</a>
 
-
-            
-            
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
-
-
-
-
-@*
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.UserName"></label>
-                <span asp-validation-for="Input.UserName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
-                <label asp-for="Input.FirstName"></label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="lastname" aria-required="true" />
-                <label asp-for="Input.LastName"></label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
-</div>*@

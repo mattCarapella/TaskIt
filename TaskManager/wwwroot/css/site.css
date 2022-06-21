@@ -26,6 +26,11 @@ html {
     position: relative;
     min-height: 100%;
 }
+    @media (min-width: 768px) {
+        html {
+            font-size: 16px;
+        }
+    }
 
 body {
     font-family: 'Abel', sans-serif;
@@ -80,6 +85,18 @@ svg {
 /*************************************************************/
 /*                      FORMATTING                           */
 /*************************************************************/
+
+.form-center {
+    display: flex;
+    justify-content: center;
+}
+
+.link-center {
+    display: block;
+    text-align: center;
+}
+
+
 .center-vert {
     display: flex;
     flex-direction: column;
@@ -91,6 +108,11 @@ svg {
     width: 50%;
 }
 
+.btn-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 /*************************************************************/
 /*                        TABLES                             */
 /*************************************************************/
@@ -98,13 +120,11 @@ svg {
     background-color: var(--white);
 }
 
-/*.table td {
-    border-bottom: 1px solid #dee2e6;
-}*/
 
 th {
     vertical-align: top !important;
 }
+
     th a {
         font-weight: bold !important;
     }
@@ -154,9 +174,9 @@ th {
     .navbar-logo a {
         color: var(--white);
     }
-    .navbar-logo a:hover {
-        color: var(--light-link-hover);
-    }
+        .navbar-logo a:hover {
+            color: var(--light-link-hover);
+        }
 
 .navbar-logo-name {
     padding: 10px;
@@ -193,6 +213,7 @@ th {
 .dropdown-item {
     transition: all 0.3s ease-in-out;
 }
+
     .dropdown-item:hover {
         color: var(--black) !important;
         background: var(--dropdown-tan-dark) !important;
@@ -220,42 +241,31 @@ th {
     color: var(--white);
 }
 
+
 /*******************************************/
-/**            MEDIA QUERIES              **/
+/**        LOGIN / REGISTER PAGES         **/
 /*******************************************/
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
+
+.login-container {
+    padding-top: 31px;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-top: 31px;
+    margin-bottom: 20px;
+}
+    @media (max-width: 768px) {
+        .login-container {
+            padding-top: 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
     }
+
+.login--demo-header {
+    margin-bottom: 3.5rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    font-weight: 700;
+    text-align: center;
 }
-
-
-
-
-
-.login-card {
-  /*  background: var(--offwhite);
-    border: 1px solid #dee2e6;
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: 0px 2px 6px rgba(78, 78, 78, 0.2) !important;*/
-}
-
-.login-welcome-brand {
-    font-size: 2.4rem;
-    color: var(--black);
-}
-
-.login-welcome-text {
-    font-size: 1.8rem;
-    color: #5e5e5e;
-}
-
-.login-welcome-text-md {
-    font-size: 1.2rem !important;
-    color: #5e5e5e !important;
-    text-align: center !important;
-}
-
-
-/*font-family: 'Oswald', sans-serif;*/
+   
