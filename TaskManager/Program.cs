@@ -26,17 +26,16 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    // Password settings
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 8;
-
-    // User settings
     options.User.RequireUniqueEmail = true;
 });
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddResponseCaching();
 
 #region Authorization
 
@@ -67,7 +66,7 @@ else
 }
 
 app.UseStatusCodePagesWithRedirects("/Error/{0}");
-
+app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -95,8 +94,6 @@ void AddAuthorizationPolicies(IServiceCollection services)
         options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Administrator"));
         options.AddPolicy("RequireManager", policy => policy.RequireRole("Manager"));
         options.AddPolicy("ElevatedRights", policy => policy.RequireRole("Administrator", "Manager"));
-        options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeID"));
-        options.AddPolicy("DevelopersOnly", policy => policy.RequireClaim("JobTitle", "Developer"));
     });
 }
 
