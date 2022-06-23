@@ -188,9 +188,9 @@ th {
     .navbar-logo a {
         color: var(--white);
     }
-        .navbar-logo a:hover {
+        /*.navbar-logo a:hover {
             color: var(--light-link-hover);
-        }
+        }*/
 
 .navbar-logo-name {
     padding: 10px;

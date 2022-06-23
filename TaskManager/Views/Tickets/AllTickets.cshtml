@@ -15,7 +15,7 @@
                             <img alt="Image" src="~/images/ticketA100.png" class="header-img" overflow="hidden" />
                             <span class="header-text pl-4 pr-2 pt-2">All Open Tickets</span>
                         </div>
-                        <span class="mt-2">
+                        @*<span class="mt-2">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                             {
                                 <button class="btn btn-round-med" data-toggle="tooltip" data-title="Submit a Ticket">
@@ -24,7 +24,7 @@
                                     </a>
                                 </button>
                             }
-                        </span>
+                        </span>*@
                     </div>
 
                     <form asp-action="AllTickets" method="get">
@@ -58,9 +58,9 @@
                                         Project
                                     </a>
                                 </th>
-                                <th>
+                              @*  <th>
                                     Description
-                                </th>
+                                </th>*@
                                 <th>
                                     <a class="index--sort-link"
                                        asp-action="AllTickets"
@@ -119,7 +119,7 @@
                                             @Html.DisplayFor(modelItem => item.Project!.Name)
                                         </a>
                                     </td>
-                                    <td>
+                                    @*<td>
                                         @if (@item.DescriptionNoHtml is not null)
                                         {
                                             @if (@item.DescriptionNoHtml.Length > 150)
@@ -131,7 +131,7 @@
                                                 @Html.DisplayFor(modelItem => item.DescriptionNoHtml)
                                             }
                                         }
-                                    </td>
+                                    </td>*@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Status)
                                     </td>
@@ -154,7 +154,6 @@
                                                     <i class="material-icons btn-icon">format_align_right</i>
                                                 </a>
                                             </button>
-
                                             <button class="btn btn-round-sm mr-1">
                                                 <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
                                                     <i class="material-icons btn-icon btn-icon-sm">create</i>

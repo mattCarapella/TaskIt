@@ -49,7 +49,7 @@ public class Ticket
 
 
     [DataType(DataType.Date), Display(Name = "Created On")]
-    [DisplayFormat(DataFormatString = "{0:g}")]
+    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
 

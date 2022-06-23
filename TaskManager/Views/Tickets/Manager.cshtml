@@ -15,7 +15,7 @@
                             <img alt="Image" src="~/images/ticketA100.png" class="header-img" overflow="hidden" />
                             <div class="header-text pl-4 pr-2 pt-2">Tickets for Managed Projects</div>
                         </div>
-                        <span class="mt-2">
+                        @*<span class="mt-2">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                             {
                                 <button class="btn btn-round-med" data-toggle="tooltip" data-title="Submit a Ticket">
@@ -24,7 +24,7 @@
                                     </a>
                                 </button>
                             }
-                        </span>
+                        </span>*@
                     </div>
 
                     <form asp-action="AllTickets" method="get">

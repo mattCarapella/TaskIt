@@ -14,7 +14,7 @@
                             <img class="header-img" alt="Image" src="~/images/ticketA100.png" overflow="hidden" />
                             <span class="header-text pl-4 pr-2 pt-2">Your Closed Tickets</span>
                         </div>
-                        <span class="mt-2">
+                        @*<span class="mt-2">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
                             {
                                 <button class="btn btn-round-med" data-toggle="tooltip" data-title="Submit a Ticket">
@@ -23,7 +23,7 @@
                                     </a>
                                 </button>
                             }
-                        </span>
+                        </span>*@
                     </div>
                     <form asp-action="Closed" method="get">
                         <div class="form-actions no-color">
@@ -97,7 +97,11 @@
                                         Closed On
                                     </a>
                                 </th>
-                                <th></th>
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                {
+                                    <th></th>
+                                }
+
                             </tr>
                         </thead>
                         <tbody>
@@ -145,31 +149,35 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ClosedAt)
                                     </td>
-                                    <td>
-                                        <div class="button-group">
-                                            <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
-                                                <a asp-action="Details" asp-route-id="@item.TicketId">
-                                                    <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
-                                                </a>
-                                            </button>
-                                            @if ((await AuthorizationService.AuthorizeAsync(User, @Model, TaskOperations.Update)).Succeeded)
-                                            {
-                                                <button class="btn btn-round-sm mr-1">
-                                                    <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
-                                                        <i class="material-icons btn-icon btn-icon-sm">create</i>
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                    {
+                                        <td>
+                                            <div class="button-group">
+                                                <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
+                                                    <a asp-action="Details" asp-route-id="@item.TicketId">
+                                                        <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
                                                     </a>
                                                 </button>
-                                            }
-                                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
-                                            {
-                                                <button class="btn btn-round-sm">
-                                                    <a asp-action="Delete" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Delete ticket">
-                                                        <i class="material-icons btn-icon btn-icon-sm">delete</i>
-                                                    </a>
-                                                </button>
-                                            }
-                                        </div>
-                                    </td>
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, @Model, TaskOperations.Update)).Succeeded)
+                                                {
+                                                    <button class="btn btn-round-sm mr-1">
+                                                        <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
+                                                            <i class="material-icons btn-icon btn-icon-sm">create</i>
+                                                        </a>
+                                                    </button>
+                                                }
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                                                {
+                                                    <button class="btn btn-round-sm">
+                                                        <a asp-action="Delete" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Delete ticket">
+                                                            <i class="material-icons btn-icon btn-icon-sm">delete</i>
+                                                        </a>
+                                                    </button>
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+
                                 </tr>
                             }
                         </tbody>

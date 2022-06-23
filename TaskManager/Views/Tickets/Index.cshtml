@@ -5,194 +5,201 @@
 }
 
 <div class="container container-body">
-<div class="main-container">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-12 col-lg-12">
-                <div class="page-content">
-                    <div class="wrapper mb-2">
-                        <div class="media">
-                            <img class="header-img" alt="Image" src="~/images/ticketA100.png" overflow="hidden" />
-                            <span class="header-text pl-4 pr-2 pt-2">Your Tickets</span>
+    <div class="main-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="page-content">
+                        <div class="wrapper mb-2">
+                            <div class="media">
+                                <img class="header-img" alt="Image" src="~/images/ticketA100.png" overflow="hidden" />
+                                <span class="header-text pl-4 pr-2 pt-2">Your Tickets</span>
+                            </div>
+                            @*<span class="mt-2">
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                {
+                                    <button class="btn btn-round-med" data-toggle="tooltip" data-title="Submit a Ticket">
+                                        <a asp-controller="Tickets" asp-action="Create">
+                                            <i class="material-icons btn-icon btn-icon-lg">add</i>
+                                        </a>
+                                    </button>
+                                }
+                            </span>*@
                         </div>
-                        <span class="mt-2">
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
-                            {
-                                <button class="btn btn-round-med" data-toggle="tooltip" data-title="Submit a Ticket">
-                                    <a asp-controller="Tickets" asp-action="Create">
-                                        <i class="material-icons btn-icon btn-icon-lg">add</i>
-                                    </a>
-                                </button>
-                            }
-                        </span>
-                    </div>
-                    <form asp-action="Index" method="get">
-                        <div class="form-actions no-color">
-                            <p>
-                                <span class="pr-3">Search by name or description:</span>
-                                <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                                <button type="submit" class="btn btn-link btn-link-offset-sm">Search</button>
-                                <a asp-action="Index" class="btn-link">Clear</a>
-                            </p>
-                        </div>
-                    </form>
-                    <table class="table table-bordered table-responsive mt-4">
-                        <thead class="align-items-center">
-                            <tr>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Ticket
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Project
-                                    </a>
-                                </th>
-                                <th>
-                                    Description
-                                </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["StatusSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Status
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Ticket Type
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["PrioritySortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Priority
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Opened On
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="index--sort-link"
-                                       asp-action="Index"
-                                       asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
-                                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                        Goal Date
-                                    </a>
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
+                        <form asp-action="Index" method="get">
+                            <div class="form-actions no-color">
+                                <p>
+                                    <span class="pr-3">Search by name or description:</span>
+                                    <input type="text" class="search-field" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                                    <button type="submit" class="btn btn-link btn-link-offset-sm">Search</button>
+                                    <a asp-action="Index" class="btn-link">Clear</a>
+                                </p>
+                            </div>
+                        </form>
+                        <table class="table table-bordered table-responsive mt-4">
+                            <thead class="align-items-center">
                                 <tr>
-                                    <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
-                                            <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
+                                    <th>
+                                        <a class="index--sort-link"
+                                           asp-action="Index"
+                                           asp-route-sortOrder="@ViewData["TicketTitleSortParam"]"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            Ticket
                                         </a>
-                                    </td>
-                                    <td>
-                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project!.Id">
-                                            @Html.DisplayFor(modelItem => item.Project!.Name)
+                                    </th>
+                                    <th>
+                                        <a class="index--sort-link"
+                                           asp-action="Index"
+                                           asp-route-sortOrder="@ViewData["ProjectNameSortParam"]"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            Project
                                         </a>
-                                    </td>
-                                    <td>
-                                        @if (@item.DescriptionNoHtml is not null)
-                                        {
-                                            @if (@item.DescriptionNoHtml.Length > 150)
-                                            {
-                                                <p>@item.DescriptionNoHtml.Substring(0, 150)...</p>
-                                            }
-                                            else
-                                            {
-                                                @Html.DisplayFor(modelItem => item.DescriptionNoHtml)
-                                            }
-                                        }
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Status)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.TicketType)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Priority)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.CreatedAt)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.GoalDate)
-                                    </td>
-                                    <td>
-                                        <div class="button-group">
-                                            <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
-                                                <a asp-action="Details" asp-route-id="@item.TicketId">
-                                                    <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
-                                                </a>
-                                            </button>
-                                            @if ((await AuthorizationService.AuthorizeAsync(User, @item, TaskOperations.Update)).Succeeded)
-                                            {
-                                                <button class="btn btn-round-sm mr-1">
-                                                    <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
-                                                        <i class="material-icons btn-icon btn-icon-sm">create</i>
-                                                    </a>
-                                                </button>
-                                            }
-                                            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
-                                            {
-                                                <button class="btn btn-round-sm">
-                                                    <a asp-action="Delete" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Delete ticket">
-                                                        <i class="material-icons btn-icon btn-icon-sm">delete</i>
-                                                    </a>
-                                                </button>
-                                            }
-                                        </div>
-                                    </td>
+                                    </th>
+                                    @*<th>
+                                        Description
+                                    </th>*@
+                                    <th>
+                                        <a class="index--sort-link"
+                                           asp-action="Index"
+                                           asp-route-sortOrder="@ViewData["StatusSortParam"]"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            Status
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a class="index--sort-link"
+                                           asp-action="Index"
+                                           asp-route-sortOrder="@ViewData["TicketTypeSortParam"]"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            Ticket Type
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a class="index--sort-link"
+                                           asp-action="Index"
+                                           asp-route-sortOrder="@ViewData["PrioritySortParam"]"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            Priority
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a class="index--sort-link"
+                                           asp-action="Index"
+                                           asp-route-sortOrder="@ViewData["CreatedOnSortParam"]"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            Opened On
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a class="index--sort-link"
+                                           asp-action="Index"
+                                           asp-route-sortOrder="@ViewData["GoalDateSortParam"]"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            Goal Date
+                                        </a>
+                                    </th>
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                    {
+                                        <th></th>
+                                    }
+                                    
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-                    @{
-                        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-                        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-                    }
-                    <a asp-action="Index"
-                       asp-route-sortOrder="@ViewData["CurrentSort"]"
-                       asp-route-pageNumber="@(Model.PageIndex-1)" ;
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       class="btn btn-default @prevDisabled">
-                        Previous
-                    </a>
-                    <a asp-action="Index"
-                       asp-route-sortOrder="@ViewData["CurrentSort"]"
-                       asp-route-pageNumber="@(Model.PageIndex+1)" ;
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       class="btn btn-default @nextDisabled">
-                        Next
-                    </a>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.TicketId">
+                                                <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Project!.Id">
+                                                @Html.DisplayFor(modelItem => item.Project!.Name)
+                                            </a>
+                                        </td>
+                                        @*<td>
+                                            @if (@item.DescriptionNoHtml is not null)
+                                            {
+                                                @if (@item.DescriptionNoHtml.Length > 150)
+                                                {
+                                                    <p>@item.DescriptionNoHtml.Substring(0, 150)...</p>
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.DescriptionNoHtml)
+                                                }
+                                            }
+                                        </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TicketType)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Priority)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.GoalDate)
+                                        </td>
+                                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin", "RequireManager")).Succeeded)
+                                        {
+                                            <td>
+                                                <div class="button-group">
+                                                    <button class="btn btn-round-sm mr-1" data-toggle="tooltip" data-title="Ticket details">
+                                                        <a asp-action="Details" asp-route-id="@item.TicketId">
+                                                            <i class="material-icons btn-icon btn-icon-sm">format_align_right</i>
+                                                        </a>
+                                                    </button>
+                                                    @if ((await AuthorizationService.AuthorizeAsync(User, @item, TaskOperations.Update)).Succeeded)
+                                                    {
+                                                        <button class="btn btn-round-sm mr-1">
+                                                            <a asp-action="Edit" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Edit ticket">
+                                                                <i class="material-icons btn-icon btn-icon-sm">create</i>
+                                                            </a>
+                                                        </button>
+                                                    }
+                                                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdmin")).Succeeded)
+                                                    {
+                                                        <button class="btn btn-round-sm">
+                                                            <a asp-action="Delete" asp-route-id="@item.TicketId" data-toggle="tooltip" data-title="Delete ticket">
+                                                                <i class="material-icons btn-icon btn-icon-sm">delete</i>
+                                                            </a>
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @{
+                            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                        }
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                           asp-route-pageNumber="@(Model.PageIndex-1)" ;
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           class="btn btn-default @prevDisabled">
+                            Previous
+                        </a>
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                           asp-route-pageNumber="@(Model.PageIndex+1)" ;
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           class="btn btn-default @nextDisabled">
+                            Next
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>

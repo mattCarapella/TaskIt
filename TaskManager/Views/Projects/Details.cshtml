@@ -40,15 +40,7 @@
                 <p class="description-text">@Html.DisplayFor(modelItem => @Model!.Project.Description)</p>
                 <hr />
                 <dl class="row pb-2">
-                    @if (@Model!.Project.Tag is not null)
-                    {
-                        <dt class="col-sm-4 details-type">
-                            @Html.DisplayNameFor(model => model.Project.Tag)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.Project.Tag)
-                        </dd>
-                    }
+                    
                     <dt class="col-sm-4 details-type">
                         @Html.DisplayNameFor(model => model.Project.CreatedAt)
                     </dt>
@@ -67,10 +59,19 @@
                     @if (@Model.Project.UpdatedAt is not null)
                     {
                         <dt class="col-sm-4 details-type">
-                            @Html.DisplayNameFor(model => model.Project.UpdatedAt)
+                            Last Updated
                         </dt>
                         <dd class="col-sm-6">
                             @Html.DisplayFor(model => model.Project.UpdatedAt)
+                        </dd>
+                    }
+                    @if (@Model!.Project.Tag is not null)
+                    {
+                        <dt class="col-sm-4 details-type">
+                            @Html.DisplayNameFor(model => model.Project.Tag)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Html.DisplayFor(model => model.Project.Tag)
                         </dd>
                     }
                     <dt class="col-sm-4 details-type">
@@ -499,17 +500,6 @@
                                 <div class="col-auto">
                                     <h3>Closed Tickets</h3>
                                 </div>
-                                <form class="col-md-auto">
-                                    <div class="input-group input-group-round">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="material-icons">filter_list</i>
-                                            </span>
-                                        </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter Tickets" 
-                                            aria-label="Filter Tickets">
-                                    </div>
-                                </form>
                             </div>
                             <div class="content-list-body">
                                 <div class="col">

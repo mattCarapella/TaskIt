@@ -167,7 +167,7 @@ namespace TaskManager.Controllers
             }
             ViewData["CurrentFilter"] = searchString;
 
-            var ticketAssignments = await _unitOfWork.TicketAssignmentRepository.GetTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
+            var ticketAssignments = await _unitOfWork.TicketAssignmentRepository.GetClosedTicketAssignmentsWithProjectForUser(User.Identity.GetUserId());
             var tickets = from t in ticketAssignments select t.Ticket;
 
             if (!String.IsNullOrEmpty(searchString))
